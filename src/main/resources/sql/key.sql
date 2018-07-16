@@ -1,0 +1,2 @@
+CREATE SEQUENCE key_seq;
+

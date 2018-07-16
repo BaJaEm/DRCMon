@@ -1,0 +1,7 @@
+
+byte[] addr = new byte[4];
+addr[0] = 10;
+addr[1] = 0;
+addr[2] = 1;
+addr[3] = 2;
+System.out.println(java.net.Inet4Address.getByAddress(addr).getHostName());
