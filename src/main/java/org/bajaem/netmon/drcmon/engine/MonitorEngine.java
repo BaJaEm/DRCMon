@@ -9,7 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.bajaem.netmon.drcmon.DRCMonConfiguration;
 import org.bajaem.netmon.drcmon.probe.Probe;
-import org.bajaem.netmon.drcmon.probe.ProbeConfiguration;
+import org.bajaem.netmon.drcmon.probe.ProbeConfigurator;
+import org.bajaem.netmon.drcmon.respository.ProbeConfigRepository;
+import org.bajaem.netmon.drcmon.respository.ProbeResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,15 +27,22 @@ public class MonitorEngine
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> probeMap = new ConcurrentHashMap<>();
 
-    final DRCMonConfiguration config;
+    private final DRCMonConfiguration config;
 
-    final ProbeConfiguration probeConfig;
+    private final ProbeConfigurator probeConfig;
+
+    private final ProbeResponseRepository responseRepo;
+
+    private final ProbeConfigRepository configRepo;
 
     @Autowired
-    public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfiguration _probeConfig)
+    public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfigurator _probeConfig,
+            final ProbeResponseRepository _responseRepo, final ProbeConfigRepository _configRepo)
     {
         config = _config;
         probeConfig = _probeConfig;
+        responseRepo = _responseRepo;
+        configRepo = _configRepo;
         pool = Executors.newScheduledThreadPool(config.getPoolSize());
     }
 

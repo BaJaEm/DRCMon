@@ -57,10 +57,10 @@ public class Main
                 for (int x = 1; x < 255; x++)
                 {
                     addr[3] = (byte) x;
-                    final PingProbe pLocal = new PingProbe(300, InetAddress.getByAddress(addr));
+                    //final PingProbe pLocal = new PingProbe(300, InetAddress.getByAddress(addr));
                     // ses.scheduleAtFixedRate(pLocal, 60,
                     // pLocal.getPollingInterval(), TimeUnit.SECONDS);
-                    ses.execute(pLocal);
+                   // ses.execute(pLocal);
                     a++;
                 }
             }

@@ -1,2 +1,4 @@
-CREATE SEQUENCE key_seq;
+DROP SEQUENCE key_seq;
+CREATE SEQUENCE key_seq START WITH 20000;
 
+SELECT key_seq.nextval

@@ -9,7 +9,7 @@ import java.util.Map;
  * well as an error code ( i.e. Error Message or Java {@link Exception} )
  *
  */
-public class ProbeResponse
+public class Response
 {
     private final Map<String, String> dataMap;
 
@@ -19,17 +19,17 @@ public class ProbeResponse
 
     private final Exception error;
 
-    public ProbeResponse(final Map<String, String> _dataMap, final boolean _success)
+    public Response(final Map<String, String> _dataMap, final boolean _success)
     {
         this(_dataMap, _success, null, null);
     }
 
-    public ProbeResponse(final boolean _success)
+    public Response(final boolean _success)
     {
         this(new HashMap<>(), _success, null, null);
     }
 
-    public ProbeResponse(final boolean _success, final String _errorMessage, final Exception _error)
+    public Response(final boolean _success, final String _errorMessage, final Exception _error)
     {
         this(new HashMap<>(), _success, _errorMessage, _error);
     }
@@ -46,7 +46,7 @@ public class ProbeResponse
      * @param _error
      *            {@link Exception} that was thrown by probe.
      */
-    public ProbeResponse(final Map<String, String> _dataMap, final boolean _success, final String _errorMessage,
+    public Response(final Map<String, String> _dataMap, final boolean _success, final String _errorMessage,
             final Exception _error)
     {
         dataMap = _dataMap;

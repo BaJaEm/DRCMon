@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.netmon.drcmon.Main;
+import org.bajaem.netmon.drcmon.model.ProbeConfig;
 
 public class PingProbe extends Probe
 {
@@ -14,30 +15,31 @@ public class PingProbe extends Probe
 
     private final int timeout;
 
-    public PingProbe(final long _pollingInterval, final InetAddress _target, final int _timeout)
+    public PingProbe(final ProbeConfig _probeConfig, final long _pollingInterval, final InetAddress _target,
+            final int _timeout)
     {
-        super(_pollingInterval);
+        super(_probeConfig, _pollingInterval);
         target = _target;
         timeout = _timeout;
         LOG.trace("New Probe... " + target);
     }
 
-    public PingProbe(final InetAddress _target, final int _timeout)
+    public PingProbe(final ProbeConfig _probeConfig, final InetAddress _target, final int _timeout)
     {
-        super();
+        super(_probeConfig);
         target = _target;
         timeout = _timeout;
 
     }
 
-    public PingProbe(final long _pollingInterval, final InetAddress _target)
+    public PingProbe(final ProbeConfig _probeConfig, final long _pollingInterval, final InetAddress _target)
     {
-        this(_pollingInterval, _target, 30);
+        this(_probeConfig, _pollingInterval, _target, 30);
     }
 
-    public PingProbe(final InetAddress _target)
+    public PingProbe(final ProbeConfig _probeConfig, final InetAddress _target)
     {
-        this(_target, 30);
+        this(_probeConfig, _target, 30);
     }
 
     public InetAddress getTarget()
@@ -46,15 +48,15 @@ public class PingProbe extends Probe
     }
 
     @Override
-    public ProbeResponse probe()
+    public Response probe()
     {
         try
         {
-            return new ProbeResponse(target.isReachable(timeout));
+            return new Response(target.isReachable(timeout));
         }
         catch (final IOException e)
         {
-            return new ProbeResponse(false, e.getMessage(), e);
+            return new Response(false, e.getMessage(), e);
         }
 
     }
