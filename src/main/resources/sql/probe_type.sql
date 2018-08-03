@@ -6,3 +6,4 @@ CREATE TABLE probe_type
 );
 -- TODO make name unique
 INSERT INTO probe_type (id, name, description) VALUES (key_seq.nextval, 'Ping', 'Ping using java isReachable method - may or maynot be ICMP');
+

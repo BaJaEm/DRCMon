@@ -18,8 +18,6 @@ CREATE OR REPLACE TABLE probe_config
 	
 );
 
-
-INSERT INTO probe_config VALUES(key_seq.nextval,null, 1, '10.0.1.1', null, null, 60, 0, CURRENT_TIMESTAMP(), 'Glen', CURRENT_TIMESTAMP(), 'Glen') ;
-INSERT INTO probe_config VALUES(key_seq.nextval,null, 1, '10.0.1.2', null, null, 60, 0, CURRENT_TIMESTAMP(), 'Glen', CURRENT_TIMESTAMP(), 'Glen') ;
-INSERT INTO probe_config VALUES(key_seq.nextval,null, 1, '10.0.1.3', null, null, 60, 0, CURRENT_TIMESTAMP(), 'Glen', CURRENT_TIMESTAMP(), 'Glen') ;
-INSERT INTO probe_config VALUES(key_seq.nextval,null, 1, '10.0.1.4', null, null, 60, 0, CURRENT_TIMESTAMP(), 'Glen', CURRENT_TIMESTAMP(), 'Glen') ;
+ALTER TABLE probe_config 
+	ADD FOREIGN KEY ( monitor_type_id )
+	REFERENCES probe_type ( id );
