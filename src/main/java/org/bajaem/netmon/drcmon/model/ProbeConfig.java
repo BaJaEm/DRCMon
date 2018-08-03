@@ -1,7 +1,9 @@
 package org.bajaem.netmon.drcmon.model;
 
+import java.net.InetAddress;
 import java.sql.Date;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,8 +12,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import org.bajaem.netmon.drcmon.util.InetAddressToStringConverter;
+
 @Entity
-@SequenceGenerator(name = "Generator", sequenceName = "key_seq",  allocationSize=1)
+@SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
 public class ProbeConfig
 {
 
@@ -21,7 +25,7 @@ public class ProbeConfig
 
     private ProbeType probeType;
 
-    private String host;
+    private InetAddress host;
 
     private Integer port;
 
@@ -73,12 +77,13 @@ public class ProbeConfig
         probeType = _probeType;
     }
 
-    public String getHost()
+    @Convert(converter = InetAddressToStringConverter.class)
+    public InetAddress getHost()
     {
         return host;
     }
 
-    public void setHost(final String _host)
+    public void setHost(final InetAddress _host)
     {
         host = _host;
     }
