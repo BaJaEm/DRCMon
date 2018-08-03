@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.bajaem.netmon.drcmon.DRCMonConfiguration;
+import org.bajaem.netmon.drcmon.configuration.DRCMonConfiguration;
 import org.bajaem.netmon.drcmon.probe.Probe;
 import org.bajaem.netmon.drcmon.probe.ProbeConfigurator;
 import org.bajaem.netmon.drcmon.respository.ProbeConfigRepository;

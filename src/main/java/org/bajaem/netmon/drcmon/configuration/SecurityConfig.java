@@ -1,4 +1,4 @@
-package org.bajaem.netmon.drcmon;
+package org.bajaem.netmon.drcmon.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
