@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Date;
 import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.netmon.drcmon.Main;
 import org.bajaem.netmon.drcmon.model.ProbeConfig;
 import org.bajaem.netmon.drcmon.model.ProbeResponse;
 import org.bajaem.netmon.drcmon.respository.ProbeResponseRepository;
@@ -26,7 +26,19 @@ public abstract class Probe implements Runnable
 
     protected final ProbeConfig probeConfig;
 
-    protected final InetAddress localhost = Main.localhost;
+    protected static InetAddress localhost;
+    static
+    {
+        try
+        {
+            localhost = InetAddress.getLocalHost();
+        }
+        catch (UnknownHostException e)
+        {
+            LOG.fatal("Could not aquire localhost", e);
+            throw new RuntimeException(e);
+        }
+    }
 
     public Probe(final ProbeConfig _probeConfig)
     {
