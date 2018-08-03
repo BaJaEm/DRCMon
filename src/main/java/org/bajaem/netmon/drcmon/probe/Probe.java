@@ -24,30 +24,13 @@ public abstract class Probe implements Runnable
 
     private static final Logger LOG = LogManager.getLogger(Probe.class);
 
-    protected final long pollingInterval;
-
-    protected final long delay;
-
     protected final ProbeConfig probeConfig;
 
     protected final InetAddress localhost = Main.localhost;
 
     public Probe(final ProbeConfig _probeConfig)
     {
-        this(_probeConfig, 60);
-    }
-
-    public Probe(final ProbeConfig _probeConfig, final long _pollingInterval)
-    {
-        this(_probeConfig, _pollingInterval, 0);
-    }
-
-    public Probe(final ProbeConfig _probeConfig, final long _pollingInterval, final long _delay)
-    {
         probeConfig = _probeConfig;
-        pollingInterval = _pollingInterval;
-        delay = _delay;
-
     }
 
     /**
@@ -97,18 +80,13 @@ public abstract class Probe implements Runnable
         repo.save(resp);
     }
 
-    public long getPollingInterval()
+    public ProbeConfig getProbeConfig()
     {
-        return pollingInterval;
-    }
-
-    public long getDelay()
-    {
-        return delay;
+        return probeConfig;
     }
 
     public String toString()
     {
-        return this.getClass() + " @" + pollingInterval + " after: " + delay;
+        return this.getClass() + " @" + probeConfig.getPollingInterval() + " after: " + probeConfig.getDelayTime();
     }
 }

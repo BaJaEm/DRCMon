@@ -52,8 +52,8 @@ public class MonitorEngine
         for (final String key : configMap.keySet())
         {
             final Probe probe = configMap.get(key);
-            final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getDelay(),
-                    probe.getPollingInterval(), TimeUnit.SECONDS);
+            final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
+                    probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
             probeMap.put(key, future);
         }
     }

@@ -1,7 +1,5 @@
 package org.bajaem.netmon.drcmon.probe;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,15 +84,8 @@ public class ProbeConfigurator
         {
             if (config.getProbeType().getName().equals("Ping"))
             {
-                try
-                {
-                    final String host = config.getHost();
-                    probes.put(host, new PingProbe(config, 1, InetAddress.getByName(host)));
-                }
-                catch (UnknownHostException e)
-                {
-                    throw new RuntimeException();
-                }
+
+                probes.put(config.getHost().toString(), new PingProbe(config));
             }
         }
 

@@ -1,50 +1,21 @@
 package org.bajaem.netmon.drcmon.probe;
 
 import java.io.IOException;
-import java.net.InetAddress;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.netmon.drcmon.Main;
 import org.bajaem.netmon.drcmon.model.ProbeConfig;
 
 public class PingProbe extends Probe
 {
-    private static final Logger LOG = LogManager.getLogger(Main.class);
-    private final InetAddress target;
+    private static final Logger LOG = LogManager.getLogger(PingProbe.class);
 
-    private final int timeout;
+    private static final int TIMEOUT = 30;
 
-    public PingProbe(final ProbeConfig _probeConfig, final long _pollingInterval, final InetAddress _target,
-            final int _timeout)
-    {
-        super(_probeConfig, _pollingInterval);
-        target = _target;
-        timeout = _timeout;
-        LOG.trace("New Probe... " + target);
-    }
-
-    public PingProbe(final ProbeConfig _probeConfig, final InetAddress _target, final int _timeout)
+    public PingProbe(final ProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        target = _target;
-        timeout = _timeout;
-
-    }
-
-    public PingProbe(final ProbeConfig _probeConfig, final long _pollingInterval, final InetAddress _target)
-    {
-        this(_probeConfig, _pollingInterval, _target, 30);
-    }
-
-    public PingProbe(final ProbeConfig _probeConfig, final InetAddress _target)
-    {
-        this(_probeConfig, _target, 30);
-    }
-
-    public InetAddress getTarget()
-    {
-        return target;
+        LOG.trace("New Probe... " + getProbeConfig().getHost());
     }
 
     @Override
@@ -52,7 +23,7 @@ public class PingProbe extends Probe
     {
         try
         {
-            return new Response(target.isReachable(timeout));
+            return new Response(getProbeConfig().getHost().isReachable(TIMEOUT));
         }
         catch (final IOException e)
         {
@@ -63,7 +34,7 @@ public class PingProbe extends Probe
 
     public String toString()
     {
-        return target + " -- " + super.toString();
+        return getProbeConfig().getHost() + " -- " + super.toString();
     }
 
 }
