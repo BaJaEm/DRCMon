@@ -50,6 +50,11 @@ public abstract class Probe implements Runnable
      */
     public abstract Response probe();
 
+    /**
+     * probe method must be overridden by implementing class;
+     */
+    public abstract String getUniqueKey();
+
     @Override
     public void run()
     {

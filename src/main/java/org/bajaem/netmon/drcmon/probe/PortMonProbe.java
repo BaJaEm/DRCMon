@@ -41,4 +41,10 @@ public class PortMonProbe extends Probe
 
     }
 
+    @Override
+    public String getUniqueKey()
+    {
+        return getProbeConfig().getHost().getHostAddress() + ":" + port;
+    }
+
 }
