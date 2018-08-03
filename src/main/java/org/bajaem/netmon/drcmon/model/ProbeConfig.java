@@ -2,6 +2,7 @@ package org.bajaem.netmon.drcmon.model;
 
 import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.Map;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.bajaem.netmon.drcmon.util.InetAddressToStringConverter;
+import org.bajaem.netmon.drcmon.util.MapToStringConverter;
 
 @Entity
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
@@ -27,10 +29,6 @@ public class ProbeConfig
 
     private InetAddress host;
 
-    private Integer port;
-
-    private String protocol;
-
     private int pollingInterval;
 
     private int delayTime;
@@ -42,6 +40,8 @@ public class ProbeConfig
     private Timestamp lastModifiedOn;
 
     private String lastModifiedBy;
+
+    private Map<String, String> customConfiguration;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Generator")
@@ -86,26 +86,6 @@ public class ProbeConfig
     public void setHost(final InetAddress _host)
     {
         host = _host;
-    }
-
-    public Integer getPort()
-    {
-        return port;
-    }
-
-    public void setPort(final Integer _port)
-    {
-        port = _port;
-    }
-
-    public String getProtocol()
-    {
-        return protocol;
-    }
-
-    public void setProtocol(final String _protocol)
-    {
-        protocol = _protocol;
     }
 
     public int getPollingInterval()
@@ -166,6 +146,23 @@ public class ProbeConfig
     public void setLastModifiedBy(final String _lastModifiedBy)
     {
         lastModifiedBy = _lastModifiedBy;
+    }
+
+    @Convert(converter = MapToStringConverter.class)
+    public Map<String, String> getCustomConfiguration()
+    {
+        return customConfiguration;
+    }
+
+    public void setCustomConfiguration(final Map<String, String> _customConfiguration)
+    {
+        customConfiguration = _customConfiguration;
+    }
+
+    public String toString()
+    {
+        return id + " - " + artifactId + " - " + probeType + " - " + host + " - " + pollingInterval + " - " + delayTime
+                + " - " + createdOn + " - " + createdBy + " - " + lastModifiedOn + " - " + lastModifiedBy;
     }
 
 }

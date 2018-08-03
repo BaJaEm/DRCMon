@@ -5,17 +5,22 @@ import java.net.Socket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.netmon.drcmon.configuration.ProbeMarker;
 import org.bajaem.netmon.drcmon.model.ProbeConfig;
 
+@ProbeMarker(name = "PortMon")
 public class PortMonProbe extends Probe
 {
+    private static final Logger LOG = LogManager.getLogger(PortMonProbe.class);
+
+    private final Integer port;
 
     public PortMonProbe(final ProbeConfig _probeConfig)
     {
         super(_probeConfig);
+        final String sport = _probeConfig.getCustomConfiguration().get("port");
+        port = Integer.parseInt(sport);
     }
-
-    private static final Logger LOG = LogManager.getLogger(PortMonProbe.class);
 
     @Override
     public Response probe()
@@ -24,13 +29,13 @@ public class PortMonProbe extends Probe
 
         try
         {
-            final Socket s = new Socket(config.getHost(), config.getPort());
+            final Socket s = new Socket(config.getHost(), port);
             s.close();
             return new Response(true);
         }
         catch (final IOException e)
         {
-            LOG.info("Could not connect to: " + config.getHost() + ":" + config.getPort());
+            LOG.info("Could not connect to: " + config.getHost() + ":" + port);
             return new Response(false, e.getMessage(), e);
         }
 
