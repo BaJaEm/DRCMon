@@ -1,17 +1,23 @@
 package org.bajaem.netmon.drcmon.probe;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.netmon.drcmon.configuration.ProbeMarker;
 import org.bajaem.netmon.drcmon.model.ProbeConfig;
 import org.bajaem.netmon.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.netmon.drcmon.respository.ProbeResponseRepository;
 import org.bajaem.netmon.drcmon.respository.ProbeTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 @Configuration
 public class ProbeConfigurator
@@ -28,6 +34,8 @@ public class ProbeConfigurator
 
     @Autowired
     private final ProbeTypeRepository typeRepo;
+
+    private final static Map<String, Class<Probe>> beans = new HashMap<>();
 
     public ProbeResponseRepository getProbeResponseRepository()
     {
@@ -75,17 +83,50 @@ public class ProbeConfigurator
         return config;
     }
 
-    // TODO : use more elegant way to create new probe instances
+    public static Map<String, Class<Probe>> getProbeBeanMap()
+    {
+        if (beans.isEmpty())
+        {
+            final ClassPathScanningCandidateComponentProvider scanner;
+            scanner = new ClassPathScanningCandidateComponentProvider(false);
+            scanner.addIncludeFilter(new AnnotationTypeFilter(ProbeMarker.class));
+            for (final BeanDefinition bd : scanner.findCandidateComponents("*"))
+            {
+                try
+                {
+                    @SuppressWarnings("unchecked")
+                    final Class<Probe> clazz = (Class<Probe>) Class.forName(bd.getBeanClassName());
+                    final ProbeMarker m = clazz.getAnnotation(ProbeMarker.class);
+                    final String key = m.name() != null ? m.name() : clazz.getName();
+                    beans.put(key, clazz);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    LOG.fatal("Could not find class: " + bd.getBeanClassName(), e);
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return beans;
+    }
+
     public Map<String, Probe> getProbes()
     {
         final Map<String, Probe> probes = new HashMap<>();
         final Iterable<ProbeConfig> configs = configRepo.findAll();
         for (final ProbeConfig config : configs)
         {
-            if (config.getProbeType().getName().equals("Ping"))
+            final Class<Probe> p = getProbeBeanMap().get(config.getProbeType().getName());
+            try
             {
-
-                probes.put(config.getHost().toString(), new PingProbe(config));
+                final Constructor<Probe> cons = p.getConstructor(ProbeConfig.class);
+                final Probe probe = cons.newInstance(config);
+                probes.put(probe.getUniqueKey(), probe);
+            }
+            catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                    | IllegalArgumentException | InvocationTargetException e)
+            {
+                LOG.fatal("Could not create instance of Probe - please check configuration" + config.toString(), e);
             }
         }
 
