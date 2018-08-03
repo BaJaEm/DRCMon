@@ -1,6 +1,6 @@
 package org.bajaem.netmon.drcmon.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -25,9 +25,9 @@ public class ProbeResponse
 
     private ProbeConfig probeConfig;
 
-    private Date startTime;
+    private Timestamp startTime;
 
-    private Date endTime;
+    private Timestamp endTime;
 
     private boolean success;
 
@@ -60,22 +60,22 @@ public class ProbeResponse
         probeConfig = _probeConfig;
     }
 
-    public Date getStartTime()
+    public Timestamp getStartTime()
     {
         return startTime;
     }
 
-    public void setStartTime(final Date _startTime)
+    public void setStartTime(final Timestamp _startTime)
     {
         startTime = _startTime;
     }
 
-    public Date getEndTime()
+    public Timestamp getEndTime()
     {
         return endTime;
     }
 
-    public void setEndTime(final Date _endTime)
+    public void setEndTime(final Timestamp _endTime)
     {
         endTime = _endTime;
     }

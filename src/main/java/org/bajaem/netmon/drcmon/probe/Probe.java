@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
@@ -68,8 +68,8 @@ public abstract class Probe implements Runnable
         final ProbeResponseRepository repo = configer.getProbeResponseRepository();
         final ProbeResponse resp = new ProbeResponse();
 
-        resp.setStartTime(new Date(start.getTimeInMillis()));
-        resp.setEndTime(new Date(end.getTimeInMillis()));
+        resp.setStartTime(new Timestamp(start.getTimeInMillis()));
+        resp.setEndTime(new Timestamp(end.getTimeInMillis()));
         if (r.getError() != null)
         {
             try (final StringWriter sw = new StringWriter())

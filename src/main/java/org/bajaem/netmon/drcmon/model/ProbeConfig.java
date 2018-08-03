@@ -1,7 +1,7 @@
 package org.bajaem.netmon.drcmon.model;
 
 import java.net.InetAddress;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -35,11 +35,11 @@ public class ProbeConfig
 
     private int delayTime;
 
-    private Date createdOn;
+    private Timestamp createdOn;
 
     private String createdBy;
 
-    private Date lastModifiedOn;
+    private Timestamp lastModifiedOn;
 
     private String lastModifiedBy;
 
@@ -128,12 +128,12 @@ public class ProbeConfig
         delayTime = _delayTime;
     }
 
-    public Date getCreatedOn()
+    public Timestamp getCreatedOn()
     {
         return createdOn;
     }
 
-    public void setCreatedOn(final Date _createdOn)
+    public void setCreatedOn(final Timestamp _createdOn)
     {
         createdOn = _createdOn;
     }
@@ -148,12 +148,12 @@ public class ProbeConfig
         createdBy = _createdBy;
     }
 
-    public Date getLastModifiedOn()
+    public Timestamp getLastModifiedOn()
     {
         return lastModifiedOn;
     }
 
-    public void setLastModifiedOn(final Date _lastModifiedOn)
+    public void setLastModifiedOn(final Timestamp _lastModifiedOn)
     {
         lastModifiedOn = _lastModifiedOn;
     }
