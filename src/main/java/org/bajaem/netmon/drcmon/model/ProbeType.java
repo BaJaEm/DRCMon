@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(name = "Generator", sequenceName = "key_seq",  allocationSize=1)
+@SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
 public class ProbeType
 {
 

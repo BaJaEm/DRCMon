@@ -16,11 +16,10 @@ import org.apache.logging.log4j.Logger;
 import org.bajaem.netmon.drcmon.util.BooleanToStringConverter;
 
 @Entity
-@SequenceGenerator(name = "Generator", sequenceName = "key_seq",  allocationSize=1)
+@SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
 public class ProbeResponse
 {
     private static final Logger LOG = LogManager.getLogger(ProbeResponse.class);
-
 
     private long id;
 
