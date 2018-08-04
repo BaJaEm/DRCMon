@@ -46,12 +46,14 @@ public abstract class Probe implements Runnable
     }
 
     /**
-     * probe method must be overridden by implementing class;
+     * Execute the probe logic and return a {@link Response} Object with the
+     * return value for the probe action.
      */
     public abstract Response probe();
 
     /**
-     * probe method must be overridden by implementing class;
+     * probe method to define a key that identifies this probe instance. This
+     * value is used as the hash key for the Probe;
      */
     public abstract String getUniqueKey();
 
