@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//TODO: can we make this use Beans rather than a map?  They would need to be dynamic
 public class MapToStringConverter implements AttributeConverter<Map<String, String>, String>
 {
 
