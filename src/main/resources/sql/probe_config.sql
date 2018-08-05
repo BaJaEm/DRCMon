@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE probe_config
 	id					  BIGINT PRIMARY KEY,
 	artifact_id			  VARCHAR(255) NULL,
 	monitor_type_id		  INT NOT NULL,
-	host				  VARCHAR(255) NOT NULL,
+	host				  VARCHAR(255) NULL,
 	polling_interval	  INT not null,
 	delay_time			  INT,
 	created_on			  datetime not null,
