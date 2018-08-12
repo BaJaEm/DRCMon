@@ -50,14 +50,15 @@ host/ip, Port, Protocol
 * Maintenance windows
 
 ####Probe Types
-* Ping ( TCP isReachable() )
-* Port Monitor
+* _Ping ( TCP isReachable() )_ 
+* _Port Monitor_
 * Web Monitor - using Selenium
 * REST Get
-* SQL Query
+* _SQL Query_
 * SNMP?
 * Custom?
 * Traceroute?
+* Ping - (native) ?
 
 ###INFR DB ( id ? )
 * Environments - Production
