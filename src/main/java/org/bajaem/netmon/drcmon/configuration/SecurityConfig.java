@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception
     {
 
-        http.authorizeRequests().antMatchers("/login").permitAll().and().formLogin();
+        http.authorizeRequests().antMatchers("/api/**").permitAll().and().httpBasic();
         http.authorizeRequests().antMatchers("/**").authenticated();
         http.csrf().disable();
 
@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
     {
-        auth.inMemoryAuthentication().withUser("a").password("{noop}a").roles("USER");
+        auth.inMemoryAuthentication().withUser("a").password("{noop}a").roles("USER").and().withUser("b").password("{noop}b").roles("ADMIN","USER");
     }
 
 }
