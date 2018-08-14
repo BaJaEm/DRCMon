@@ -29,7 +29,7 @@ public class DrcmonApplication
         @Override
         public void run(final String... args) throws UnknownHostException
         {
-            eng.init();
+            //eng.init();
         }
 
     }

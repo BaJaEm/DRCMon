@@ -1,0 +1,9 @@
+
+byte[] addr = new byte[4];
+addr[0] = 10;
+addr[1] = 0;
+addr[2] = 1;
+addr[3] = 2;
+The method getByAddress(byte[]) in the type InetAddress is not applicable for the arguments (String)Syntax error, insert ")" to complete ExpressionSystem.out.println(java.net.InetAddress.getByName("10.0.1.1").getHostAddress());
+
+f.l
