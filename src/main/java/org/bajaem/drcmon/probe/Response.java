@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Data returned from a Probe. The Response consists of a start time, end time,
- * boolean success or failure and optional key value pairs for the response, as
- * well as an error code ( i.e. Error Message or Java {@link Exception} )
+ * Data returned from a Probe. The Response consists of a boolean success or
+ * failure and optional key value pairs for the response, as well as an error
+ * code ( i.e. Error Message or Java {@link Exception} )
  *
  */
 public class Response
