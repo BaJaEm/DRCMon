@@ -17,20 +17,16 @@ import org.bajaem.drcmon.model.ProbeType;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeTypeRepository;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class DrcmonApplicationTests
+public class DrcmonApplicationTests extends DBGenerator
 {
 
-    private static final Logger LOG = LogManager.getLogger(DrcmonApplicationTests.class);
+    private static final Logger LOG = LogManager.getLogger();
 
     @Autowired
     private ProbeTypeRepository ptRepo;
@@ -71,6 +67,7 @@ public class DrcmonApplicationTests
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     public void data() throws UnknownHostException
     {
         final Calendar now = Calendar.getInstance();
@@ -81,13 +78,12 @@ public class DrcmonApplicationTests
         conf.setCreatedBy("Glen");
         conf.setCreatedOn(nowdt);
         conf.setDelayTime(0);
-        // conf.setHost(InetAddress.getByName("pi2d2.drcnet"));
         conf.setLastModifiedBy("Glen");
         conf.setLastModifiedOn(nowdt);
         conf.setPollingInterval(30);
         conf.setProbeType(type);
         final Map<String, String> config = new HashMap<>();
-        config.put("url", "jdbc:h2:/tmp/foo;AUTO_SERVER=true");
+        config.put("url", "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;AUTO_SERVER=true");
         config.put("user", "System");
         config.put("password", "");
         config.put("query", "SELECT name FROM probe_type WHERE name = 'SQLQueryProbe'");

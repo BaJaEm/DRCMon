@@ -14,15 +14,19 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.h2.tools.RunScript;
-import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class DBGenerator
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestPropertySource(properties = { "spring.datasource.url=jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" })
+public abstract class DBGenerator
 {
 
     private static final Logger LOG = LogManager.getLogger(DBGenerator.class);
@@ -30,10 +34,25 @@ public class DBGenerator
     @Autowired
     DataSource dataSource;
 
+    @Before
     public void createDB() throws SQLException, FileNotFoundException
     {
-        final Connection conn = dataSource.getConnection();
-        try
+        try (final Connection conn = dataSource.getConnection())
+        {
+            assertNotNull(conn);
+            for (final String s : new String[] { "/sql/key.sql", "/sql/probe_type.sql", "/sql/probe_config.sql",
+                    "/sql/probe_response.sql" })
+            {
+                final URL u = DBGenerator.class.getResource(s);
+                RunScript.execute(conn, new FileReader(u.getFile()));
+            }
+        }
+    }
+
+    @After
+    public void removeDB() throws SQLException
+    {
+        try (final Connection conn = dataSource.getConnection())
         {
             conn.createStatement().execute("DROP SEQUENCE key_seq");
             conn.createStatement().execute("DROP TABLE probe_response");
@@ -44,23 +63,5 @@ public class DBGenerator
         {
             LOG.warn(e);
         }
-
-        assertNotNull(conn);
-        for (final String s : new String[] { "/sql/key.sql", "/sql/probe_type.sql", "/sql/probe_config.sql",
-                "/sql/probe_response.sql" })
-        {
-            final URL u = DBGenerator.class.getResource(s);
-            RunScript.execute(conn, new FileReader(u.getFile()));
-        }
-
     }
-
-    @Test
-    public void checkDataSource() throws FileNotFoundException, SQLException
-    {
-        assertNotNull(dataSource);
-
-        createDB();
-    }
-
 }
