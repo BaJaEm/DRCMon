@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 public class MonitorEngine
 {
 
+
+    //TODO: separate pool for each probe type
     private final ScheduledExecutorService pool;
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> probeMap = new ConcurrentHashMap<>();
