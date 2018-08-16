@@ -7,6 +7,7 @@ import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.util.DRCBasicAuthRestWeb;
+import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;
 import org.bajaem.drcmon.util.JsonTools;
 import org.bajaem.drcmon.util.Key;
@@ -36,9 +37,18 @@ public class RESTGetProbe extends Probe
         url = getProbeConfig().getCustomConfiguration().get("url");
         expected = getProbeConfig().getCustomConfiguration().get("expected");
         path = getProbeConfig().getCustomConfiguration().get("path");
-        key = Key.decryptKey(getProbeConfig().getCustomConfiguration().get("keyFile"));
-        // TODO: use factory
-        client = new DRCBasicAuthRestWeb(url, key.getId(), key.getSecret());
+        final String keyFile = getProbeConfig().getCustomConfiguration().get("keyFile");
+        if (null != keyFile)
+        {
+            key = Key.decryptKey(keyFile);
+            client = new DRCBasicAuthRestWeb(url, key.getId(), key.getSecret());
+        }
+        else
+        {
+            key = null;
+            client = new DRCRestTemplate(url);
+        }
+        // TODO: use factory for new Web client
 
     }
 
