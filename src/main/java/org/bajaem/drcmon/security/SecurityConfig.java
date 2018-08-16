@@ -1,5 +1,5 @@
 
-package org.bajaem.drcmon.configuration;
+package org.bajaem.drcmon.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
