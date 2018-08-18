@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.bajaem.drcmon.configuration.DRCMonConfiguration;
 import org.bajaem.drcmon.probe.Probe;
-import org.bajaem.drcmon.probe.ProbeConfigurator;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
