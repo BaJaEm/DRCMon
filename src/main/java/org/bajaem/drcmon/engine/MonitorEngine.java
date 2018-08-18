@@ -8,6 +8,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.DRCMonConfiguration;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
@@ -23,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MonitorEngine
 {
-
+    private static final Logger LOG = LogManager.getLogger();
 
     //TODO: separate pool for each probe type
     private final ScheduledExecutorService pool;
