@@ -1,25 +1,24 @@
-
-package org.bajaem.drcmon;
+package org.bajaem.drcmon.probes;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;
 import org.junit.Test;
 import org.springframework.boot.web.server.LocalServerPort;
 
-public class WebClientTest extends DBGenerator
+public class RestWebTests extends DBGenerator
 {
-
-    private static final Logger LOG = LogManager.getLogger(WebClientTest.class);
+    private static final Logger LOG = LogManager.getLogger();
 
     @LocalServerPort
     private int port;
 
-    public WebClientTest() throws FileNotFoundException, SQLException
+    public RestWebTests() throws FileNotFoundException, SQLException
     {
         LOG.info("new client");
 

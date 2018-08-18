@@ -48,7 +48,7 @@ public class JsonToolsTests
         {
             assertEquals("a1val", JsonTools.getValue(node, "a.a1"));
         }
-        catch (DRCProbeException e)
+        catch (final DRCProbeException e)
         {
             fail(e.getMessage());
         }
@@ -56,7 +56,7 @@ public class JsonToolsTests
         {
             assertEquals("b1", JsonTools.getValue(node, "b.0"));
         }
-        catch (DRCProbeException e)
+        catch (final DRCProbeException e)
         {
             fail(e.getMessage());
         }
@@ -64,7 +64,7 @@ public class JsonToolsTests
         {
             assertEquals("cval", JsonTools.getValue(node, "c"));
         }
-        catch (DRCProbeException e)
+        catch (final DRCProbeException e)
         {
             fail(e.getMessage());
         }
@@ -73,7 +73,7 @@ public class JsonToolsTests
             final String foo = JsonTools.getValue(node, "d");
             assertNotEquals("none", foo);
         }
-        catch (DRCProbeException e)
+        catch (final DRCProbeException e)
         {
             // success - this should fail
         }
@@ -83,7 +83,7 @@ public class JsonToolsTests
             JsonTools.getValue(node, "b.a1");
             fail("should not get here - invalid path");
         }
-        catch (DRCProbeException e)
+        catch (final DRCProbeException e)
         {
             // success - this should fail
         }
