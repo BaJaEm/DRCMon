@@ -6,20 +6,24 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
+import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.ProbeConfig;
 
-@ProbeMarker(name = "Ping")
+@ProbeMarker(config = PingProbeConfig.class)
 public class PingProbe extends Probe
 {
 
-    private static final Logger LOG = LogManager.getLogger(PingProbe.class);
+    static final Logger LOG = LogManager.getLogger(PingProbe.class);
 
     private static final int TIMEOUT = 30;
+
+    private final PingProbeConfig myConfig;
 
     public PingProbe(final ProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        LOG.trace("New Probe... " + getProbeConfig().getHost());
+        myConfig = (PingProbeConfig) getProbeConfig();
+        LOG.trace("New Probe... " + myConfig.getHost());
     }
 
     @Override
@@ -27,7 +31,7 @@ public class PingProbe extends Probe
     {
         try
         {
-            return new Response(getProbeConfig().getHost().isReachable(TIMEOUT));
+            return new Response(myConfig.getInetAddress().isReachable(TIMEOUT));
         }
         catch (final IOException e)
         {
@@ -39,13 +43,13 @@ public class PingProbe extends Probe
     @Override
     public String toString()
     {
-        return getProbeConfig().getHost() + " -- " + super.toString();
+        return myConfig.getHost() + " -- " + super.toString();
     }
 
     @Override
     public String getUniqueKey()
     {
-        return getProbeConfig().getHost().getHostAddress();
+        return myConfig.getHost();
     }
 
 }

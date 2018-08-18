@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @RepositoryRestResource
-public interface ProbeTypeRepository extends CrudRepository<ProbeType, Long>
+public interface ProbeTypeRepository extends CrudRepository<ProbeType, String>
 {
 
     public ProbeType findByName(final String name);
@@ -19,5 +19,5 @@ public interface ProbeTypeRepository extends CrudRepository<ProbeType, Long>
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    void delete(ProbeType aLong);
+    void delete(ProbeType aString);
 }

@@ -1,34 +1,36 @@
 
 package org.bajaem.drcmon.model;
 
-import java.net.InetAddress;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import org.bajaem.drcmon.util.InetAddressToStringConverter;
 import org.bajaem.drcmon.util.MapToStringConverter;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "probe_type", discriminatorType = DiscriminatorType.STRING, length = 20)
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
-public class ProbeConfig
+public abstract class ProbeConfig
 {
 
     private long id;
 
     private String artifactId;
-
-    private ProbeType probeType;
-
-    private InetAddress host;
 
     private int pollingInterval;
 
@@ -42,7 +44,7 @@ public class ProbeConfig
 
     private String lastModifiedBy;
 
-    private Map<String, String> customConfiguration;
+    private Map<String, String> customConfiguration = new HashMap<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Generator")
@@ -64,29 +66,6 @@ public class ProbeConfig
     public void setArtifactId(final String _artifactId)
     {
         artifactId = _artifactId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "monitor_type_id")
-    public ProbeType getProbeType()
-    {
-        return probeType;
-    }
-
-    public void setProbeType(final ProbeType _probeType)
-    {
-        probeType = _probeType;
-    }
-
-    @Convert(converter = InetAddressToStringConverter.class)
-    public InetAddress getHost()
-    {
-        return host;
-    }
-
-    public void setHost(final InetAddress _host)
-    {
-        host = _host;
     }
 
     public int getPollingInterval()
@@ -163,8 +142,8 @@ public class ProbeConfig
     @Override
     public String toString()
     {
-        return id + " - " + artifactId + " - " + probeType + " - " + host + " - " + pollingInterval + " - " + delayTime
-                + " - " + createdOn + " - " + createdBy + " - " + lastModifiedOn + " - " + lastModifiedBy;
+        return id + " - " + artifactId + " - " + " - " + pollingInterval + " - " + delayTime + " - "
+                + createdOn + " - " + createdBy + " - " + lastModifiedOn + " - " + lastModifiedBy;
     }
 
 }

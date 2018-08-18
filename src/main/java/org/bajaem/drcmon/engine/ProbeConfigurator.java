@@ -1,5 +1,5 @@
 
-package org.bajaem.drcmon.probe;
+package org.bajaem.drcmon.engine;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 import org.bajaem.drcmon.respository.ProbeTypeRepository;
@@ -38,7 +39,7 @@ public class ProbeConfigurator
     @Autowired
     private final ProbeTypeRepository typeRepo;
 
-    private final static Map<String, Class<Probe>> beans = new HashMap<>();
+    private final static Map<Class<? extends ProbeConfig>, Class<Probe>> beans = new HashMap<>();
 
     public ProbeResponseRepository getProbeResponseRepository()
     {
@@ -86,7 +87,7 @@ public class ProbeConfigurator
         return config;
     }
 
-    public static Map<String, Class<Probe>> getProbeBeanMap()
+    public static Map<Class<? extends ProbeConfig>, Class<Probe>> getProbeBeanMap()
     {
         if (beans.isEmpty())
         {
@@ -100,7 +101,7 @@ public class ProbeConfigurator
                     @SuppressWarnings("unchecked")
                     final Class<Probe> clazz = (Class<Probe>) Class.forName(bd.getBeanClassName());
                     final ProbeMarker m = clazz.getAnnotation(ProbeMarker.class);
-                    final String key = m.name() != null ? m.name() : clazz.getName();
+                    final Class<? extends ProbeConfig> key = m.config();
                     beans.put(key, clazz);
                 }
                 catch (final ClassNotFoundException e)
@@ -119,7 +120,7 @@ public class ProbeConfigurator
         final Iterable<ProbeConfig> configs = configRepo.findAll();
         for (final ProbeConfig config : configs)
         {
-            final Class<Probe> p = getProbeBeanMap().get(config.getProbeType().getName());
+            final Class<Probe> p = getProbeBeanMap().get(config.getClass());
             try
             {
                 final Constructor<Probe> cons = p.getConstructor(ProbeConfig.class);

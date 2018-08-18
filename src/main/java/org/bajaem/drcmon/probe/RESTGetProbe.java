@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.util.DRCBasicAuthRestWeb;
 import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;
@@ -14,17 +15,13 @@ import org.bajaem.drcmon.util.Key;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-@ProbeMarker(name = "RESTGetProbe")
+@ProbeMarker(config = RESTGetProbeConfig.class)
 public class RESTGetProbe extends Probe
 {
 
     private static final Logger LOG = LogManager.getLogger(RESTGetProbe.class);
 
-    private final String url;
-
-    private final String expected;
-
-    private final String path;
+    private final RESTGetProbeConfig myConfig;
 
     private final DRCWebClient client;
 
@@ -33,21 +30,20 @@ public class RESTGetProbe extends Probe
     public RESTGetProbe(final ProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        LOG.trace("New Probe... " + getProbeConfig().getHost());
-        url = getProbeConfig().getCustomConfiguration().get("url");
-        expected = getProbeConfig().getCustomConfiguration().get("expected");
-        path = getProbeConfig().getCustomConfiguration().get("path");
-        final String keyFile = getProbeConfig().getCustomConfiguration().get("keyFile");
-        if (null != keyFile)
+        myConfig = (RESTGetProbeConfig) _probeConfig;
+        LOG.trace("New Probe... " + _probeConfig);
+
+        if (null != myConfig.getKeyFile())
         {
-            key = Key.decryptKey(keyFile);
-            client = new DRCBasicAuthRestWeb(url, key.getId(), key.getSecret());
+            key = Key.decryptKey(myConfig.getKeyFile());
+            client = new DRCBasicAuthRestWeb(myConfig.getUrl(), key.getId(), key.getSecret());
         }
         else
         {
             key = null;
-            client = new DRCRestTemplate(url);
+            client = new DRCRestTemplate(myConfig.getUrl());
         }
+
         // TODO: use factory for new Web client
 
     }
@@ -58,7 +54,7 @@ public class RESTGetProbe extends Probe
         final JsonNode node = client.get();
         try
         {
-            return new Response(expected.equals(JsonTools.getValue(node, path)));
+            return new Response(myConfig.getExpected().equals(JsonTools.getValue(node, myConfig.getPath())));
         }
         catch (final DRCProbeException e)
         {
@@ -70,7 +66,7 @@ public class RESTGetProbe extends Probe
     @Override
     public String getUniqueKey()
     {
-        return url;
+        return myConfig.getUrl();
     }
 
 }

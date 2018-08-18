@@ -2,13 +2,12 @@
 package org.bajaem.drcmon.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
+
+import org.hibernate.annotations.Immutable;
 
 @Entity
-@SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
+@Immutable
 public class ProbeType
 {
 
@@ -16,26 +15,13 @@ public class ProbeType
 
     private String description;
 
-    private long id;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Generator")
-    public long getId()
-    {
-        return id;
-    }
-
-    public void setId(final long _id)
-    {
-        id = _id;
-    }
-
     public String getName()
     {
         return name;
     }
 
-    public void setName(final String _name)
+    protected void setName(final String _name)
     {
         name = _name;
     }
@@ -45,7 +31,7 @@ public class ProbeType
         return description;
     }
 
-    public void setDescription(final String _description)
+    protected void setDescription(final String _description)
     {
         description = _description;
     }

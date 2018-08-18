@@ -1,4 +1,4 @@
-
+-- DROP TABLE probe_response
 
 CREATE OR REPLACE TABLE probe_response
 (
