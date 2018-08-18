@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContext;
  * System user with Administrative privileges. Any access to the JPA
  * Repositories require a {@link SecurityContext} for execution. This class
  * provides a system user that can be used for internal application calls.
- * 
+ *
  */
 public class SystemUser extends AnonymousAuthenticationToken
 {
@@ -29,7 +29,7 @@ public class SystemUser extends AnonymousAuthenticationToken
 
     /**
      * Get the instance of the SystemUser
-     * 
+     *
      * @return the singleton of the SystemUser.
      */
     public static SystemUser get()

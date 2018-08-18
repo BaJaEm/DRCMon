@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -15,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.bajaem.drcmon.util.MapToStringConverter;
@@ -142,8 +139,8 @@ public abstract class ProbeConfig
     @Override
     public String toString()
     {
-        return id + " - " + artifactId + " - " + " - " + pollingInterval + " - " + delayTime + " - "
-                + createdOn + " - " + createdBy + " - " + lastModifiedOn + " - " + lastModifiedBy;
+        return id + " - " + artifactId + " - " + " - " + pollingInterval + " - " + delayTime + " - " + createdOn + " - "
+                + createdBy + " - " + lastModifiedOn + " - " + lastModifiedBy;
     }
 
 }

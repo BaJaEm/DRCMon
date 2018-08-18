@@ -20,21 +20,21 @@ public class JsonTools
 
     /**
      * return the end value of a for a json "object"
-     * 
+     *
      * Examples:
-     * 
+     *
      * <pre>
      * node = {
      *  'a' : { 'a1' : 'a1val' },
      *  'b' : [ 'b1', 'b2', 'b3'],
      *  'c' : 'cval'
      * }
-     * 
+     *
      * getValue(node, "a.a1" ) returns "a1val";
      * getValue(node, "b.0" ) returns "b1";
      * getValue(node, "c" ) returns "cval";
      * </pre>
-     * 
+     *
      * @param node
      *            root node to start
      * @param path

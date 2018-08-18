@@ -6,11 +6,13 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
- * Run arbitrary code ( from the {@link Wrapped} Functional Interface ) as the {@link SystemUser}.
- * 
+ * Run arbitrary code ( from the {@link Wrapped} Functional Interface ) as the
+ * {@link SystemUser}.
+ *
  * Example:
+ * 
  * <pre>
- *  new SystemUserWrapper().executeAsSystem(() -> eng.init());
+ * new SystemUserWrapper().executeAsSystem(() -> eng.init());
  * </pre>
  *
  */

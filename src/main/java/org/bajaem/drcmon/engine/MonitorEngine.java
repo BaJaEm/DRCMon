@@ -27,7 +27,7 @@ public class MonitorEngine
 {
     private static final Logger LOG = LogManager.getLogger();
 
-    //TODO: separate pool for each probe type
+    // TODO: separate pool for each probe type
     private final ScheduledExecutorService pool;
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> probeMap = new ConcurrentHashMap<>();
