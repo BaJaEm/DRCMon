@@ -34,6 +34,7 @@ public class DrcmonApplication
         public void run(final String... args) throws UnknownHostException
         {
             LOG.info("Initialize engine");
+            eng.start();
         }
 
     }
