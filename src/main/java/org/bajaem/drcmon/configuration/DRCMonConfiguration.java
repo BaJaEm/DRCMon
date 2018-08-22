@@ -13,14 +13,23 @@ public class DRCMonConfiguration
 
     private final int poolSize;
 
+    private final int refreshTime;
+
     @Autowired
-    public DRCMonConfiguration(@Value("${poolSize}") final int _poolsize)
+    public DRCMonConfiguration(@Value("${poolSize}") final int _poolsize,
+            @Value("${refreshTime}") final int _refreshTime)
     {
         poolSize = _poolsize;
+        refreshTime = _refreshTime;
     }
 
     public int getPoolSize()
     {
         return poolSize;
+    }
+
+    public int getRefreshTime()
+    {
+        return refreshTime;
     }
 }
