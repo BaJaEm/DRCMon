@@ -98,7 +98,7 @@ public class TestConfigs extends DBGenerator
     {
         final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
         configDefaults(conf);
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;AUTO_SERVER=true");
+        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
         conf.setKeyFile("keyFile");
         conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQueryProbe'");
         conf.setExpected("SQLQueryProbe");
@@ -109,7 +109,7 @@ public class TestConfigs extends DBGenerator
         final SQLQueryProbeConfig conf2 = (SQLQueryProbeConfig) configRepo.findById(conf.getId()).get();
         final String url = conf2.getUrl();
         assertNotNull(url);
-        assertEquals("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;AUTO_SERVER=true", url);
+        assertEquals("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", url);
         final String expected = conf2.getExpected();
         assertNotNull(expected);
         assertEquals("SQLQueryProbe", expected);
