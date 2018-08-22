@@ -76,7 +76,7 @@ public class ProbeConfigurator
     }
 
     @Bean
-    public static ProbeConfigurator probeConfigurator(final ProbeConfigRepository _configRepo,
+    private static ProbeConfigurator probeConfigurator(final ProbeConfigRepository _configRepo,
             final ProbeResponseRepository _responseRepo, final ProbeTypeRepository _typeRepo)
     {
         LOG.info("static probe configer");
@@ -87,7 +87,7 @@ public class ProbeConfigurator
         return config;
     }
 
-    public static Map<Class<? extends ProbeConfig>, Class<Probe>> getProbeBeanMap()
+    private static Map<Class<? extends ProbeConfig>, Class<Probe>> getProbeBeanMap()
     {
         if (beans.isEmpty())
         {
@@ -114,7 +114,7 @@ public class ProbeConfigurator
         return beans;
     }
 
-    public Map<String, Probe> getProbes()
+    Map<String, Probe> getProbes()
     {
         final Map<String, Probe> probes = new HashMap<>();
         final Iterable<ProbeConfig> configs = configRepo.findAll();
