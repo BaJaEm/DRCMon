@@ -36,18 +36,13 @@ public class MonitorEngine
 
     private final ProbeConfigurator probeConfig;
 
-    private final ProbeResponseRepository responseRepo;
 
-    private final ProbeConfigRepository configRepo;
 
     @Autowired
-    public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfigurator _probeConfig,
-            final ProbeResponseRepository _responseRepo, final ProbeConfigRepository _configRepo)
+    public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfigurator _probeConfig)
     {
         config = _config;
         probeConfig = _probeConfig;
-        responseRepo = _responseRepo;
-        configRepo = _configRepo;
         pool = Executors.newScheduledThreadPool(config.getPoolSize());
     }
 
