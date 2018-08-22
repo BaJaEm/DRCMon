@@ -66,7 +66,7 @@ public abstract class Probe implements Runnable
         final Calendar start = Calendar.getInstance();
         final Response r = probe();
         final Calendar end = Calendar.getInstance();
-        new SystemUserWrapper().executeAsSystem(() -> storeResponse(r, localhost, start, end));
+        SystemUserWrapper.executeAsSystem(() -> storeResponse(r, localhost, start, end));
     }
 
     private void storeResponse(final Response r, final InetAddress addr, final Calendar start, final Calendar end)

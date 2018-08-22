@@ -12,14 +12,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * Example:
  * 
  * <pre>
- * new SystemUserWrapper().executeAsSystem(() -> eng.init());
+ * SystemUserWrapper.executeAsSystem(() -> eng.init());
  * </pre>
  *
  */
 public class SystemUserWrapper
 {
 
-    public void executeAsSystem(final Wrapped wrapped)
+    public static void executeAsSystem(final Wrapped wrapped)
+    {
+        new SystemUserWrapper().executeAsSystemHelper(wrapped);
+    }
+
+    private void executeAsSystemHelper(final Wrapped wrapped)
     {
         try
         {

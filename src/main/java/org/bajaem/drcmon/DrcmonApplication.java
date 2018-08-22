@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.engine.MonitorEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -35,7 +34,6 @@ public class DrcmonApplication
         public void run(final String... args) throws UnknownHostException
         {
             LOG.info("Initialize engine");
-            new SystemUserWrapper().executeAsSystem(() -> eng.init());
         }
 
     }
