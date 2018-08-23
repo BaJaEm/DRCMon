@@ -10,7 +10,6 @@ import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
-import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 import org.bajaem.drcmon.util.Key;
 
@@ -43,10 +42,10 @@ public class SQLQueryProbe extends Probe
 
     private final SQLQueryProbeConfig myConfig;
 
-    public SQLQueryProbe(final ProbeConfig _probeConfig)
+    public SQLQueryProbe(final SQLQueryProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        myConfig = (SQLQueryProbeConfig) _probeConfig;
+        myConfig = _probeConfig;
         LOG.debug("new Query Probe");
 
         if (null != myConfig.getKeyFile())

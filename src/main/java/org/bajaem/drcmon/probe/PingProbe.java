@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.model.PingProbeConfig;
-import org.bajaem.drcmon.model.ProbeConfig;
 
 @ProbeMarker(config = PingProbeConfig.class)
 public class PingProbe extends Probe
@@ -19,10 +18,10 @@ public class PingProbe extends Probe
 
     private final PingProbeConfig myConfig;
 
-    public PingProbe(final ProbeConfig _probeConfig)
+    public PingProbe(final PingProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        myConfig = (PingProbeConfig) getProbeConfig();
+        myConfig = _probeConfig;
         LOG.trace("New Probe... " + myConfig.getHost());
     }
 

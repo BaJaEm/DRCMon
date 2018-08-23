@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.exceptions.DRCProbeException;
-import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.util.DRCBasicAuthRestWeb;
 import org.bajaem.drcmon.util.DRCRestTemplate;
@@ -27,10 +26,10 @@ public class RESTGetProbe extends Probe
 
     private final Key key;
 
-    public RESTGetProbe(final ProbeConfig _probeConfig)
+    public RESTGetProbe(final RESTGetProbeConfig _probeConfig)
     {
         super(_probeConfig);
-        myConfig = (RESTGetProbeConfig) _probeConfig;
+        myConfig = _probeConfig;
         LOG.trace("New Probe... " + _probeConfig);
 
         if (null != myConfig.getKeyFile())
