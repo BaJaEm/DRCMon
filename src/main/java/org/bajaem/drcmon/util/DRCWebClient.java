@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.http.HttpHost;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -71,47 +72,47 @@ public abstract class DRCWebClient
         return url.getHost();
     }
 
-    public final JsonNode get()
+    public final JsonNode get() throws DRCProbeException
     {
         return get(JsonNode.class);
     }
 
-    public final JsonNode delete()
+    public final JsonNode delete() throws DRCProbeException
     {
         return delete(JsonNode.class);
     }
 
-    public final JsonNode post(final String body)
+    public final JsonNode post(final String body) throws DRCProbeException
     {
         return post(JsonNode.class, body);
     }
 
-    public final JsonNode post()
+    public final JsonNode post() throws DRCProbeException
     {
         return post(null);
     }
 
-    public final JsonNode put(final String body)
+    public final JsonNode put(final String body) throws DRCProbeException
     {
         return put(JsonNode.class, body);
     }
 
-    public <T> T get(final Class<T> type)
+    public <T> T get(final Class<T> type) throws DRCProbeException
     {
         return action(type, null, HttpMethod.GET);
     }
 
-    public <T> T delete(final Class<T> type)
+    public <T> T delete(final Class<T> type) throws DRCProbeException
     {
         return action(type, null, HttpMethod.DELETE);
     }
 
-    public <T> T post(final Class<T> type, final String body)
+    public <T> T post(final Class<T> type, final String body) throws DRCProbeException
     {
         return action(type, body, HttpMethod.POST);
     }
 
-    public <T> T put(final Class<T> type, final String body)
+    public <T> T put(final Class<T> type, final String body) throws DRCProbeException
     {
         return action(type, body, HttpMethod.PUT);
     }
@@ -130,6 +131,6 @@ public abstract class DRCWebClient
      *            HTTP request method to be performed see {@link HttpMethod}
      * @return body of the request
      */
-    public abstract <T> T action(final Class<T> type, final String body, final HttpMethod method);
+    public abstract <T> T action(final Class<T> type, final String body, final HttpMethod method) throws DRCProbeException;
 
 }

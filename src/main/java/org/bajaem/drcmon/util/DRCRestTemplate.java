@@ -15,6 +15,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -61,7 +62,7 @@ public class DRCRestTemplate extends DRCWebClient
     }
 
     @Override
-    public <T> T action(final Class<T> _type, final String _body, final HttpMethod _method)
+    public <T> T action(final Class<T> _type, final String _body, final HttpMethod _method) throws DRCProbeException
     {
 
         final HttpEntity<?> entity;
@@ -93,6 +94,7 @@ public class DRCRestTemplate extends DRCWebClient
                 LOG.error(new_name.getResponseHeaders());
             }
             LOG.error(e.getMessage(), e);
+            throw new DRCProbeException(e);
         }
         return null;
     }

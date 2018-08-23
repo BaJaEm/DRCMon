@@ -50,9 +50,9 @@ public class RESTGetProbe extends Probe
     @Override
     public Response probe()
     {
-        final JsonNode node = client.get();
         try
         {
+            final JsonNode node = client.get();
             return new Response(myConfig.getExpected().equals(JsonTools.getValue(node, myConfig.getPath())));
         }
         catch (final DRCProbeException e)
