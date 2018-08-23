@@ -1,5 +1,8 @@
+
 package org.bajaem.drcmon.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -15,6 +18,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.exceptions.DRCStartupException;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +26,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Key
 {
+
     private static final Logger LOG = LogManager.getLogger(Key.class);
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(final String[] args) throws Exception
@@ -51,11 +57,30 @@ public class Key
         eda.serialize(file);
     }
 
+    /**
+     * Return a new Key object as the result of decrypting the file specified.
+     *
+     * @param file
+     *            Name of the file containing the encrypted key. Note this can
+     *            be an absolute path, or relative to the class path. It will
+     *            search for the absolute path first.
+     * @return {@link Key} object
+     */
     public static Key decryptKey(final String file)
     {
         try
         {
-            final InputStream is = Key.class.getClassLoader().getResourceAsStream(file);
+            final InputStream is;
+            final File f = new File(file);
+            if (f.exists())
+            {
+                is = new FileInputStream(f);
+            }
+            else
+            {
+                is = Key.class.getClassLoader().getResourceAsStream(file);
+            }
+
             final String data = EncryptionDecryptionAES.decrypt(is);
             is.close();
             return mapper.readValue(data, Key.class);
@@ -63,7 +88,7 @@ public class Key
         catch (final Exception e)
         {
             LOG.error(e);
-            throw new RuntimeException(e);
+            throw new DRCStartupException(e);
         }
     }
 
