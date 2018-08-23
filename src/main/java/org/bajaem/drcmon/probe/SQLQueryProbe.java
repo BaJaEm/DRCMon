@@ -54,9 +54,8 @@ public class SQLQueryProbe extends Probe
         }
         else
         {
-            key = null;
+            key = new Key(null, null);
         }
-
     }
 
     @Override
