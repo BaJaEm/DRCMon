@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 import javax.sql.DataSource;
 
@@ -20,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -29,10 +32,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 public abstract class DBGenerator
 {
 
+    protected static final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
+
+    protected static final String user = "testUser";
+
     private static final Logger LOG = LogManager.getLogger(DBGenerator.class);
 
     @Autowired
     DataSource dataSource;
+
+    @LocalServerPort
+    protected int port;
 
     @Before
     public void createDB() throws SQLException, FileNotFoundException

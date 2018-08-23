@@ -11,7 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
 public class TestTypes extends DBGenerator
 {
-
     @Autowired
     private ProbeTypeRepository repo;
 
