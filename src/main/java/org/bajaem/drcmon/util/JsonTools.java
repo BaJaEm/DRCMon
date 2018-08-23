@@ -39,10 +39,15 @@ public class JsonTools
      *            root node to start
      * @param path
      *            a period separated String of the path to terminal value
-     * @return the String value of the "path" in the json object.
+     * @return the String value of the "path" in the json object. If either
+     *         parameter is null, null will be returned.
      */
     public static String getValue(final JsonNode node, final String path) throws DRCProbeException
     {
+        if (null == node || null == path)
+        {
+            return null;
+        }
         final String[] split = path.split("\\.");
         final JsonNode last = getNext(node, split, 0);
         return last.asText();
