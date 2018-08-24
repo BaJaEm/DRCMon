@@ -82,7 +82,7 @@ public abstract class DRCWebClient
         return delete(JsonNode.class);
     }
 
-    public final JsonNode post(final String body) throws DRCProbeException
+    public final JsonNode post(final JsonNode body) throws DRCProbeException
     {
         return post(JsonNode.class, body);
     }
@@ -92,7 +92,7 @@ public abstract class DRCWebClient
         return post(null);
     }
 
-    public final JsonNode put(final String body) throws DRCProbeException
+    public final JsonNode put(final JsonNode body) throws DRCProbeException
     {
         return put(JsonNode.class, body);
     }
@@ -107,12 +107,12 @@ public abstract class DRCWebClient
         return action(type, null, HttpMethod.DELETE);
     }
 
-    public <T> T post(final Class<T> type, final String body) throws DRCProbeException
+    public <T> T post(final Class<T> type, final T body) throws DRCProbeException
     {
         return action(type, body, HttpMethod.POST);
     }
 
-    public <T> T put(final Class<T> type, final String body) throws DRCProbeException
+    public <T> T put(final Class<T> type, final T body) throws DRCProbeException
     {
         return action(type, body, HttpMethod.PUT);
     }
@@ -131,6 +131,6 @@ public abstract class DRCWebClient
      *            HTTP request method to be performed see {@link HttpMethod}
      * @return body of the request
      */
-    public abstract <T> T action(final Class<T> type, final String body, final HttpMethod method) throws DRCProbeException;
+    public abstract <T> T action(final Class<T> type, final T body, final HttpMethod method) throws DRCProbeException;
 
 }
