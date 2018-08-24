@@ -23,20 +23,20 @@ public class DrcmonApplication
         SpringApplication.run(DrcmonApplication.class, args);
     }
 
-    @Component
-    public class MyBean implements CommandLineRunner
-    {
-
-        @Autowired
-        private MonitorEngine eng;
-
-        @Override
-        public void run(final String... args) throws UnknownHostException
-        {
-            LOG.info("Initialize engine");
-            eng.start();
-        }
-
-    }
+//    @Component
+//    public class MyBean implements CommandLineRunner
+//    {
+//
+//        @Autowired
+//        private MonitorEngine eng;
+//
+//        @Override
+//        public void run(final String... args) throws UnknownHostException
+//        {
+//            LOG.info("Initialize engine");
+//            eng.start();
+//        }
+//
+//    }
 
 }

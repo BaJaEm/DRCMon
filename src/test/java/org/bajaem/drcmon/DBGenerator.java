@@ -3,18 +3,26 @@ package org.bajaem.drcmon;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.util.Key;
 import org.h2.tools.RunScript;
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +44,21 @@ public abstract class DBGenerator
 
     protected static final String user = "testUser";
 
-    private static final Logger LOG = LogManager.getLogger(DBGenerator.class);
+    private static final Logger LOG = LogManager.getLogger();
+
+    protected File goodWebKeyFile;
+
+    protected File badWebKeyFile;
+
+    protected File goodSQLKeyFile;
+
+    protected File badSQLKeyFile;
+
+    protected String baseURL;
+
+    protected Key goodWebKey;
+
+    protected Key goodSQLKey;
 
     @Autowired
     DataSource dataSource;
@@ -45,7 +67,8 @@ public abstract class DBGenerator
     protected int port;
 
     @Before
-    public void createDB() throws SQLException, FileNotFoundException
+    public void createDB() throws SQLException, IOException, InvalidKeyException, NoSuchAlgorithmException,
+            NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException
     {
         try (final Connection conn = dataSource.getConnection())
         {
@@ -57,6 +80,33 @@ public abstract class DBGenerator
                 RunScript.execute(conn, new FileReader(u.getFile()));
             }
         }
+
+        goodWebKeyFile = File.createTempFile("goodTempKey", null);
+        Key.encryptKey(goodWebKeyFile.getAbsolutePath(), "b", "b");
+        goodWebKey = Key.decryptKey(goodWebKeyFile.getAbsolutePath());
+
+        badWebKeyFile = File.createTempFile("badTempKey", null);
+        Key.encryptKey(badWebKeyFile.getAbsolutePath(), "bad", "bad");
+
+        goodSQLKeyFile = File.createTempFile("goodTempKey", null);
+        Key.encryptKey(goodSQLKeyFile.getAbsolutePath(), "System", "");
+        goodSQLKey = Key.decryptKey(goodSQLKeyFile.getAbsolutePath());
+
+        badSQLKeyFile = File.createTempFile("badTempKey", null);
+        Key.encryptKey(badSQLKeyFile.getAbsolutePath(), "bad", "bad");
+
+        baseURL = "http://localhost:" + port + "/";
+    }
+
+    protected void initializConfig(final ProbeConfig config)
+    {
+        config.setArtifactId(null);
+        config.setCreatedBy(user);
+        config.setCreatedOn(now);
+        config.setDelayTime(0);
+        config.setLastModifiedBy(user);
+        config.setLastModifiedOn(now);
+        config.setPollingInterval(30);
     }
 
     @After

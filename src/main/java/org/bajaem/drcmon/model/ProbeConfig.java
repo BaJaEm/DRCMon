@@ -18,10 +18,15 @@ import javax.persistence.SequenceGenerator;
 
 import org.bajaem.drcmon.util.MapToStringConverter;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "probe_type", discriminatorType = DiscriminatorType.STRING, length = 20)
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "probeType", visible = true)
+@JsonSubTypes({ @JsonSubTypes.Type(value = PingProbeConfig.class, name = "Ping") })
 public abstract class ProbeConfig
 {
 

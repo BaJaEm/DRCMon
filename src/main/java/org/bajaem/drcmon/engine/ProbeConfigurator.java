@@ -8,18 +8,15 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.drcmon.configuration.ProbeMarker;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 import org.bajaem.drcmon.respository.ProbeTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.type.filter.AnnotationTypeFilter;
 
 @Configuration
 public class ProbeConfigurator
@@ -39,7 +36,8 @@ public class ProbeConfigurator
     @Autowired
     private final ProbeTypeRepository typeRepo;
 
-    private final static Map<Class<? extends ProbeConfig>, Class<Probe>> beans = new HashMap<>();
+    @Autowired
+    private final ProbeMarkerCache probeCache;
 
     public ProbeResponseRepository getProbeResponseRepository()
     {
@@ -57,12 +55,13 @@ public class ProbeConfigurator
     }
 
     public ProbeConfigurator(final ProbeConfigRepository _configRepo, final ProbeResponseRepository _responseRepo,
-            final ProbeTypeRepository _typeRepo)
+            final ProbeTypeRepository _typeRepo, final ProbeMarkerCache _probeCache)
     {
         LOG.info("constructor probe configer");
         configRepo = _configRepo;
         responseRepo = _responseRepo;
         typeRepo = _typeRepo;
+        probeCache = _probeCache;
     }
 
     /**
@@ -77,41 +76,15 @@ public class ProbeConfigurator
 
     @Bean
     private static ProbeConfigurator probeConfigurator(final ProbeConfigRepository _configRepo,
-            final ProbeResponseRepository _responseRepo, final ProbeTypeRepository _typeRepo)
+            final ProbeResponseRepository _responseRepo, final ProbeTypeRepository _typeRepo,
+            final ProbeMarkerCache _probeCache)
     {
         LOG.info("static probe configer");
         if (null == config)
         {
-            config = new ProbeConfigurator(_configRepo, _responseRepo, _typeRepo);
+            config = new ProbeConfigurator(_configRepo, _responseRepo, _typeRepo, _probeCache);
         }
         return config;
-    }
-
-    private static Map<Class<? extends ProbeConfig>, Class<Probe>> getProbeBeanMap()
-    {
-        if (beans.isEmpty())
-        {
-            final ClassPathScanningCandidateComponentProvider scanner;
-            scanner = new ClassPathScanningCandidateComponentProvider(false);
-            scanner.addIncludeFilter(new AnnotationTypeFilter(ProbeMarker.class));
-            for (final BeanDefinition bd : scanner.findCandidateComponents("*"))
-            {
-                try
-                {
-                    @SuppressWarnings("unchecked")
-                    final Class<Probe> clazz = (Class<Probe>) Class.forName(bd.getBeanClassName());
-                    final ProbeMarker m = clazz.getAnnotation(ProbeMarker.class);
-                    final Class<? extends ProbeConfig> key = m.config();
-                    beans.put(key, clazz);
-                }
-                catch (final ClassNotFoundException e)
-                {
-                    LOG.fatal("Could not find class: " + bd.getBeanClassName(), e);
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return beans;
     }
 
     Map<String, Probe> getProbes()
@@ -120,10 +93,10 @@ public class ProbeConfigurator
         final Iterable<ProbeConfig> configs = configRepo.findAll();
         for (final ProbeConfig config : configs)
         {
-            final Class<Probe> p = getProbeBeanMap().get(config.getClass());
+            final Class<? extends Probe> p = probeCache.getConfig2Probe().get(config.getClass());
             try
             {
-                final Constructor<Probe> cons = p.getConstructor(ProbeConfig.class);
+                final Constructor<? extends Probe> cons = p.getConstructor(ProbeConfig.class);
                 final Probe probe = cons.newInstance(config);
                 probes.put(probe.getUniqueKey(), probe);
             }
