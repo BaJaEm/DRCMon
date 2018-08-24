@@ -7,15 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.DBGenerator;
@@ -24,7 +15,6 @@ import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.probe.Response;
 import org.bajaem.drcmon.probe.SQLQueryProbe;
-import org.bajaem.drcmon.util.Key;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -36,30 +26,13 @@ public class SQLQueryProbeTests extends DBGenerator
 
     private final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
 
-    private File goodKeyFile;
-
-    private File badKeyFile;
-
     @Before
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    public void init() throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-            IllegalBlockSizeException, BadPaddingException
+    public void init()
     {
         LOG.trace("Starting test");
 
-        conf.setArtifactId(null);
-        conf.setCreatedBy(user);
-        conf.setCreatedOn(now);
-        conf.setDelayTime(0);
-        conf.setLastModifiedBy(user);
-        conf.setLastModifiedOn(now);
-        conf.setPollingInterval(30);
-
-        goodKeyFile = File.createTempFile("goodTempKey", null);
-        Key.encryptKey(goodKeyFile.getAbsolutePath(), "System", "");
-
-        badKeyFile = File.createTempFile("badTempKey", null);
-        Key.encryptKey(badKeyFile.getAbsolutePath(), "bad", "bad");
+        initializConfig(conf);
     }
 
     @Test
@@ -67,7 +40,7 @@ public class SQLQueryProbeTests extends DBGenerator
     public void testGood()
     {
         conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setKeyFile(goodKeyFile.getAbsolutePath());
+        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
         conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
         conf.setExpected("SQLQuery");
         final Probe p = new SQLQueryProbe(conf);
@@ -115,7 +88,6 @@ public class SQLQueryProbeTests extends DBGenerator
             // Correct path
         }
     }
-    
 
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
@@ -133,7 +105,7 @@ public class SQLQueryProbeTests extends DBGenerator
         assertTrue(response.getDataMap().isEmpty());
         assertNotNull(response.getErrorMessage());
     }
-    
+
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadQuery()
@@ -141,7 +113,7 @@ public class SQLQueryProbeTests extends DBGenerator
         conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
         conf.setQuery("FOO");
         conf.setExpected("FOO");
-        conf.setKeyFile(goodKeyFile.getAbsolutePath());
+        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -151,7 +123,7 @@ public class SQLQueryProbeTests extends DBGenerator
         assertTrue(response.getDataMap().isEmpty());
         assertNotNull(response.getErrorMessage());
     }
-    
+
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testWrongResponse()
@@ -159,7 +131,7 @@ public class SQLQueryProbeTests extends DBGenerator
         conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
         conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
         conf.setExpected("FOO");
-        conf.setKeyFile(goodKeyFile.getAbsolutePath());
+        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -169,13 +141,13 @@ public class SQLQueryProbeTests extends DBGenerator
         assertTrue(response.getDataMap().isEmpty());
         assertNull(response.getErrorMessage());
     }
-    
+
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadURL()
     {
         conf.setUrl("foo");
-        conf.setKeyFile(goodKeyFile.getAbsolutePath());
+        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
         conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
         conf.setExpected("SQLQuery");
         final Probe p = new SQLQueryProbe(conf);

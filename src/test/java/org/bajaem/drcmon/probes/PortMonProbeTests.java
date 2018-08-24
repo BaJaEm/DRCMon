@@ -30,14 +30,7 @@ public class PortMonProbeTests extends DBGenerator
     public void init() throws UnknownHostException
     {
         LOG.trace("Starting test");
-
-        conf.setArtifactId(null);
-        conf.setCreatedBy(user);
-        conf.setCreatedOn(now);
-        conf.setDelayTime(0);
-        conf.setLastModifiedBy(user);
-        conf.setLastModifiedOn(now);
-        conf.setPollingInterval(30);
+        initializConfig(conf);
     }
     
     @Test
