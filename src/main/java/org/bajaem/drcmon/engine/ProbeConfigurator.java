@@ -93,17 +93,20 @@ public class ProbeConfigurator
         final Iterable<ProbeConfig> configs = configRepo.findAll();
         for (final ProbeConfig config : configs)
         {
-            final Class<? extends Probe> p = probeCache.getConfig2Probe().get(config.getClass());
-            try
+            if (config.isEnabled())
             {
-                final Constructor<? extends Probe> cons = p.getConstructor(ProbeConfig.class);
-                final Probe probe = cons.newInstance(config);
-                probes.put(probe.getUniqueKey(), probe);
-            }
-            catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                    | IllegalArgumentException | InvocationTargetException e)
-            {
-                LOG.fatal("Could not create instance of Probe - please check configuration" + config.toString(), e);
+                final Class<? extends Probe> p = probeCache.getConfig2Probe().get(config.getClass());
+                try
+                {
+                    final Constructor<? extends Probe> cons = p.getConstructor(config.getClass());
+                    final Probe probe = cons.newInstance(config);
+                    probes.put(probe.getUniqueKey(), probe);
+                }
+                catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                        | IllegalArgumentException | InvocationTargetException e)
+                {
+                    LOG.fatal("Could not create instance of Probe - please check configuration" + config.toString(), e);
+                }
             }
         }
 
