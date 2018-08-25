@@ -2,12 +2,14 @@
 package org.bajaem.drcmon.model;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Convert;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,15 +17,20 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 import org.bajaem.drcmon.util.converters.BooleanToStringConverter;
 import org.bajaem.drcmon.util.converters.MapToStringConverter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "probe_type", discriminatorType = DiscriminatorType.STRING, length = 20)
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
-public abstract class ProbeConfig
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+public class ProbeConfig
 {
 
     private long id;
@@ -95,6 +102,10 @@ public abstract class ProbeConfig
 
     public void setCreatedOn(final Timestamp _createdOn)
     {
+        if (_createdOn == null)
+        {
+            createdOn = new Timestamp(Calendar.getInstance().getTimeInMillis());
+        }
         createdOn = _createdOn;
     }
 
@@ -148,6 +159,14 @@ public abstract class ProbeConfig
     public void setEnabled(final boolean _enabled)
     {
         enabled = _enabled;
+    }
+
+    @Transient
+    @JsonIgnore
+    public String getProbeType()
+    {
+        final DiscriminatorValue dv = this.getClass().getAnnotation(DiscriminatorValue.class);
+        return dv != null ? dv.value() : null;
     }
 
     @Override
