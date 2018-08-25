@@ -4,7 +4,6 @@ package org.bajaem.drcmon.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.engine.MonitorEngine;
-import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,18 +49,18 @@ public class DRCRestController
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(path = "/repo/probeConfig/{id}", method = RequestMethod.GET)
-    public ProbeConfig get(@PathVariable("id") long id)
+    public ProbeConfig get(@PathVariable("id") final long id)
     {
-        final ProbeConfig config = (ProbeConfig) repo.findById(id).get();
+        final ProbeConfig config = repo.findById(id).get();
         return config;
     }
 
     @Secured("ROLE_ADMIN")
     @RequestMapping(path = "/repo/probeConfig/{id}", method = RequestMethod.PUT)
-    public ProbeConfig save(final String input, @PathVariable("id") long id)
+    public ProbeConfig save(final String input, @PathVariable("id") final long id)
     {
         LOG.info("Got Here: " + id + " \n\n\n\n\n\n\n\n\n" + input);
-        final ProbeConfig config = (ProbeConfig) repo.findById(id).get();
+        final ProbeConfig config = repo.findById(id).get();
         LOG.info("Config: " + config);
         return config;
     }
