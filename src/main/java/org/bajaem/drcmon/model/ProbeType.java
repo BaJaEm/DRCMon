@@ -36,4 +36,9 @@ public class ProbeType
         description = _description;
     }
 
+    public String configClassName()
+    {
+        return "Test";
+    }
+
 }

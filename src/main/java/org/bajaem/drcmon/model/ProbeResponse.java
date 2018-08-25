@@ -12,16 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.bajaem.drcmon.util.BooleanToStringConverter;
+import org.bajaem.drcmon.util.converters.BooleanToStringConverter;
 
 @Entity
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
 public class ProbeResponse
 {
-
-    private static final Logger LOG = LogManager.getLogger(ProbeResponse.class);
 
     private long id;
 
@@ -46,7 +42,6 @@ public class ProbeResponse
 
     public void setId(final long _id)
     {
-        LOG.info("My ID: " + id);
         id = _id;
     }
 
