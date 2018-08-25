@@ -7,42 +7,27 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.probe.Response;
 import org.bajaem.drcmon.probe.SQLQueryProbe;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
 public class SQLQueryProbeTests extends DBGenerator
 {
 
-    private static final Logger LOG = LogManager.getLogger();
-
-    private final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
-
-    @Before
-    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    public void init()
-    {
-        LOG.trace("Starting test");
-
-        initializConfig(conf);
-    }
-
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testGood()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("SQLQuery");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                goodSQLKeyFile.getAbsolutePath(), //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "SQLQuery");
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -57,9 +42,11 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testNoUser()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("SQLQuery");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig( //
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                null, //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "SQLQuery");
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -74,10 +61,11 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadKeyFile()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("SQLQuery");
-        conf.setKeyFile("BadFile");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                "BadFile", //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "SQLQuery"); //
         try
         {
             new SQLQueryProbe(conf);
@@ -93,9 +81,10 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadUserPassword()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("SQLQuery");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                badSQLKeyFile.getAbsolutePath(), "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "SQLQuery");//
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -110,10 +99,11 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadQuery()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setQuery("FOO");
-        conf.setExpected("FOO");
-        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                goodSQLKeyFile.getAbsolutePath(), //
+                "FOO", //
+                "FOO");//
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -128,10 +118,12 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testWrongResponse()
     {
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("FOO");
-        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
+                goodSQLKeyFile.getAbsolutePath(), //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "FOO");//
+
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -146,10 +138,11 @@ public class SQLQueryProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadURL()
     {
-        conf.setUrl("foo");
-        conf.setKeyFile(goodSQLKeyFile.getAbsolutePath());
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
-        conf.setExpected("SQLQuery");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
+                "foo", //
+                goodSQLKeyFile.getAbsolutePath(), //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                "SQLQuery");//
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);

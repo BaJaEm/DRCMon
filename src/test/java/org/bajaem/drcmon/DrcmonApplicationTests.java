@@ -3,15 +3,11 @@ package org.bajaem.drcmon;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
-import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeTypeRepository;
 import org.junit.Test;

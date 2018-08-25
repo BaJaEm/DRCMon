@@ -2,12 +2,9 @@ package org.bajaem.drcmon.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.NoSuchElementException;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,10 +20,6 @@ public class TestConfigs extends DBGenerator
 {
     private static final Logger LOG = LogManager.getLogger();
 
-    private static final Timestamp now = new Timestamp(Calendar.getInstance().getTimeInMillis());
-
-    private static final String user = "testUser";
-
     @Autowired
     private ProbeConfigRepository configRepo;
 
@@ -34,17 +27,6 @@ public class TestConfigs extends DBGenerator
     public void testExists()
     {
         assertNotNull(configRepo);
-    }
-
-    private void configDefaults(final ProbeConfig conf)
-    {
-        conf.setArtifactId(null);
-        conf.setCreatedBy(user);
-        conf.setCreatedOn(now);
-        conf.setDelayTime(0);
-        conf.setLastModifiedBy(user);
-        conf.setLastModifiedOn(now);
-        conf.setPollingInterval(30);
     }
 
     public void checkUpdateDelete(final long id)
@@ -72,21 +54,15 @@ public class TestConfigs extends DBGenerator
     @Test
     public void testPingProbeConfig()
     {
-        final PingProbeConfig conf = new PingProbeConfig();
-        configDefaults(conf);
-        conf.setHost("127.0.0.1");
+        final PingProbeConfig conf = newPingProbeConfig();
         configRepo.save(conf);
         checkUpdateDelete(conf.getId());
-
     }
 
     @Test
     public void testPortMonProbeConfig()
     {
-        final PortMonProbeConfig conf = new PortMonProbeConfig();
-        configDefaults(conf);
-        conf.setHost("127.0.0.1");
-        conf.setPort(8080);
+        final PortMonProbeConfig conf = newPortMonProbeConfig("127.0.0.1", 8080);
         configRepo.save(conf);
 
         checkUpdateDelete(conf.getId());
@@ -96,15 +72,8 @@ public class TestConfigs extends DBGenerator
     @Test
     public void testSQLProbeConfig() throws UnknownHostException
     {
-        final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
-        configDefaults(conf);
-        conf.setUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        conf.setKeyFile("keyFile");
-        conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQueryProbe'");
-        conf.setExpected("SQLQueryProbe");
+        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig();
         configRepo.save(conf);
-
-        LOG.info(conf.getId());
 
         final SQLQueryProbeConfig conf2 = (SQLQueryProbeConfig) configRepo.findById(conf.getId()).get();
         final String url = conf2.getUrl();
@@ -123,11 +92,7 @@ public class TestConfigs extends DBGenerator
     @Test
     public void testRESTGetProbeConfig() throws UnknownHostException
     {
-        final RESTGetProbeConfig conf = new RESTGetProbeConfig();
-        configDefaults(conf);
-        conf.setUrl("http://localhost:8080/api/portTypes/Ping");
-        conf.setPath("description");
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig();
         configRepo.save(conf);
 
         LOG.info(conf.getId());
@@ -135,12 +100,12 @@ public class TestConfigs extends DBGenerator
         final RESTGetProbeConfig conf2 = (RESTGetProbeConfig) configRepo.findById(conf.getId()).get();
         final String url = conf2.getUrl();
         assertNotNull(url);
-        assertEquals("http://localhost:8080/api/portTypes/Ping", url);
+        assertEquals(conf.getUrl(), url);
         final String expected = conf2.getExpected();
         assertNotNull(expected);
         assertEquals("Ping using java isReachable method - may or maynot be ICMP", expected);
         final String keyFile = conf2.getKeyFile();
-        assertNull(keyFile);
+        assertNotNull(keyFile);
         final String path = conf2.getPath();
         assertNotNull(path);
         assertEquals("description", path);

@@ -21,21 +21,11 @@ public class PingProbeTests extends DBGenerator
 {
     private static final Logger LOG = LogManager.getLogger();
 
-    private final PingProbeConfig conf = new PingProbeConfig();
-
-    @Before
-    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    public void init() throws UnknownHostException
-    {
-        LOG.trace("Starting test");
-        initializConfig(conf);
-    }
-
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testLocalhost()
     {
-        conf.setHost("127.0.0.1");
+        final PingProbeConfig conf = newPingProbeConfig();
         final PingProbe p = new PingProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -50,7 +40,7 @@ public class PingProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadHost()
     {
-        conf.setHost("foo.bar");
+        final PingProbeConfig conf = newPingProbeConfig("foo.bar");
         final PingProbe p = new PingProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);

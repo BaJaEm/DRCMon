@@ -14,7 +14,6 @@ import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.probe.RESTGetProbe;
 import org.bajaem.drcmon.probe.Response;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
@@ -23,24 +22,15 @@ public class RESTGetProbeTests extends DBGenerator
 
     private static final Logger LOG = LogManager.getLogger();
 
-    private final RESTGetProbeConfig conf = new RESTGetProbeConfig();
-
-    @Before
-    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    public void init()
-    {
-        LOG.trace("Starting test");
-        initializConfig(conf);
-    }
-
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testGood()
     {
-        conf.setUrl("http://127.0.0.1:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setKeyFile(goodWebKeyFile.getAbsolutePath());
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Ping using java isReachable method - may or maynot be ICMP", //
+                goodWebKeyFile.getAbsolutePath());//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -55,10 +45,11 @@ public class RESTGetProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadResult()
     {
-        conf.setUrl("http://127.0.0.1:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setKeyFile(goodWebKeyFile.getAbsolutePath());
-        conf.setExpected("Not Good");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Not Good", //
+                goodWebKeyFile.getAbsolutePath());//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();
         assertNotNull(response);
@@ -73,9 +64,11 @@ public class RESTGetProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testNoUser()
     {
-        conf.setUrl("http://127.0.0.1:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Ping using java isReachable method - may or maynot be ICMP", //
+                null);//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();
         LOG.info(response.getErrorMessage());
@@ -91,9 +84,11 @@ public class RESTGetProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadHost()
     {
-        conf.setUrl("http://foo.bar:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://foo.bar:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Ping using java isReachable method - may or maynot be ICMP", //
+                goodWebKeyFile.getAbsolutePath());//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();
         LOG.info(response.getErrorMessage());
@@ -109,10 +104,11 @@ public class RESTGetProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadKeyFile()
     {
-        conf.setUrl("http://127.0.0.1:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setKeyFile("BadFile");
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Ping using java isReachable method - may or maynot be ICMP", //
+                "BadFile");//
         try
         {
             new RESTGetProbe(conf);
@@ -128,10 +124,11 @@ public class RESTGetProbeTests extends DBGenerator
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadUserPassword()
     {
-        conf.setUrl("http://127.0.0.1:" + port + "/api/probeTypes/Ping");
-        conf.setPath("description");
-        conf.setKeyFile(badWebKeyFile.getAbsolutePath());
-        conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
+        final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
+                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                "description", //
+                "Ping using java isReachable method - may or maynot be ICMP", //
+                badWebKeyFile.getAbsolutePath());//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();
         LOG.info(response.getErrorMessage());
