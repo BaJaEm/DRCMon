@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * {@link SystemUser}.
  *
  * Example:
- * 
+ *
  * <pre>
  * SystemUserWrapper.executeAsSystem(() -> eng.init());
  * </pre>
