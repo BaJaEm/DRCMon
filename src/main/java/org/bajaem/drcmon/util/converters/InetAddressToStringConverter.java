@@ -2,7 +2,7 @@
  *
  */
 
-package org.bajaem.drcmon.util;
+package org.bajaem.drcmon.util.converters;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

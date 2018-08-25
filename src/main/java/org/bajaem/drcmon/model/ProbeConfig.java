@@ -16,7 +16,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
 
-import org.bajaem.drcmon.util.MapToStringConverter;
+import org.bajaem.drcmon.util.converters.BooleanToStringConverter;
+import org.bajaem.drcmon.util.converters.MapToStringConverter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -40,6 +41,8 @@ public abstract class ProbeConfig
     private Timestamp lastModifiedOn;
 
     private String lastModifiedBy;
+
+    private boolean enabled;
 
     private Map<String, String> customConfiguration = new HashMap<>();
 
@@ -134,6 +137,17 @@ public abstract class ProbeConfig
     public void setCustomConfiguration(final Map<String, String> _customConfiguration)
     {
         customConfiguration = _customConfiguration;
+    }
+
+    @Convert(converter = BooleanToStringConverter.class)
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(final boolean _enabled)
+    {
+        enabled = _enabled;
     }
 
     @Override

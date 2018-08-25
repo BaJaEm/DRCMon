@@ -1,5 +1,5 @@
 
-package org.bajaem.drcmon.util;
+package org.bajaem.drcmon.util.converters;
 
 import java.io.IOException;
 import java.util.Map;
