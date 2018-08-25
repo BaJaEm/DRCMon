@@ -7,10 +7,11 @@ CREATE OR REPLACE TABLE probe_config
 	probe_type       	  VARCHAR(10) NOT NULL,
 	polling_interval	  INT not null,
 	delay_time			  INT,
-	created_on			  datetime not null,
+	created_on			  datetime not null DEFAULT CURRENT_TIMESTAMP,
 	created_by			  varchar(50) not null,
-	last_modified_on      datetime not null,
+	last_modified_on      datetime not null  DEFAULT CURRENT_TIMESTAMP,
 	last_modified_by      varchar(50) not null,
+	enabled               CHAR(1) DEFAULT 'T' NOT NULL CHECK (enabled IN ('T', 'F')),
 	custom_configuration  varchar(2048)
 	
 	
@@ -19,3 +20,4 @@ CREATE OR REPLACE TABLE probe_config
 ALTER TABLE probe_config 
 	ADD FOREIGN KEY ( probe_type )
 	REFERENCES probe_type ( name );
+	
