@@ -85,29 +85,32 @@ public class MonitorEngine
 
     private void refresh()
     {
+        LOG.info("Starting Refresh");
         // TODO: do we really need to get all of the configs from the DB each
         // time?
-        final Map<String, Probe> configMap = probeConfig.getProbes();
+        final Map<String, Probe> dbMap = probeConfig.getProbes();
 
-        final Set<String> current = probeMap.keySet();
         final Set<String> removed = new HashSet<String>(probeMap.keySet());
 
-        final Set<String> updated = configMap.keySet();
-        final HashSet<String> added = new HashSet<String>(updated);
-        final Set<String> common = new HashSet<String>(updated);
+        final HashSet<String> added = new HashSet<String>(dbMap.keySet());
+        final Set<String> common = new HashSet<String>(dbMap.keySet());
 
         // added
-        added.removeAll(updated);
+        added.removeAll(probeMap.keySet());
         for (final String key : added)
         {
-            final Probe probe = configMap.get(key);
-            final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
-                    probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
-            probeMap.put(key, future);
+            final Probe probe = dbMap.get(key);
+            if (probe.getProbeConfig().isEnabled())
+            {
+                final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
+                        probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
+                probeMap.put(key, future);
+            }
         }
 
-        // removed
-        removed.removeAll(current);
+        // removed - Generally this should not happen - we really only want to
+        // disable configs - in order to preserve the history
+        removed.removeAll(dbMap.keySet());
         for (final String key : removed)
         {
             final ScheduledFuture<?> future = probeMap.get(key);
@@ -115,23 +118,41 @@ public class MonitorEngine
             probeMap.remove(key);
         }
         // common
-        common.addAll(current);
+        common.addAll(probeMap.keySet());
         common.removeAll(added);
         common.removeAll(removed);
         for (final String key : common)
         {
-            final Probe probe = configMap.get(key);
+            final Probe probe = dbMap.get(key);
             final Timestamp lm = probe.getProbeConfig().getLastModifiedOn();
             if (lm.after(lastRefreshed.getTime()))
             {
-                final ScheduledFuture<?> future = probeMap.get(key);
-                future.cancel(false);
-                final ScheduledFuture<?> newFuture = pool.scheduleAtFixedRate(probe,
-                        probe.getProbeConfig().getDelayTime(), probe.getProbeConfig().getPollingInterval(),
-                        TimeUnit.SECONDS);
-                probeMap.replace(key, newFuture);
+                if (probe.getProbeConfig().isEnabled())
+                {
+                    LOG.info("Key: " + key + " - updated");
+                    final ScheduledFuture<?> future = probeMap.get(key);
+                    if (null != future)
+                    {
+                        future.cancel(false);
+                    }
+                    final ScheduledFuture<?> newFuture = pool.scheduleAtFixedRate(probe,
+                            probe.getProbeConfig().getDelayTime(), probe.getProbeConfig().getPollingInterval(),
+                            TimeUnit.SECONDS);
+                    probeMap.put(key, newFuture);
+                }
+                else
+                {
+                    LOG.info("Key: " + key + " - removed");
+                    final ScheduledFuture<?> future = probeMap.get(key);
+                    if (null != future)
+                    {
+                        future.cancel(false);
+                        probeMap.remove(key);
+                    }
+                }
             }
         }
+        LOG.info("Completed Refresh");
     }
 
     public void start()
@@ -140,7 +161,7 @@ public class MonitorEngine
                 + (null != engineThread ? engineThread.isAlive() : null));
         if (!isRunning())
         {
-            if (null == engineThread || ! engineThread.isAlive() )
+            if (null == engineThread || !engineThread.isAlive())
             {
                 engineThread = new Thread(() -> SystemUserWrapper.executeAsSystem(() -> mainLoop()));
             }
