@@ -62,7 +62,7 @@ public class DRCRestTemplate extends DRCWebClient
     }
 
     @Override
-    public <T> T action(final Class<T> _type, final T _body, final HttpMethod _method) throws DRCProbeException
+    public <T> T action(final Class<T> _type, final String _body, final HttpMethod _method) throws DRCProbeException
     {
 
         final HttpEntity<?> entity;
