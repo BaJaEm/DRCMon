@@ -20,7 +20,7 @@ import io.github.classgraph.ScanResult;
 
 /**
  * Hold meta data about the Probe to ProbeConfiguration relationship.
- * 
+ *
  * When the bean is created it will scan the class path for the ProbeMarker
  * annotated classes and build a cache of the mappings of following Mappings:
  * <li>Probe Class to corresponding ProbeConfiguration Class
@@ -90,7 +90,7 @@ public class ProbeMarkerCache
 
     /**
      * Get Map of Probe Class to corresponding ProbeConfiguration Class
-     * 
+     *
      * @return unmodifiableMap of backed by the live map
      */
 
@@ -112,7 +112,7 @@ public class ProbeMarkerCache
     /**
      * Get Map of DiscriminatorValue value String to corresponding ProbeConfig
      * Class
-     * 
+     *
      * @return unmodifiableMap of backed by the live map
      */
     public Map<String, Class<? extends ProbeConfig>> getDv2Config()
@@ -123,7 +123,7 @@ public class ProbeMarkerCache
     /**
      * Get Map of ProbeConfig Class to corresponding DiscriminatorValue value
      * String
-     * 
+     *
      * @return unmodifiableMap of backed by the live map
      */
     public Map<Class<? extends ProbeConfig>, String> getConfig2Dv()
