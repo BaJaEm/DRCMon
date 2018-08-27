@@ -1,13 +1,13 @@
 package org.bajaem.drcmon.util;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.Instant;
 
 public class SystemClock
 {
 
     public static Timestamp currentTime()
     {
-        return new Timestamp(Calendar.getInstance().getTimeInMillis());
+        return new Timestamp(Instant.now().toEpochMilli());
     }
 }

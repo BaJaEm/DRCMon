@@ -2,7 +2,6 @@
 package org.bajaem.drcmon.model;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
+import org.bajaem.drcmon.util.SystemClock;
 import org.bajaem.drcmon.util.converters.BooleanToStringConverter;
 import org.bajaem.drcmon.util.converters.MapToStringConverter;
 
@@ -104,7 +104,7 @@ public class ProbeConfig
     {
         if (_createdOn == null)
         {
-            createdOn = new Timestamp(Calendar.getInstance().getTimeInMillis());
+            createdOn = SystemClock.currentTime();
         }
         createdOn = _createdOn;
     }

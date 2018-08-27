@@ -1,8 +1,7 @@
 
 package org.bajaem.drcmon.engine;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class MonitorEngine
 
     private Thread engineThread;
 
-    private Calendar lastRefreshed;
+    private Instant lastRefreshed;
 
     @Autowired
     public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfigurator _probeConfig)
@@ -79,7 +78,7 @@ public class MonitorEngine
             final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
                     probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
             probeMap.put(key, future);
-            lastRefreshed = Calendar.getInstance();
+            lastRefreshed = Instant.now();
         }
     }
 
@@ -124,8 +123,8 @@ public class MonitorEngine
         for (final String key : common)
         {
             final Probe probe = dbMap.get(key);
-            final Timestamp lm = probe.getProbeConfig().getLastModifiedOn();
-            if (lm.after(lastRefreshed.getTime()))
+            final Instant lm = probe.getProbeConfig().getLastModifiedOn().toInstant();
+            if (lm.isAfter(lastRefreshed))
             {
                 if (probe.getProbeConfig().isEnabled())
                 {

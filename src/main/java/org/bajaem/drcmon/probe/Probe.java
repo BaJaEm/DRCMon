@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.time.Instant;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,21 +63,21 @@ public abstract class Probe implements Runnable
     @Override
     public void run()
     {
-        final Calendar start = Calendar.getInstance();
+        final Instant start = Instant.now();
         final Response r = probe();
-        final Calendar end = Calendar.getInstance();
+        final Instant end = Instant.now();
         SystemUserWrapper.executeAsSystem(() -> storeResponse(r, localhost, start, end));
     }
 
-    private void storeResponse(final Response r, final InetAddress addr, final Calendar start, final Calendar end)
+    private void storeResponse(final Response r, final InetAddress addr, final Instant start, final Instant end)
     {
         final ProbeConfigurator configer = ProbeConfigurator.getProbeConfigurator();
-        LOG.info("Duration: " + (end.getTimeInMillis() - start.getTimeInMillis()) + " " + toString() + " for " + r);
+        LOG.info("Duration: " + (end.toEpochMilli() - start.toEpochMilli()) + " " + toString() + " for " + r);
         final ProbeResponseRepository repo = configer.getProbeResponseRepository();
         final ProbeResponse resp = new ProbeResponse();
 
-        resp.setStartTime(new Timestamp(start.getTimeInMillis()));
-        resp.setEndTime(new Timestamp(end.getTimeInMillis()));
+        resp.setStartTime(new Timestamp(start.toEpochMilli()));
+        resp.setEndTime(new Timestamp(end.toEpochMilli()));
         if (r.getError() != null)
         {
             try (final StringWriter sw = new StringWriter())
