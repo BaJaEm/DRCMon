@@ -23,11 +23,7 @@ import io.github.classgraph.ScanResult;
  * Hold meta data about the Probe to Configurable Class relationship.
  *
  * When the bean is created it will scan the class path for the ProbeMarker
- * annotated classes and build a cache of the mappings of following Mappings:
- * <li>Probe Class to corresponding Configurable Class
- * <li>Configurable Class to corresponding Probe Class
- * <li>DiscriminatorValue value String to corresponding Configurable Class
- * <li>Configurable Class to corresponding DiscriminatorValue value String
+ * annotated classes and build a cache of the mappings.
  *
  */
 @Component
@@ -39,13 +35,7 @@ public class ProbeMarkerCache
     private final ClassInfoList probeTypes;
 
     @Autowired
-    ProbeTypeRepository repo;
-
-    // Map Probe Class -> Configurable Class
-    private final Map<Class<? extends Probe>, Class<? extends Configurable>> probe2Config = new HashMap<>();
-
-    // Map Configurable Class -> Probe Class
-    private final Map<Class<? extends Configurable>, Class<? extends Probe>> config2Probe = new HashMap<>();
+    private ProbeTypeRepository repo;
 
     private final Map<String, ProbeType> name2pt = new HashMap<>();
 
@@ -77,8 +67,6 @@ public class ProbeMarkerCache
                     final ProbeMarker pm = p.getAnnotation(ProbeMarker.class);
                     final Class<? extends Configurable> c = pm.config();
                     final String pt = pm.typeName();
-                    probe2Config.put(p, c);
-                    config2Probe.put(c, p);
                     type2Probe.put(pt, p);
                     type2Config.put(pt, c);
                     config2TypeName.put(c, pt);
@@ -95,28 +83,8 @@ public class ProbeMarkerCache
     }
 
     /**
-     * Get Map of Probe Class to corresponding Configurable Class
-     *
-     * @return unmodifiableMap of backed by the live map
-     */
-
-    public Map<Class<? extends Probe>, Class<? extends Configurable>> getProbe2Config()
-    {
-        return Collections.unmodifiableMap(probe2Config);
-    }
-
-    /**
-     * Get Map of Configurable Class to corresponding Probe Class
-     *
-     * @return unmodifiableMap of backed by the live map
-     */
-    public Map<Class<? extends Configurable>, Class<? extends Probe>> getConfig2Probe()
-    {
-        return Collections.unmodifiableMap(config2Probe);
-    }
-
-    /**
-     * Get Map of Probe Type name to corresponding Configurable Class
+     * Get Map of {@link ProbeType} name to corresponding {@link Configurable}
+     * class.
      *
      * @return unmodifiableMap of backed by the live map
      */
@@ -127,7 +95,7 @@ public class ProbeMarkerCache
     }
 
     /**
-     * Get Map of Probe Type name to corresponding Probe Class
+     * Get Map of {@link ProbeType} name to corresponding {@link Probe} class.
      *
      * @return unmodifiableMap of backed by the live map
      */
@@ -137,7 +105,7 @@ public class ProbeMarkerCache
     }
 
     /**
-     * Get Map of Probe Type name to corresponding Probe Type
+     * Get Map of {@link ProbeType} name to corresponding {@link ProbeType}
      *
      * @return unmodifiableMap of backed by the live map
      */
@@ -147,7 +115,7 @@ public class ProbeMarkerCache
     }
 
     /**
-     * Get Map of Probe Type name to corresponding Probe Type
+     * Get Map of {@link Configurable} class to corresponding {@link ProbeType}
      *
      * @return unmodifiableMap of backed by the live map
      */
@@ -162,6 +130,12 @@ public class ProbeMarkerCache
         return Collections.unmodifiableMap(config2Type);
     }
 
+    /**
+     * Get {@link ProbeType} by corresponding {@link Configurable}.
+     *
+     * @return the {@link ProbeType} object, null if there is no corresponding
+     *         {@link Configurable}.
+     */
     public ProbeType getProbeTypeByConfig(final Class<? extends Configurable> clazz)
     {
         return getConfig2ProbeType().get(clazz);
