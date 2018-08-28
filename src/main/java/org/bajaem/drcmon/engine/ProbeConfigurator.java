@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
@@ -95,11 +96,19 @@ public class ProbeConfigurator
         {
             if (config.isEnabled())
             {
-                final Class<? extends Probe> p = probeCache.getConfig2Probe().get(config.getClass());
+                final Class<? extends Probe> p = probeCache.getType2Probe().get(config.getProbeType().getName());
+                final Class<? extends Configurable> c = probeCache.getType2Config()
+                        .get(config.getProbeType().getName());
                 try
                 {
-                    final Constructor<? extends Probe> cons = p.getConstructor(config.getClass());
-                    final Probe probe = cons.newInstance(config);
+                    // Reflection voodoo here --->
+                    final Constructor<? extends Configurable> conCons = c.getConstructor(config.getClass(),
+                            probeCache.getClass());
+                    LOG.info(c.getClass());
+                    final Constructor<? extends Probe> probeCons = p.getConstructor(c);
+                    final Configurable configurable = conCons.newInstance(config, probeCache);
+                    final Probe probe = probeCons.newInstance(configurable);
+                    // Reflection voodoo ends
                     probes.put(probe.getUniqueKey(), probe);
                 }
                 catch (final NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException

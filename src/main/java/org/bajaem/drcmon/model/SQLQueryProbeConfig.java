@@ -1,30 +1,24 @@
 package org.bajaem.drcmon.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-@Entity
-@DiscriminatorValue(value = SQLQueryProbeConfig.DV)
-@JsonTypeName(SQLQueryProbeConfig.DV)
 public class SQLQueryProbeConfig extends URLBasedConfig
 {
-    public final static String DV = "SQLQuery";
+
+    public SQLQueryProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    {
+        super(_config, _cache);
+    }
 
     private static final String QUERY_KEY = "QUERY";
 
-    @Transient
-    @JsonIgnore
     public String getQuery()
     {
-        return getCustomConfiguration().get(QUERY_KEY);
+        return getConfig().getCustomConfiguration().get(QUERY_KEY);
     }
 
     public void setQuery(final String _query)
     {
-        getCustomConfiguration().put(QUERY_KEY, _query);
+        getConfig().getCustomConfiguration().put(QUERY_KEY, _query);
     }
 }

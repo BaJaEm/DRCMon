@@ -32,7 +32,7 @@ import org.bajaem.drcmon.util.Key;
 
 // TODO: runtime loading of Driver Resources - possible new table with Driver
 // binaries?
-@ProbeMarker(config = SQLQueryProbeConfig.class)
+@ProbeMarker(config = SQLQueryProbeConfig.class, typeName = "SQLQuery")
 public class SQLQueryProbe extends Probe
 {
 
@@ -44,7 +44,7 @@ public class SQLQueryProbe extends Probe
 
     public SQLQueryProbe(final SQLQueryProbeConfig _probeConfig)
     {
-        super(_probeConfig);
+        super(_probeConfig.getConfig());
         myConfig = _probeConfig;
         LOG.debug("new Query Probe");
 

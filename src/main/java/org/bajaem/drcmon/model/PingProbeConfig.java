@@ -4,27 +4,16 @@ package org.bajaem.drcmon.model;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
-@DiscriminatorValue(value = PingProbeConfig.DV)
-// @JsonTypeName(PingProbeConfig.DV)
 public class PingProbeConfig extends HostProbeConfig
 {
 
-    public static final String DV = "Ping";
-
-    public PingProbeConfig()
+    public PingProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
     {
-        super();
+        super(_config, _cache);
     }
 
-    @Transient
-    @JsonIgnore
     public InetAddress getInetAddress() throws UnknownHostException
     {
         return InetAddress.getByName(getHost());

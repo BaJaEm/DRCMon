@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.model.PortMonProbeConfig;
 
-@ProbeMarker(config = PortMonProbeConfig.class)
+@ProbeMarker(config = PortMonProbeConfig.class, typeName = "PortMon")
 public class PortMonProbe extends Probe
 {
 
@@ -19,7 +19,7 @@ public class PortMonProbe extends Probe
 
     public PortMonProbe(final PortMonProbeConfig _probeConfig)
     {
-        super(_probeConfig);
+        super(_probeConfig.getConfig());
         myConfig = _probeConfig;
     }
 

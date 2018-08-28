@@ -6,30 +6,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Convert;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 
 import org.bajaem.drcmon.util.SystemClock;
 import org.bajaem.drcmon.util.converters.BooleanToStringConverter;
 import org.bajaem.drcmon.util.converters.MapToStringConverter;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "probe_type", discriminatorType = DiscriminatorType.STRING, length = 20)
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class ProbeConfig
 {
 
@@ -50,6 +40,8 @@ public class ProbeConfig
     private String lastModifiedBy;
 
     private boolean enabled;
+
+    private ProbeType probeType;
 
     private Map<String, String> customConfiguration = new HashMap<>();
 
@@ -161,12 +153,16 @@ public class ProbeConfig
         enabled = _enabled;
     }
 
-    @Transient
-    @JsonIgnore
-    public String getProbeType()
+    @ManyToOne
+    @JoinColumn(name = "probe_type")
+    public ProbeType getProbeType()
     {
-        final DiscriminatorValue dv = this.getClass().getAnnotation(DiscriminatorValue.class);
-        return dv != null ? dv.value() : null;
+        return probeType;
+    }
+
+    public void setProbeType(final ProbeType _probeType)
+    {
+        probeType = _probeType;
     }
 
     @Override

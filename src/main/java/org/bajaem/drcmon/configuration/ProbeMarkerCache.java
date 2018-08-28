@@ -5,12 +5,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.DiscriminatorValue;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.model.Configurable;
+import org.bajaem.drcmon.model.ProbeType;
 import org.bajaem.drcmon.probe.Probe;
+import org.bajaem.drcmon.respository.ProbeTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.github.classgraph.ClassGraph;
@@ -19,14 +20,14 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
 /**
- * Hold meta data about the Probe to ProbeConfiguration relationship.
+ * Hold meta data about the Probe to Configurable Class relationship.
  *
  * When the bean is created it will scan the class path for the ProbeMarker
  * annotated classes and build a cache of the mappings of following Mappings:
- * <li>Probe Class to corresponding ProbeConfiguration Class
- * <li>ProbeConfiguration Class to corresponding Probe Class
- * <li>DiscriminatorValue value String to corresponding ProbeConfig Class
- * <li>ProbeConfig Class to corresponding DiscriminatorValue value String
+ * <li>Probe Class to corresponding Configurable Class
+ * <li>Configurable Class to corresponding Probe Class
+ * <li>DiscriminatorValue value String to corresponding Configurable Class
+ * <li>Configurable Class to corresponding DiscriminatorValue value String
  *
  */
 @Component
@@ -37,21 +38,27 @@ public class ProbeMarkerCache
 
     private final ClassInfoList probeTypes;
 
-    // Map Probe Class -> ProbeConfig Class
-    private final Map<Class<? extends Probe>, Class<? extends ProbeConfig>> probe2Config = new HashMap<>();
+    @Autowired
+    ProbeTypeRepository repo;
 
-    // Map ProbeConfig Class -> Probe Class
-    private final Map<Class<? extends ProbeConfig>, Class<? extends Probe>> config2Probe = new HashMap<>();
+    // Map Probe Class -> Configurable Class
+    private final Map<Class<? extends Probe>, Class<? extends Configurable>> probe2Config = new HashMap<>();
 
-    // Map ProbeConfig Class -> DiscriminatorValue value String
-    private final Map<String, Class<? extends ProbeConfig>> dv2Config = new HashMap<>();
+    // Map Configurable Class -> Probe Class
+    private final Map<Class<? extends Configurable>, Class<? extends Probe>> config2Probe = new HashMap<>();
 
-    // Map DiscriminatorValue value String -> ProbeConfig Class
-    private final Map<Class<? extends ProbeConfig>, String> config2Dv = new HashMap<>();
+    private final Map<String, ProbeType> name2pt = new HashMap<>();
+
+    private final Map<String, Class<? extends Probe>> type2Probe = new HashMap<>();
+
+    private final Map<String, Class<? extends Configurable>> type2Config = new HashMap<>();
+
+    private final Map<Class<? extends Configurable>, String> config2TypeName = new HashMap<>();
+
+    private final Map<Class<? extends Configurable>, ProbeType> config2Type = new HashMap<>();
 
     ProbeMarkerCache()
     {
-
         LOG.debug("Starting Annotation Scan");
         try (final ScanResult scanResult = new ClassGraph() //
                 .enableAnnotationInfo() //
@@ -68,14 +75,13 @@ public class ProbeMarkerCache
                     @SuppressWarnings("unchecked")
                     final Class<? extends Probe> p = (Class<? extends Probe>) Class.forName(className);
                     final ProbeMarker pm = p.getAnnotation(ProbeMarker.class);
-
-                    final Class<? extends ProbeConfig> c = pm.config();
-                    final DiscriminatorValue dv = c.getAnnotation(DiscriminatorValue.class);
-                    final String d = dv.value();
+                    final Class<? extends Configurable> c = pm.config();
+                    final String pt = pm.typeName();
                     probe2Config.put(p, c);
                     config2Probe.put(c, p);
-                    dv2Config.put(d, c);
-                    config2Dv.put(c, d);
+                    type2Probe.put(pt, p);
+                    type2Config.put(pt, c);
+                    config2TypeName.put(c, pt);
                 }
                 catch (final ClassNotFoundException e)
                 {
@@ -89,46 +95,75 @@ public class ProbeMarkerCache
     }
 
     /**
-     * Get Map of Probe Class to corresponding ProbeConfiguration Class
+     * Get Map of Probe Class to corresponding Configurable Class
      *
      * @return unmodifiableMap of backed by the live map
      */
 
-    public Map<Class<? extends Probe>, Class<? extends ProbeConfig>> getProbe2Config()
+    public Map<Class<? extends Probe>, Class<? extends Configurable>> getProbe2Config()
     {
         return Collections.unmodifiableMap(probe2Config);
     }
 
     /**
-     * Get Map of ProbeConfiguration Class to corresponding Probe Class
+     * Get Map of Configurable Class to corresponding Probe Class
      *
      * @return unmodifiableMap of backed by the live map
      */
-    public Map<Class<? extends ProbeConfig>, Class<? extends Probe>> getConfig2Probe()
+    public Map<Class<? extends Configurable>, Class<? extends Probe>> getConfig2Probe()
     {
         return Collections.unmodifiableMap(config2Probe);
     }
 
     /**
-     * Get Map of DiscriminatorValue value String to corresponding ProbeConfig
-     * Class
+     * Get Map of Probe Type name to corresponding Configurable Class
      *
      * @return unmodifiableMap of backed by the live map
      */
-    public Map<String, Class<? extends ProbeConfig>> getDv2Config()
+
+    public Map<String, Class<? extends Configurable>> getType2Config()
     {
-        return Collections.unmodifiableMap(dv2Config);
+        return Collections.unmodifiableMap(type2Config);
     }
 
     /**
-     * Get Map of ProbeConfig Class to corresponding DiscriminatorValue value
-     * String
+     * Get Map of Probe Type name to corresponding Probe Class
      *
      * @return unmodifiableMap of backed by the live map
      */
-    public Map<Class<? extends ProbeConfig>, String> getConfig2Dv()
+    public Map<String, Class<? extends Probe>> getType2Probe()
     {
-        return Collections.unmodifiableMap(config2Dv);
+        return Collections.unmodifiableMap(type2Probe);
     }
 
+    /**
+     * Get Map of Probe Type name to corresponding Probe Type
+     *
+     * @return unmodifiableMap of backed by the live map
+     */
+    public Map<String, ProbeType> getProbeTypeName2ProbeType()
+    {
+        return Collections.unmodifiableMap(name2pt);
+    }
+
+    /**
+     * Get Map of Probe Type name to corresponding Probe Type
+     *
+     * @return unmodifiableMap of backed by the live map
+     */
+    public Map<Class<? extends Configurable>, ProbeType> getConfig2ProbeType()
+    {
+        if (name2pt.isEmpty())
+        {
+            repo.findAll().forEach(t -> name2pt.put(t.getName(), t));
+            config2TypeName.forEach((k, v) -> config2Type.put(k, name2pt.get(v)));
+
+        }
+        return Collections.unmodifiableMap(config2Type);
+    }
+
+    public ProbeType getProbeTypeByConfig(final Class<? extends Configurable> clazz)
+    {
+        return getConfig2ProbeType().get(clazz);
+    }
 }

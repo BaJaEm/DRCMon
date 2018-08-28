@@ -1,23 +1,24 @@
 package org.bajaem.drcmon.model;
 
-import javax.persistence.Transient;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public abstract class HostProbeConfig extends ProbeConfig
+public abstract class HostProbeConfig extends Configurable
 {
+
+    public HostProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    {
+        super(_config, _cache);
+    }
 
     private static final String HOST_KEY = "HOST";
 
-    @Transient
-    @JsonIgnore
     public String getHost()
     {
-        return getCustomConfiguration().get(HOST_KEY);
+        return getConfig().getCustomConfiguration().get(HOST_KEY);
     }
 
     public void setHost(final String host)
     {
-        getCustomConfiguration().put(HOST_KEY, host);
+        getConfig().getCustomConfiguration().put(HOST_KEY, host);
     }
 }

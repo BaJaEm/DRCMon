@@ -14,7 +14,7 @@ import org.bajaem.drcmon.util.Key;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-@ProbeMarker(config = RESTGetProbeConfig.class)
+@ProbeMarker(config = RESTGetProbeConfig.class, typeName = "RESTGet")
 public class RESTGetProbe extends Probe
 {
 
@@ -28,7 +28,7 @@ public class RESTGetProbe extends Probe
 
     public RESTGetProbe(final RESTGetProbeConfig _probeConfig)
     {
-        super(_probeConfig);
+        super(_probeConfig.getConfig());
         myConfig = _probeConfig;
         LOG.trace("New Probe... " + _probeConfig);
 

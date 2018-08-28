@@ -1,14 +1,12 @@
 package org.bajaem.drcmon.model;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-@Entity
-@DiscriminatorValue(value = RESTGetProbeConfig.DV)
-@JsonTypeName(RESTGetProbeConfig.DV)
 public class RESTGetProbeConfig extends URLBasedConfig
 {
-    public static final String DV = "RESTGet";
+
+    public RESTGetProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    {
+        super(_config, _cache);
+    }
 }

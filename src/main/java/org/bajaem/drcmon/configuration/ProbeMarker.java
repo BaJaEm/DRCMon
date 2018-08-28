@@ -6,12 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.model.Configurable;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
 public @interface ProbeMarker
 {
 
-    Class<? extends ProbeConfig> config();
+    Class<? extends Configurable> config();
+
+    String typeName();
 }

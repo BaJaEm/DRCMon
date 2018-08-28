@@ -55,17 +55,17 @@ public class TestConfigs extends DBGenerator
     public void testPingProbeConfig()
     {
         final PingProbeConfig conf = newPingProbeConfig();
-        configRepo.save(conf);
-        checkUpdateDelete(conf.getId());
+        configRepo.save(conf.getConfig());
+        checkUpdateDelete(conf.getConfig().getId());
     }
 
     @Test
     public void testPortMonProbeConfig()
     {
         final PortMonProbeConfig conf = newPortMonProbeConfig("127.0.0.1", 8080);
-        configRepo.save(conf);
+        configRepo.save(conf.getConfig());
 
-        checkUpdateDelete(conf.getId());
+        checkUpdateDelete(conf.getConfig().getId());
 
     }
 
@@ -73,9 +73,10 @@ public class TestConfigs extends DBGenerator
     public void testSQLProbeConfig() throws UnknownHostException
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig();
-        configRepo.save(conf);
+        configRepo.save(conf.getConfig());
 
-        final SQLQueryProbeConfig conf2 = (SQLQueryProbeConfig) configRepo.findById(conf.getId()).get();
+        final SQLQueryProbeConfig conf2 = new SQLQueryProbeConfig(configRepo.findById(conf.getConfig().getId()).get(),
+                cache);
         final String url = conf2.getUrl();
         assertNotNull(url);
         assertEquals("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", url);
@@ -86,18 +87,19 @@ public class TestConfigs extends DBGenerator
         assertNotNull(keyFile);
         assertEquals("keyFile", keyFile);
 
-        checkUpdateDelete(conf.getId());
+        checkUpdateDelete(conf.getConfig().getId());
     }
 
     @Test
     public void testRESTGetProbeConfig() throws UnknownHostException
     {
         final RESTGetProbeConfig conf = newRESTGetProbeConfig();
-        configRepo.save(conf);
+        configRepo.save(conf.getConfig());
 
-        LOG.info(conf.getId());
+        LOG.info(conf.getConfig().getId());
 
-        final RESTGetProbeConfig conf2 = (RESTGetProbeConfig) configRepo.findById(conf.getId()).get();
+        final RESTGetProbeConfig conf2 = new RESTGetProbeConfig(configRepo.findById(conf.getConfig().getId()).get(),
+                cache);
         final String url = conf2.getUrl();
         assertNotNull(url);
         assertEquals(conf.getUrl(), url);
@@ -110,6 +112,6 @@ public class TestConfigs extends DBGenerator
         assertNotNull(path);
         assertEquals("description", path);
 
-        checkUpdateDelete(conf.getId());
+        checkUpdateDelete(conf.getConfig().getId());
     }
 }

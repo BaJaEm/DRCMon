@@ -1,12 +1,15 @@
 
 package org.bajaem.drcmon.model;
 
-import javax.persistence.Transient;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public abstract class URLBasedConfig extends ProbeConfig
+public abstract class URLBasedConfig extends Configurable
 {
+
+    public URLBasedConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    {
+        super(_config, _cache);
+    }
 
     private static final String URL_KEY = "URL";
 
@@ -16,60 +19,44 @@ public abstract class URLBasedConfig extends ProbeConfig
 
     private static final String KEYFILE_KEY = "KEYFILE";
 
-    @JsonIgnore
-    @Transient
     public String getUrl()
     {
-        return getCustomConfiguration().get(URL_KEY);
+        return getConfig().getCustomConfiguration().get(URL_KEY);
     }
 
-    @JsonIgnore
-    @Transient
     public void setUrl(final String _url)
     {
-        getCustomConfiguration().put(URL_KEY, _url);
+        getConfig().getCustomConfiguration().put(URL_KEY, _url);
     }
 
-    @JsonIgnore
-    @Transient
     public String getExpected()
     {
-        return getCustomConfiguration().get(EXPECTED_KEY);
+        return getConfig().getCustomConfiguration().get(EXPECTED_KEY);
     }
 
-    @JsonIgnore
-    @Transient
     public void setExpected(final String _expected)
     {
-        getCustomConfiguration().put(EXPECTED_KEY, _expected);
+        getConfig().getCustomConfiguration().put(EXPECTED_KEY, _expected);
     }
 
-    @JsonIgnore
-    @Transient
     public String getPath()
     {
-        return getCustomConfiguration().get(PATH_KEY);
+        return getConfig().getCustomConfiguration().get(PATH_KEY);
     }
 
-    @JsonIgnore
-    @Transient
     public void setPath(final String _path)
     {
-        getCustomConfiguration().put(PATH_KEY, _path);
+        getConfig().getCustomConfiguration().put(PATH_KEY, _path);
     }
 
-    @JsonIgnore
-    @Transient
     public String getKeyFile()
     {
-        return getCustomConfiguration().get(KEYFILE_KEY);
+        return getConfig().getCustomConfiguration().get(KEYFILE_KEY);
     }
 
-    @JsonIgnore
-    @Transient
     public void setKeyFile(final String _keyFile)
     {
-        getCustomConfiguration().put(KEYFILE_KEY, _keyFile);
+        getConfig().getCustomConfiguration().put(KEYFILE_KEY, _keyFile);
     }
 
 }

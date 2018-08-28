@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class APITests extends DBGenerator
 {
@@ -39,9 +40,9 @@ public class APITests extends DBGenerator
     {
         final PingProbeConfig conf = newPingProbeConfig();
 
-        final JsonNode node = new ObjectMapper().convertValue(conf, JsonNode.class);
+        final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
         final String url = baseURL + "api/probeConfigs";
-
+        node.put("probeType", baseURL + "/api/probeTypes/Ping");
         final DRCBasicAuthRestWeb client = new DRCBasicAuthRestWeb(url, headers, webUser, webPassword);
         try
         {
@@ -60,7 +61,8 @@ public class APITests extends DBGenerator
     public void testCreatePortMonConfigMappedObject()
     {
         final PortMonProbeConfig conf = newPortMonProbeConfig();
-        final JsonNode node = new ObjectMapper().convertValue(conf, JsonNode.class);
+        final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
+        node.put("probeType", baseURL + "/api/probeTypes/PortMon");
         final String url = baseURL + "api/probeConfigs";
 
         final DRCBasicAuthRestWeb client = new DRCBasicAuthRestWeb(url, headers, webUser, webPassword);
@@ -82,7 +84,8 @@ public class APITests extends DBGenerator
     {
         final RESTGetProbeConfig conf = newRESTGetProbeConfig();
 
-        final JsonNode node = new ObjectMapper().convertValue(conf, JsonNode.class);
+        final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
+        node.put("probeType", baseURL + "/api/probeTypes/RESTGet");
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
         final String user = goodWebKey.getId();
@@ -101,14 +104,15 @@ public class APITests extends DBGenerator
             fail(e.getMessage());
         }
     }
-    
+
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void testCreateSQLQueryProbeConfigMappedObject()
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig();
 
-        final JsonNode node = new ObjectMapper().convertValue(conf, JsonNode.class);
+        final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
+        node.put("probeType", baseURL + "/api/probeTypes/SQLQuery");
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
         final String user = goodWebKey.getId();

@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.PortMonProbeConfig;
 import org.bajaem.drcmon.model.ProbeConfig;
@@ -74,6 +75,9 @@ public abstract class DBGenerator
     @LocalServerPort
     protected int port;
 
+    @Autowired
+    protected ProbeMarkerCache cache;
+
     @Before
     public void createDB() throws SQLException, IOException, InvalidKeyException, NoSuchAlgorithmException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException
@@ -109,8 +113,9 @@ public abstract class DBGenerator
         baseURL = "http://localhost:" + port + "/";
     }
 
-    protected void initializConfig(final ProbeConfig config)
+    protected ProbeConfig initializConfig()
     {
+        final ProbeConfig config = new ProbeConfig();
         config.setArtifactId(null);
         config.setCreatedBy(user);
         config.setCreatedOn(now);
@@ -118,6 +123,7 @@ public abstract class DBGenerator
         config.setLastModifiedBy(user);
         config.setLastModifiedOn(now);
         config.setPollingInterval(30);
+        return config;
     }
 
     @After
@@ -138,9 +144,10 @@ public abstract class DBGenerator
 
     protected PingProbeConfig newPingProbeConfig(final String host)
     {
-        final PingProbeConfig conf = new PingProbeConfig();
-        initializConfig(conf);
+        final ProbeConfig pConfig = initializConfig();
+        final PingProbeConfig conf = new PingProbeConfig(pConfig, cache);
         conf.setHost(host);
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         return conf;
     }
 
@@ -156,8 +163,9 @@ public abstract class DBGenerator
 
     protected PortMonProbeConfig newPortMonProbeConfig(final String host, final int _port)
     {
-        final PortMonProbeConfig conf = new PortMonProbeConfig();
-        initializConfig(conf);
+        final ProbeConfig pConfig = initializConfig();
+        final PortMonProbeConfig conf = new PortMonProbeConfig(pConfig, cache);
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setHost(host);
         conf.setPort(_port);
         return conf;
@@ -176,8 +184,10 @@ public abstract class DBGenerator
     protected SQLQueryProbeConfig newSQLQueryProbeConfig(final String _url, final String _keyFile, final String _query,
             final String _expected)
     {
-        final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
-        initializConfig(conf);
+        final ProbeConfig pConfig = initializConfig();
+        final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(pConfig, cache);
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
+        LOG.info(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setUrl(_url);
         conf.setKeyFile(_keyFile);
         conf.setQuery(_query);
@@ -198,8 +208,9 @@ public abstract class DBGenerator
     protected RESTGetProbeConfig newRESTGetProbeConfig(final String _url, final String _path, final String _expected,
             final String _keyFile)
     {
-        final RESTGetProbeConfig conf = new RESTGetProbeConfig();
-        initializConfig(conf);
+        final ProbeConfig pConfig = initializConfig();
+        final RESTGetProbeConfig conf = new RESTGetProbeConfig(pConfig, cache);
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setUrl(_url);
         conf.setPath(_path);
         conf.setExpected(_expected);

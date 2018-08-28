@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.engine.MonitorEngine;
 import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.PortMonProbeConfig;
@@ -34,12 +35,16 @@ public class InitBean // implements CommandLineRunner
     @Autowired
     private ProbeConfigRepository configRepo;
 
+    @Autowired
+    private ProbeMarkerCache cache;
+
     private final Timestamp now = SystemClock.currentTime();
 
     private final String user = "testUser";
 
-    private void configDefaults(final ProbeConfig conf)
+    private ProbeConfig configDefaults()
     {
+        final ProbeConfig conf = new ProbeConfig();
         conf.setArtifactId(null);
         conf.setCreatedBy(user);
         conf.setCreatedOn(now);
@@ -47,40 +52,41 @@ public class InitBean // implements CommandLineRunner
         conf.setLastModifiedBy(user);
         conf.setLastModifiedOn(now);
         conf.setPollingInterval(30);
+        return conf;
     }
 
     public void createProbes()
     {
         {
-            final PingProbeConfig conf = new PingProbeConfig();
-            configDefaults(conf);
+            final PingProbeConfig conf = new PingProbeConfig(configDefaults(), cache);
+            ;
             conf.setHost("127.0.0.1");
-            configRepo.save(conf);
+            configRepo.save(conf.getConfig());
         }
         {
-            final PortMonProbeConfig conf = new PortMonProbeConfig();
-            configDefaults(conf);
+            final PortMonProbeConfig conf = new PortMonProbeConfig(configDefaults(), cache);
+            configDefaults();
             conf.setHost("127.0.0.1");
             conf.setPort(8080);
-            configRepo.save(conf);
+            configRepo.save(conf.getConfig());
         }
         {
-            final SQLQueryProbeConfig conf = new SQLQueryProbeConfig();
-            configDefaults(conf);
+            final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(configDefaults(), cache);
+            configDefaults();
             conf.setUrl("jdbc:h2:./foo;AUTO_SERVER=true");
             conf.setKeyFile("jdbc.key");
             conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
             conf.setExpected("SQLQuery");
-            configRepo.save(conf);
+            configRepo.save(conf.getConfig());
         }
         {
-            final RESTGetProbeConfig conf = new RESTGetProbeConfig();
-            configDefaults(conf);
+            final RESTGetProbeConfig conf = new RESTGetProbeConfig(configDefaults(), cache);
+            configDefaults();
             conf.setUrl("http://localhost:8080/api/probeTypes/Ping");
             conf.setKeyFile("web.key");
             conf.setPath("description");
             conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
-            configRepo.save(conf);
+            configRepo.save(conf.getConfig());
         }
     }
 }
