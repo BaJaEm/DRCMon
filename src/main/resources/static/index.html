@@ -5,17 +5,36 @@
 <title>DRCMon</title>
 </head>
 <body>
-	<div id="container">
-		<div id=top>
-			<div class="banner">Distribute ResourCe Monitor</div>
-		</div>
-		<div id="menu">
-			<div id="overview">Overview</div>
-			<div id="search">Search</div>
-			<div id="add probe">Add Probes</div>
-		</div>
-		<div id="main"></div>
-		<div id="bottom">(c) 2018</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            <h2>Distribute ResourCe Monitor</h2>
+        </div>
+        <div class="row">
+            <div id="menu" class="col">
+                <button class="btn btn-secondary dropdown-toggle"
+                    type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Dropdown button</button>
+                <div class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">Overview</a>
+                    <a class="dropdown-item" href="#">Search</a>
+                    <a class="dropdown-item" href="#">Add Probes</a>
+                </div>
+            </div>
+            <div id="main" class="col">TEST</div>
+        </div>
+        <div id="bottom" class="row text-muted">(c) 2018</div>
+    </div>
 </body>
+
+
+
+<script src="js/lib/angular.min.js"></script>
+<script src="js/lib/jquery-3.3.1.slim.min.js"></script>
+<script src="js/lib/bootstrap.bundle.min.js"></script>
+<script src="js/app/app.js"></script>
+
+<link rel="stylesheet" href="css/lib/bootstrap.min.css" />
+<link rel="stylesheet" href="css/app/drcmon.css" />
 </html>
