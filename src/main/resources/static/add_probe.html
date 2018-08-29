@@ -1,10 +1,10 @@
 <div class="add_probe">
-     <table>
-          <form>
+     <form>
+          <table>
                <tr>
                     <td>Probe Type:</td>
                     <td><select ng-model="np.pt"
-                         ng-options="t.name for t in probeTypes"></select></td>
+                         ng-options="t.name for t in probeTypes track by t.name"></select></td>
                </tr>
                <tr>
                     <td>External ID:</td>
@@ -22,52 +22,54 @@
                     <td>Enabled</td>
                     <td><input type="checkbox" ng-model="np.enabled" /></td>
                </tr>
-          <tr
-               ng-show="np.pt && ( np.pt.name == 'Ping' || np.pt.name == 'PortMon')">
-               <td>Host</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.HOST" /></td>
-          </tr>
-          <tr ng-show="np.pt && np.pt.name == 'PortMon'">
-               <td>Port</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.PORT" /></td>
-          </tr>
-          <tr
-               ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
-               <td>URL</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.URL" /></td>
-          </tr>
-          <tr
-               ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
-               <td>EXPECTED</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.EXPECTED" /></td>
-          </tr>
-          <tr
-               ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
-               <td>PATH</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.PATH" /></td>
-          </tr>
-          <tr
-               ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
-               <td>KEYFILE</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.KEYFILE" /></td>
-          </tr>
-          <tr ng-show="np.pt && (np.pt.name == 'SQLQuery' )">
-               <td>QUERY</td>
-               <td><input type="text"
-                    ng-model="np.customConfigurationTemp.QUERY" /></td>
-          </tr>
-          <tr>
-               <td><input type="submit" value="add" ng-click="addItem(np)"></td>
-          </tr>
-     </table>
-     {{np}}
-     <hr>
-     {{foo}}
+               <tr
+                    ng-show="np.pt && ( np.pt.name == 'Ping' || np.pt.name == 'PortMon')">
+                    <td>Host</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.HOST" /></td>
+               </tr>
+               <tr ng-show="np.pt && np.pt.name == 'PortMon'">
+                    <td>Port</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.PORT" /></td>
+               </tr>
+               <tr
+                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    <td>URL</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.URL" /></td>
+               </tr>
+               <tr
+                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    <td>EXPECTED</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.EXPECTED" /></td>
+               </tr>
+               <tr
+                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    <td>PATH</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.PATH" /></td>
+               </tr>
+               <tr
+                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    <td>KEYFILE</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.KEYFILE" /></td>
+               </tr>
+               <tr ng-show="np.pt && (np.pt.name == 'SQLQuery' )">
+                    <td>QUERY</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.QUERY" /></td>
+               </tr>
+               <tr>
+                    <td><input type="submit" value="{{action}}"
+                         ng-click="doAction"></td>
+               </tr>
+          </table>
      </form>
+     {{error}}
+     <hr>
+     <pre>{{np | json}}</pre>
+     <pre>{{probeTypes | json}}</pre>
 </div>

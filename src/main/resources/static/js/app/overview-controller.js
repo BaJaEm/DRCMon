@@ -10,7 +10,7 @@
 
 	drcmon_app.factory("overview_service", overview_service);
 
-	var overview_controller = function($scope, overview_service, $http) {
+	var overview_controller = function($scope, overview_service, $http, $window) {
 
 		$scope.status = "Initializing..."
 
@@ -31,7 +31,7 @@
 				} else {
 					$scope.status = "Not Running";
 				}
-			}, onError );
+			}, onError);
 		}
 		$scope.start = function() {
 			$http.get("/start").then(function(data) {
@@ -43,6 +43,13 @@
 			$http.get("/stop").then(function(data) {
 				refreshStatus()
 			}, onError)
+		}
+
+		$scope.update = function(config) {
+			var ref = config._links.self.href;
+			var n = ref.lastIndexOf("/");
+			var id = ref.substring(n + 1);
+			$window.location.href = '/#!/update/' + id;
 		}
 
 		var refreshData = function() {

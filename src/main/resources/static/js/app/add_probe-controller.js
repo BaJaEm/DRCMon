@@ -23,8 +23,8 @@
 			"delayTime" : 0,
 			"customConfiguration" : {}
 		};
-
-		$scope.addItem = function(item) {
+		$scope.action = "add";
+		$scope.doAction = function(item) {
 
 			if (item.pt.name == 'Ping' || item.pt.name == 'PortMon') {
 				item.customConfiguration.HOST = item.customConfigurationTemp.HOST;
@@ -43,9 +43,8 @@
 				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
 			}
 			item.probeType = item.pt._links.self.href;
-			$http.post("/api/probeConfigs", item).then( $scope.foo = item
-					//$window.location.href = '/#!/add'
-						, function(response) {
+			$http.post("/api/probeConfigs", item).then(
+					$window.location.href = '/#!/add', function(response) {
 						alert(response)
 					});
 		}

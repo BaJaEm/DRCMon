@@ -6,6 +6,9 @@
 		$routeProvider.when("/add/", {
 			'templateUrl' : "add_probe.html",
 			'controller' : "add_probe_controller"
+		}).when("/update/:id", {
+			'templateUrl' : "add_probe.html",
+			'controller' : "update_probe_controller"
 		}).otherwise({
 			'templateUrl' : "overview.html",
 			'controller' : "overview_controller"

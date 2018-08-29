@@ -12,17 +12,30 @@
           </tr>
 
      </table>
-     {{data}}
-     <table>
+
+     <table border="1">
           <tr>
-               <th>Probe Type</th>
-               <th>Probe Status</th>
+               <th>Type</th>
                <th>Configuration</th>
+               <th>Enabled?</th>
+               <th>Delay Time</th>
+               <th>Polling Interval</th>
+               <th>Last Modified</th>
+               <th></th>
+
           </tr>
           <tr ng-repeat="config in data">
                <td>{{config.probeType.name}}</td>
+               <td><div
+                         ng-repeat="(key, value) in config.customConfiguration">
+                         {{key}} : {{value}}</div></td>
                <td>{{config.enabled}}</td>
-               <td>{{config.customConfiguration}}</td>
+               <td>{{config.delayTime}} sec.</td>
+               <td>{{config.pollingInterval}} sec.</td>
+               <td>{{config.lastModifiedOn}}</td>
+               <td><input type="submit" value="edit"
+                    ng-click="update(config)" /></td>
+
           </tr>
      </table>
 </div>
