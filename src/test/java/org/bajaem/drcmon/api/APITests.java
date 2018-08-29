@@ -42,7 +42,7 @@ public class APITests extends DBGenerator
 
         final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
         final String url = baseURL + "api/probeConfigs";
-        node.put("probeType", baseURL + "/api/probeTypes/Ping");
+        node.put("probeType", getURLforProbeType("Ping"));
         final DRCBasicAuthRestWeb client = new DRCBasicAuthRestWeb(url, headers, webUser, webPassword);
         try
         {
@@ -62,7 +62,8 @@ public class APITests extends DBGenerator
     {
         final PortMonProbeConfig conf = newPortMonProbeConfig();
         final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
-        node.put("probeType", baseURL + "/api/probeTypes/PortMon");
+        node.put("probeType", getURLforProbeType("PortMon"));
+        LOG.info("ProbeType URL: " + node.get("probeType"));
         final String url = baseURL + "api/probeConfigs";
 
         final DRCBasicAuthRestWeb client = new DRCBasicAuthRestWeb(url, headers, webUser, webPassword);
@@ -85,7 +86,7 @@ public class APITests extends DBGenerator
         final RESTGetProbeConfig conf = newRESTGetProbeConfig();
 
         final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
-        node.put("probeType", baseURL + "/api/probeTypes/RESTGet");
+        node.put("probeType", getURLforProbeType("RESTGet"));
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
         final String user = goodWebKey.getId();
@@ -112,7 +113,7 @@ public class APITests extends DBGenerator
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig();
 
         final ObjectNode node = (ObjectNode) new ObjectMapper().convertValue(conf.getConfig(), JsonNode.class);
-        node.put("probeType", baseURL + "/api/probeTypes/SQLQuery");
+        node.put("probeType", getURLforProbeType("SQLQuery"));
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
         final String user = goodWebKey.getId();

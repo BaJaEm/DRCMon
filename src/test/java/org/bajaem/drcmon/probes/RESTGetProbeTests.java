@@ -27,7 +27,7 @@ public class RESTGetProbeTests extends DBGenerator
     public void testGood()
     {
         final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
-                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                getURLforProbeType("Ping"), //
                 "description", //
                 "Ping using java isReachable method - may or maynot be ICMP", //
                 goodWebKeyFile.getAbsolutePath());//
@@ -46,7 +46,7 @@ public class RESTGetProbeTests extends DBGenerator
     public void testBadResult()
     {
         final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
-                "http://127.0.0.1:" + port + "/api/probeTypes/Ping", //
+                getURLforProbeType("RESTGet"), //
                 "description", //
                 "Not Good", //
                 goodWebKeyFile.getAbsolutePath());//

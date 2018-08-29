@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @PreAuthorize("hasRole('ROLE_USER')")
 @RepositoryRestResource
-public interface ProbeTypeRepository extends CrudRepository<ProbeType, String>
+public interface ProbeTypeRepository extends CrudRepository<ProbeType, Long>
 {
 
     public ProbeType findByName(final String name);

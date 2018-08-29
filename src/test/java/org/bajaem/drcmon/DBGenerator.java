@@ -186,7 +186,6 @@ public abstract class DBGenerator
     {
         final ProbeConfig pConfig = initializConfig();
         final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(pConfig, cache);
-        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         LOG.info(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setUrl(_url);
         conf.setKeyFile(_keyFile);
@@ -216,5 +215,10 @@ public abstract class DBGenerator
         conf.setExpected(_expected);
         conf.setKeyFile(_keyFile);
         return conf;
+    }
+
+    protected String getURLforProbeType(final String name)
+    {
+        return baseURL + "/api/probeTypes/" + cache.getProbeTypeByName(name).getId();
     }
 }

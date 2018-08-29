@@ -121,11 +121,10 @@ public class ProbeMarkerCache
      */
     public Map<Class<? extends Configurable>, ProbeType> getConfig2ProbeType()
     {
-        if (name2pt.isEmpty())
+        if (config2Type.isEmpty())
         {
-            repo.findAll().forEach(t -> name2pt.put(t.getName(), t));
-            config2TypeName.forEach((k, v) -> config2Type.put(k, name2pt.get(v)));
-
+            final Map<String, ProbeType> pts = getName2ProbeType();
+            config2TypeName.forEach((k, v) -> config2Type.put(k, pts.get(v)));
         }
         return Collections.unmodifiableMap(config2Type);
     }
@@ -140,4 +139,31 @@ public class ProbeMarkerCache
     {
         return getConfig2ProbeType().get(clazz);
     }
+
+    /**
+     * Get Map of {@link ProbeType} name to corresponding {@link ProbeType}
+     *
+     * @return unmodifiableMap of backed by the live map
+     */
+    public Map<String, ProbeType> getName2ProbeType()
+    {
+        if (name2pt.isEmpty())
+        {
+            repo.findAll().forEach(t -> name2pt.put(t.getName(), t));
+        }
+        return Collections.unmodifiableMap(name2pt);
+    }
+
+    /**
+     * Get the {@link ProbeType} by it's name.
+     *
+     * @param name
+     *            of the probe
+     * @return {@link ProbeType} object.
+     */
+    public ProbeType getProbeTypeByName(final String name)
+    {
+        return getName2ProbeType().get(name);
+    }
+
 }
