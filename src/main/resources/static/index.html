@@ -2,38 +2,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport"
+     content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>DRCMon</title>
 </head>
-<body>
-    <div class="container">
-        <div class="row">
-            <h2>Distribute ResourCe Monitor</h2>
-        </div>
-        <div class="row">
-            <div id="menu" class="col">
-                <button class="btn btn-secondary dropdown-toggle"
-                    type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">Dropdown button</button>
-                <div class="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Overview</a>
-                    <a class="dropdown-item" href="#">Search</a>
-                    <a class="dropdown-item" href="#">Add Probes</a>
-                </div>
-            </div>
-            <div id="main" class="col">TEST</div>
-        </div>
-        <div id="bottom" class="row text-muted">(c) 2018</div>
-    </div>
+<body ng-app="drcmon_app">
+     <div class="main">
+          <div class="Header">
+               <h2>Distribute ResourCe Monitor</h2>
+          </div>
+          <div class="row">
+               <div id="menu" class="col">
+                    <div>
+                         <a href="#">Overview</a><p>
+                         <a href="/#!search/">Search</a><p>
+                         <a href="/#!/add/">Add Probes</a><p>
+                    </div>
+               </div>
+               <div id="main" class="col">
+                    <div ng-view></div>
+               </div>
+          </div>
+          <div id="bottom" class="Footer text-muted">(c) 2018</div>
+     </div>
 </body>
 
 
 
 <script src="js/lib/angular.min.js"></script>
+
+<script src="js/lib/angular-route.min.js"></script>
+<script src="js/lib/angular-resource.min.js"></script>
+<script src="js/lib/angular-cookies.min.js"></script>
 <script src="js/lib/jquery-3.3.1.slim.min.js"></script>
 <script src="js/lib/bootstrap.bundle.min.js"></script>
-<script src="js/app/app.js"></script>
+<script src="js/app/drcmon-app.js"></script>
+<script src="js/app/overview-controller.js"></script>
+<script src="js/app/add_probe-controller.js"></script>
 
 <link rel="stylesheet" href="css/lib/bootstrap.min.css" />
 <link rel="stylesheet" href="css/app/drcmon.css" />

@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>DRCMon Overview</title>
-</head>
-<body>
+<div class="overview">
+     <table>
+          <tr>
+               <td>Status:</td>
+               <td>{{status}}</td>
+          </tr>
+          <tr>
+               <td><input type="button" value="Start" ng-click="start()"
+                    ng-disabled="start_disabled" /></td>
+               <td><input type="button" value="Stop" ng-click="stop()"
+                    ng-disabled="stop_disabled" /></td>
+          </tr>
 
-</body>
-</html>
+     </table>
+     {{data}}
+     <table>
+          <tr>
+               <th>Probe Type</th>
+               <th>Probe Status</th>
+               <th>Configuration</th>
+          </tr>
+          <tr ng-repeat="config in data">
+               <td>{{config.probeType.name}}</td>
+               <td>{{config.enabled}}</td>
+               <td>{{config.customConfiguration}}</td>
+          </tr>
+     </table>
+</div>
