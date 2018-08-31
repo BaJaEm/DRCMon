@@ -18,7 +18,6 @@
 
 		$scope.action = "update";
 		var getConfig = function() {
-			alert("/api/probeConfigs/" + id + "?inlineProbeConfig");
 			$http.get("/api/probeConfigs/" + id + "?projection=inlineProbeConfig").then(
 					function(data) {
 						$scope.np = data.data;
