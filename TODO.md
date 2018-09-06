@@ -25,12 +25,12 @@ DRCMon – UI
 
 Overview
 * Status
-* Add probes
-* Modify probes
-* Delete probes – we will not delete probes, only disable them
-* (Re)Start engine
+* _Add probes_
+* _Modify probes_
+* Delete probes – we will not delete probes, only disable them -- just use update
+* _(Re)Start engine_
 * Show message queue _future_
-* Show probe status
+* Show probe status - running - failed, etc...
 * Overview
 *	running status
 *	<start> <stop> <refresh>
@@ -41,6 +41,7 @@ Overview
 *	Add probe
 *	update probe – update custom data – enable disable
 *	show probe history
+*   Add Key - needs API to create - store keys in DB? - encrypted field
 	
 ##Data Store
 
@@ -89,3 +90,4 @@ host/ip, Port, Protocol
 * track Schema ( liquibase )
 * _Better mechanism for probe initialization_
 * _ad-hoc config for probes ( JSON field )_
+* Integration with SSO ( KeyCloak, etc... )
