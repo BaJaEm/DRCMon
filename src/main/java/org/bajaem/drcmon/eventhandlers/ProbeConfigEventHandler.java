@@ -1,6 +1,8 @@
 
 package org.bajaem.drcmon.eventhandlers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.util.SystemClock;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProbeConfigEventHandler extends AbstractRepositoryEventListener<ProbeConfig>
 {
+    private static final Logger LOG = LogManager.getLogger();
 
     @Override
     protected void onBeforeCreate(final ProbeConfig p)
@@ -36,6 +39,7 @@ public class ProbeConfigEventHandler extends AbstractRepositoryEventListener<Pro
     {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final String currentPrincipalName = authentication.getName();
+        LOG.trace("updating: " + p.getCreatedOn());
 
         p.setLastModifiedOn(SystemClock.currentTime());
         p.setLastModifiedBy(currentPrincipalName);
