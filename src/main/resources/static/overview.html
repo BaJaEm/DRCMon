@@ -32,7 +32,7 @@
                <td>{{config.enabled}}</td>
                <td>{{config.delayTime}} sec.</td>
                <td>{{config.pollingInterval}} sec.</td>
-               <td>{{config.lastModifiedOn}}</td>
+               <td>{{config.lastModifiedOn | date: 'yy-MM-dd HH:mm:ss'}}</td>
                <td><input type="submit" value="edit"
                     ng-click="update(config)" /></td>
 

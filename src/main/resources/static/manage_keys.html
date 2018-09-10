@@ -1,0 +1,28 @@
+<div class="manage_keys">
+     <table border="1">
+          <tr>
+               <th>Key Name</th>
+               <th>User ID</th>
+               <th>password</th>
+               <th></th>
+               <th></th>
+          </tr>
+          <tr ng-repeat="key in probeKeys">
+               <td>{{key.name}}</td>
+               <td>{{key.userId}}</td>
+               <td>"Hidden"</td>
+               <td></td>
+               <td><input type="submit" value="edit"
+                    ng-click="updateKey(key)" /></td>
+          </tr>
+          <tr>
+               <td><input type="text" ng-model="newkey.name" /></td>
+               <td><input type="text" ng-model="newkey.userId" /></td>
+               <td><input type="password" ng-model="newkey.pw1" /></td>
+               <td><input type="password" ng-model="newkey.pw2" /></td>
+               <td><input type="submit" value="add"
+                    ng-click="addKey(newkey)" /></td>
+          </tr>
+
+     </table>
+</div>

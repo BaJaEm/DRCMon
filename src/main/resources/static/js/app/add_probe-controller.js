@@ -17,6 +17,14 @@
 			});
 		}
 		getProbeTypes();
+		
+		var getProbeKeys = function() {
+			$http.get("/api/probeKeys").then(function(data) {
+				$scope.probeKeys = data.data._embedded.probeKeys
+			});
+		}
+		getProbeKeys();
+		
 		$scope.np = {
 			"enabled" : true,
 			"pollingInterval" : 30,
@@ -43,6 +51,15 @@
 				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
 			}
 			item.probeType = item.pt._links.self.href;
+			
+			if (item.probeKey._links ){
+				var probeKey = item.probeKey._links.probeKey.href;
+				item.probeKey = probeKey;
+		    }
+			else
+			{
+				delete item.probeKey;
+			}
 			$http.post("/api/probeConfigs", item).then(
 					$window.location.href = '/#!/add', function(response) {
 						alert(response)

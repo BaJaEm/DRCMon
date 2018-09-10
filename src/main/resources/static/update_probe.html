@@ -3,8 +3,7 @@
           <table>
                <tr>
                     <td>Probe Type:</td>
-                    <td><select ng-model="np.pt"
-                         ng-options="t.name for t in probeTypes track by t.name"></select></td>
+                    <td>{{np.probeType.name}}</td>
                </tr>
                <tr>
                     <td>Artifact ID:</td>
@@ -23,44 +22,45 @@
                     <td><input type="checkbox" ng-model="np.enabled" /></td>
                </tr>
                <tr
-                    ng-show="np.pt && ( np.pt.name == 'Ping' || np.pt.name == 'PortMon')">
+                    ng-show="np.probeType.name == 'Ping' || np.probeType.name == 'PortMon'">
                     <td>Host</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.HOST" /></td>
+                         ng-model="np.customConfiguration.HOST" /></td>
                </tr>
-               <tr ng-show="np.pt && np.pt.name == 'PortMon'">
+               <tr ng-show="np.probeType.name == 'PortMon'">
                     <td>Port</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.PORT" /></td>
+                         ng-model="np.customConfiguration.PORT" /></td>
                </tr>
-                              <tr
-                    ng-show="np.pt && np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet'">
+               <tr
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
                     <td>Key</td>
                     <td><select style="width: 100%" ng-model="np.probeKey"
                          ng-options="t.name for t in probeKeys track by t.name"></select></td>
                </tr>
                <tr
-                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
                     <td>URL</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.URL" /></td>
+                         ng-model="np.customConfiguration.URL" /></td>
                </tr>
                <tr
-                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
                     <td>EXPECTED</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.EXPECTED" /></td>
+                         ng-model="np.customConfiguration.EXPECTED" /></td>
                </tr>
                <tr
-                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
                     <td>PATH</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.PATH" /></td>
+                         ng-model="np.customConfiguration.PATH" /></td>
                </tr>
-               <tr ng-show="np.pt && (np.pt.name == 'SQLQuery' )">
+
+               <tr ng-show="np.probeType.name == 'SQLQuery' ">
                     <td>QUERY</td>
                     <td><input type="text"
-                         ng-model="np.customConfigurationTemp.QUERY" /></td>
+                         ng-model="np.customConfiguration.QUERY" /></td>
                </tr>
                <tr>
                     <td><input type="submit" value="{{action}}"

@@ -7,53 +7,40 @@
 			$scope.error = error;
 			alert(error);
 		}
-
-		var getProbeTypes = function(next) {
-			$http.get("/api/probeTypes").then(function(data) {
-				$scope.probeTypes = data.data._embedded.probeTypes;
-				next();
+		var getProbeKeys = function() {
+			$http.get("/api/probeKeys").then(function(data) {
+				$scope.probeKeys = data.data._embedded.probeKeys
 			});
 		}
+		getProbeKeys();
 		var id = $routeParams.id
 
 		$scope.action = "update";
 		var getConfig = function() {
-			$http.get("/api/probeConfigs/" + id + "?projection=inlineProbeConfig").then(
+			$http.get("/api/probeConfigs/" + id + "?projection=full").then(
 					function(data) {
 						$scope.np = data.data;
-						for (var x = 0; x < $scope.probeTypes.length; x++) {
-							if ($scope.probeTypes[x].href = "") {
-								//
-							}
-						}
+						$scope.probeTypes = [ data.data.probeType ];
 					}, onError);
 		}
 
-		getProbeTypes(getConfig);
-
-		$scope.doAction = function(item) {
-
-			if (item.pt.name == 'Ping' || item.pt.name == 'PortMon') {
-				item.customConfiguration.HOST = item.customConfigurationTemp.HOST;
+		getConfig();
+		$scope.doAction = function(np) {
+			
+			if (np.probeKey && np.probeKey._links ){
+				var probeKey = np.probeKey._links.probeKey.href;
+				np.probeKey = probeKey;
+		    }
+			else
+			{
+				delete np.probeKey;
 			}
-			if (item.pt.name == 'PortMon') {
-				item.customConfiguration.PORT = item.customConfigurationTemp.PORT;
-			}
-			if (item.pt.name == 'SQLQuery' || item.pt.name == 'RESTGet') {
-				item.customConfiguration.URL = item.customConfigurationTemp.URL;
-				item.customConfiguration.PATH = item.customConfigurationTemp.PATH;
-				item.customConfiguration.EXPECTED = item.customConfigurationTemp.EXPECTED;
-				item.customConfiguration.KEYFILE = item.customConfigurationTemp.KEYFILE;
-
-			}
-			if (item.pt.name == 'SQLQuery') {
-				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
-			}
-			item.probeType = item.pt._links.self.href;
-			$http.put(item._links.self.href, item).then($scope.foo = item
-			// $window.location.href = '/#!/add'
-			, function(response) {
-				alert(response)
+			delete np.probeType;
+			$http.patch(np._links.self.href, np).then(function() {
+				$scope.foo = np;
+				$window.location.href = '/';
+			}, function(response) {
+				$scope.error = response;
 			});
 
 		}
