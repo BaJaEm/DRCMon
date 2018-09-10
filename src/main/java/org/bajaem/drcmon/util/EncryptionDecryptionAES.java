@@ -5,7 +5,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,52 +56,65 @@ public class EncryptionDecryptionAES implements Serializable
 
     public void serialize(final String f) throws IOException
     {
-        final ByteArrayOutputStream ba = new ByteArrayOutputStream();
-        final ObjectOutputStream out = new ObjectOutputStream(ba);
-        final BufferedWriter w = new BufferedWriter(new FileWriter(new File(f)));
-        out.writeObject(this);
-        w.write(encoder.encodeToString(ba.toByteArray()));
-        out.close();
-        ba.close();
-        w.close();
+        try (final BufferedWriter w = new BufferedWriter(new FileWriter(new File(f))))
+        {
+            w.write(getEncodedString());
+        }
+    }
+
+    public String getEncodedString() throws IOException
+    {
+        try (final ByteArrayOutputStream ba = new ByteArrayOutputStream())
+        {
+            try (final ObjectOutputStream out = new ObjectOutputStream(ba))
+            {
+                out.writeObject(this);
+                return encoder.encodeToString(ba.toByteArray());
+            }
+        }
+
     }
 
     public static EncryptionDecryptionAES deSerialize(final InputStream is) throws IOException, ClassNotFoundException
     {
-        final BufferedReader r = new BufferedReader(new InputStreamReader(is));
-        final String enc;
-        if ((enc = r.readLine()) == null)
+        try (final BufferedReader r = new BufferedReader(new InputStreamReader(is)))
         {
-            r.close();
-            throw new IOException("not a valid key file");
-        }
+            final String enc;
+            if ((enc = r.readLine()) == null)
+            {
+                r.close();
+                throw new IOException("not a valid key file");
+            }
 
-        final ByteArrayInputStream fileIn = new ByteArrayInputStream(decoder.decode(enc));
-        final ObjectInputStream in = new ObjectInputStream(fileIn);
-        final EncryptionDecryptionAES ob = (EncryptionDecryptionAES) in.readObject();
-        in.close();
-        fileIn.close();
-        r.close();
-        return ob;
+            try (final ByteArrayInputStream fileIn = new ByteArrayInputStream(decoder.decode(enc)))
+            {
+                try (final ObjectInputStream in = new ObjectInputStream(fileIn))
+                {
+                    final EncryptionDecryptionAES ob = (EncryptionDecryptionAES) in.readObject();
+                    return ob;
+                }
+            }
+        }
     }
 
-    public static EncryptionDecryptionAES deSerialize(final String f) throws IOException, ClassNotFoundException
+    public static EncryptionDecryptionAES deSerialize(final String value) throws IOException, ClassNotFoundException
     {
-        final BufferedReader r = new BufferedReader(new FileReader(new File(f)));
-        final String enc;
-        if ((enc = r.readLine()) == null)
+        if (value == null)
         {
-            r.close();
-            throw new IOException("File " + f + "not a valid key file");
+            throw new IOException("not a valid key");
         }
+        try (final InputStream bais = new ByteArrayInputStream(value.getBytes()))
+        {
+            return deSerialize(bais);
+        }
+    }
 
-        final ByteArrayInputStream fileIn = new ByteArrayInputStream(decoder.decode(enc));
-        final ObjectInputStream in = new ObjectInputStream(fileIn);
-        final EncryptionDecryptionAES ob = (EncryptionDecryptionAES) in.readObject();
-        in.close();
-        fileIn.close();
-        r.close();
-        return ob;
+    public static EncryptionDecryptionAES deSerialize(final File f) throws IOException, ClassNotFoundException
+    {
+        try (final FileInputStream fis = new FileInputStream(f))
+        {
+            return deSerialize(fis);
+        }
     }
 
     public static SecretKey createKey() throws NoSuchAlgorithmException
@@ -145,7 +158,7 @@ public class EncryptionDecryptionAES implements Serializable
 
             final String file = cmd.getOptionValue("keyFile");
 
-            System.out.println(EncryptionDecryptionAES.decrypt(file));
+            System.out.println(EncryptionDecryptionAES.decrypt(new File(file)));
         }
     }
 
@@ -156,7 +169,7 @@ public class EncryptionDecryptionAES implements Serializable
         return EncryptionDecryptionAES.deSerialize(is).decrypt();
     }
 
-    public static String decrypt(final String file) throws InvalidKeyException, IllegalBlockSizeException,
+    public static String decrypt(final File file) throws InvalidKeyException, IllegalBlockSizeException,
             BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, ClassNotFoundException, IOException
 
     {
