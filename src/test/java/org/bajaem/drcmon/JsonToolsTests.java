@@ -23,21 +23,52 @@ public class JsonToolsTests
 
     private final String raw = "{ \"a\" : { \"a1\" : \"a1val\" }, \"b\" : [ \"b1\", \"b2\", \"b3\"], \"c\" : \"cval\" }";
 
+    private final String test2 = "{\r\n" + "  \"artifactId\" : null,\r\n" + "  \"pollingInterval\" : 30,\r\n"
+            + "  \"delayTime\" : 0,\r\n" + "  \"createdOn\" : \"2018-08-28T22:22:29.994+0000\",\r\n"
+            + "  \"createdBy\" : \"b\",\r\n" + "  \"lastModifiedOn\" : \"2018-09-06T18:01:52.139+0000\",\r\n"
+            + "  \"lastModifiedBy\" : \"b\",\r\n" + "  \"enabled\" : true,\r\n" + "  \"customConfiguration\" : {\r\n"
+            + "    \"HOST\" : \"VDCAWQ02779.logon.ds.ge.com\"\r\n" + "  },\r\n" + "  \"_links\" : {\r\n"
+            + "    \"self\" : {\r\n" + "      \"href\" : \"http://localhost:8080/api/probeConfigs/20392\"\r\n"
+            + "    },\r\n" + "    \"probeConfig\" : {\r\n"
+            + "      \"href\" : \"http://localhost:8080/api/probeConfigs/20392{?projection}\",\r\n"
+            + "      \"templated\" : true\r\n" + "    },\r\n" + "    \"probeKey\" : {\r\n"
+            + "      \"href\" : \"http://localhost:8080/api/probeConfigs/20392/probeKey\"\r\n" + "    },\r\n"
+            + "    \"probeType\" : {\r\n"
+            + "      \"href\" : \"http://localhost:8080/api/probeConfigs/20392/probeType\"\r\n" + "    }\r\n"
+            + "  }\r\n" + "}";
+
     private final ObjectMapper m = new ObjectMapper();
 
     private JsonNode node;
+
+    private JsonNode node2;
 
     public JsonToolsTests()
     {
         try
         {
             node = m.readTree(raw);
+            node2 = m.readTree(test2);
         }
         catch (final IOException e)
         {
             LOG.error(e);
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetValueInt()
+    {
+        try
+        {
+            assertEquals("30", JsonTools.getValue(node2, "pollingInterval"));
+        }
+        catch (final DRCProbeException e)
+        {
+            fail(e.getMessage());
+        }
+
     }
 
     @Test
