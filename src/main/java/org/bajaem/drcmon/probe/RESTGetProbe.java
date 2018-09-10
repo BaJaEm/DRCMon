@@ -18,7 +18,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class RESTGetProbe extends Probe
 {
 
-    private static final Logger LOG = LogManager.getLogger(RESTGetProbe.class);
+    private static final Logger LOG = LogManager.getLogger();
 
     private final RESTGetProbeConfig myConfig;
 
