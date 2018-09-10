@@ -37,11 +37,15 @@ public class JsonToolsTests
             + "      \"href\" : \"http://localhost:8080/api/probeConfigs/20392/probeType\"\r\n" + "    }\r\n"
             + "  }\r\n" + "}";
 
+    private final String test3 = "{\"dataShape\":{\"fieldDefinitions\":{\"name\":{\"name\":\"name\",\"description\":\"Thing name\",\"baseType\":\"STRING\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"isPersistent\":false,\"isBuiltIn\":true}},\"description\":{\"name\":\"description\",\"description\":\"Thing description\",\"baseType\":\"STRING\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"isPersistent\":false,\"isBuiltIn\":true}},\"thingTemplate\":{\"name\":\"thingTemplate\",\"description\":\"Thing Template\",\"baseType\":\"THINGTEMPLATENAME\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"isPersistent\":false,\"isBuiltIn\":true}},\"tags\":{\"name\":\"tags\",\"description\":\"Thing Tags\",\"baseType\":\"TAGS\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"isPersistent\":false,\"tagType\":\"ModelTags\",\"isBuiltIn\":true}},\"isConnected\":{\"name\":\"isConnected\",\"description\":\"Flag indicating if connected or not\",\"baseType\":\"BOOLEAN\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"defaultValue\":false,\"isPersistent\":false}},\"lastConnection\":{\"name\":\"lastConnection\",\"description\":\"Last connection time\",\"baseType\":\"DATETIME\",\"ordinal\":0,\"aspects\":{\"isReadOnly\":true,\"defaultValue\":0,\"isPersistent\":true}},\"isActive_ExtensionSourceThingShape_geDiscreteExecution\":{\"name\":\"isActive_ExtensionSourceThingShape_geDiscreteExecution\",\"description\":\"\",\"baseType\":\"BOOLEAN\",\"ordinal\":2,\"aspects\":{\"isReadOnly\":false,\"isPersistent\":true,\"isLogged\":false,\"dataChangeType\":\"VALUE\",\"cacheTime\":0.0}},\"isActive_ExtensionSourceThingShape_geIntegratedDiscreteExecution\":{\"name\":\"isActive_ExtensionSourceThingShape_geIntegratedDiscreteExecution\",\"description\":\"\",\"baseType\":\"BOOLEAN\",\"ordinal\":2,\"aspects\":{\"isReadOnly\":false,\"defaultValue\":true,\"isPersistent\":true,\"isLogged\":false,\"dataChangeType\":\"VALUE\",\"cacheTime\":0.0}}}},\"rows\":[{\"name\":\"GEAExtensionSourceProvider_geIntegratedDiscreteExecution\",\"description\":\"\",\"thingTemplate\":\"RemoteThing\",\"tags\":[{\"vocabulary\":\"geIntegratedDiscreteExecution\",\"vocabularyTerm\":\"All\"}],\"isConnected\":true,\"lastConnection\":1536406381007,\"isActive_ExtensionSourceThingShape_geDiscreteExecution\":true,\"isActive_ExtensionSourceThingShape_geIntegratedDiscreteExecution\":true}]}";
+
     private final ObjectMapper m = new ObjectMapper();
 
     private JsonNode node;
 
     private JsonNode node2;
+
+    private JsonNode node3;
 
     public JsonToolsTests()
     {
@@ -49,6 +53,7 @@ public class JsonToolsTests
         {
             node = m.readTree(raw);
             node2 = m.readTree(test2);
+            node3 = m.readTree(test3);
         }
         catch (final IOException e)
         {
@@ -72,7 +77,32 @@ public class JsonToolsTests
     }
 
     @Test
-    public void testGetValue()
+    public void testRows1()
+    {
+        try
+        {
+            assertEquals("true", JsonTools.getValue(node3, "rows.0.isConnected"));
+        }
+        catch (final DRCProbeException e)
+        {
+            fail(e.getMessage());
+        }
+    }
+    @Test
+    public void testRows2()
+    {
+        try
+        {
+            assertEquals("true", JsonTools.getValue(node3, "rows[0].isConnected"));
+        }
+        catch (final DRCProbeException e)
+        {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetValue1()
     {
 
         try
@@ -83,6 +113,11 @@ public class JsonToolsTests
         {
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetValue2()
+    {
         try
         {
             assertEquals("b1", JsonTools.getValue(node, "b.0"));
@@ -91,6 +126,11 @@ public class JsonToolsTests
         {
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetValue3()
+    {
         try
         {
             assertEquals("cval", JsonTools.getValue(node, "c"));
@@ -99,6 +139,11 @@ public class JsonToolsTests
         {
             fail(e.getMessage());
         }
+    }
+
+    @Test
+    public void testGetValue4()
+    {
         try
         {
             final String foo = JsonTools.getValue(node, "d");
@@ -108,7 +153,11 @@ public class JsonToolsTests
         {
             // success - this should fail
         }
+    }
 
+    @Test
+    public void testGetValue5()
+    {
         try
         {
             JsonTools.getValue(node, "b.a1");

@@ -32,6 +32,7 @@ public class JsonTools
      *
      * getValue(node, "a.a1" ) returns "a1val";
      * getValue(node, "b.0" ) returns "b1";
+     * getValue(node, "b[0]" ) returns "b1";
      * getValue(node, "c" ) returns "cval";
      * </pre>
      *
@@ -48,7 +49,8 @@ public class JsonTools
         {
             return null;
         }
-        final String[] split = path.split("\\.");
+        final String[] split = path.replaceAll("\\[", ".").replaceAll("\\]", "").split("\\.");
+
         final JsonNode last = getNext(node, split, 0);
         return last.asText();
     }
@@ -59,11 +61,13 @@ public class JsonTools
         final int len = path.length;
         final String currPath = path[counter];
         final JsonNode current;
+
         if (node instanceof ArrayNode)
         {
             try
             {
                 current = node.path(Integer.parseInt(currPath));
+                LOG.debug("Numeric Index: " + current.toString() + " -> " + currPath);
             }
             catch (final NumberFormatException e)
             {
@@ -74,6 +78,7 @@ public class JsonTools
         else
         {
             current = node.path(currPath);
+            LOG.debug("Non Numeric Index: " + current.toString() + " -> " + currPath);
         }
 
         if (counter == len - 1)
