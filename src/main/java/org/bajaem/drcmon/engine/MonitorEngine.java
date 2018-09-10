@@ -33,8 +33,7 @@ public class MonitorEngine
 
     private boolean running = false;
 
-    // TODO: separate pool for each probe type
-    private final ScheduledExecutorService pool;
+    private final Map<String, ScheduledExecutorService> pool = new ConcurrentHashMap<>();
 
     private final ConcurrentHashMap<String, ScheduledFuture<?>> probeMap = new ConcurrentHashMap<>();
 
@@ -51,7 +50,6 @@ public class MonitorEngine
     {
         config = _config;
         probeConfig = _probeConfig;
-        pool = Executors.newScheduledThreadPool(config.getPoolSize());
     }
 
     public int getPoolSize()
@@ -72,14 +70,28 @@ public class MonitorEngine
     private void init()
     {
         final Map<String, Probe> configMap = probeConfig.getProbes();
+
         for (final String key : configMap.keySet())
         {
             final Probe probe = configMap.get(key);
-            final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
-                    probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
+            final ScheduledFuture<?> future = getExecutor(probe).scheduleAtFixedRate(probe,
+                    probe.getProbeConfig().getDelayTime(), probe.getProbeConfig().getPollingInterval(),
+                    TimeUnit.SECONDS);
             probeMap.put(key, future);
             lastRefreshed = Instant.now();
         }
+    }
+
+    private ScheduledExecutorService getExecutor(final Probe probe)
+    {
+        final String key = probe.getProbeConfig().getProbeType().getName();
+        final ScheduledExecutorService service = pool.get(key);
+        if (service == null || service.isTerminated())
+        {
+            pool.put(key, Executors.newScheduledThreadPool(config.getPoolSize()));
+        }
+        return pool.get(key);
+
     }
 
     private void refresh()
@@ -101,8 +113,9 @@ public class MonitorEngine
             final Probe probe = dbMap.get(key);
             if (probe.getProbeConfig().isEnabled())
             {
-                final ScheduledFuture<?> future = pool.scheduleAtFixedRate(probe, probe.getProbeConfig().getDelayTime(),
-                        probe.getProbeConfig().getPollingInterval(), TimeUnit.SECONDS);
+                final ScheduledFuture<?> future = getExecutor(probe).scheduleAtFixedRate(probe,
+                        probe.getProbeConfig().getDelayTime(), probe.getProbeConfig().getPollingInterval(),
+                        TimeUnit.SECONDS);
                 probeMap.put(key, future);
             }
         }
@@ -134,7 +147,7 @@ public class MonitorEngine
                     {
                         future.cancel(false);
                     }
-                    final ScheduledFuture<?> newFuture = pool.scheduleAtFixedRate(probe,
+                    final ScheduledFuture<?> newFuture = getExecutor(probe).scheduleAtFixedRate(probe,
                             probe.getProbeConfig().getDelayTime(), probe.getProbeConfig().getPollingInterval(),
                             TimeUnit.SECONDS);
                     probeMap.put(key, newFuture);
@@ -201,8 +214,11 @@ public class MonitorEngine
     {
         try
         {
-            pool.shutdown();
-            pool.awaitTermination(2, TimeUnit.MINUTES);
+            for (final ScheduledExecutorService service : pool.values())
+            {
+                service.shutdown();
+                service.awaitTermination(2, TimeUnit.MINUTES);
+            }
         }
         catch (final InterruptedException e)
         {
