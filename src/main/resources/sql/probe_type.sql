@@ -7,9 +7,10 @@ CREATE TABLE probe_type
 	description     VARCHAR(255) NOT NULL
 );
 
+CREATE UNIQUE INDEX probe_type_uq_name ON  probe_type (name);
 
-INSERT INTO probe_type (id, name, description) VALUES (key_seq.nextval, 'Ping', 'Ping using java isReachable method - may or maynot be ICMP');
-INSERT INTO probe_type (id, name, description) VALUES (key_seq.nextval, 'PortMon', 'TCP Port Monitor - Checks if port is reachable');
-INSERT INTO probe_type (id, name, description) VALUES (key_seq.nextval, 'SQLQuery', 'SQL Query Probe - checks if a query returns correct value');
-INSERT INTO probe_type (id, name, description) VALUES (key_seq.nextval, 'RESTGet', 'Web Query Probe - checks if a REST GET returns correct value');
+INSERT INTO probe_type (id, name, description) VALUES (nextval('key_seq'), 'Ping', 'Ping using java isReachable method - may or maynot be ICMP');
+INSERT INTO probe_type (id, name, description) VALUES (nextval('key_seq'), 'PortMon', 'TCP Port Monitor - Checks if port is reachable');
+INSERT INTO probe_type (id, name, description) VALUES (nextval('key_seq'), 'SQLQuery', 'SQL Query Probe - checks if a query returns correct value');
+INSERT INTO probe_type (id, name, description) VALUES (nextval('key_seq'), 'RESTGet', 'Web Query Probe - checks if a REST GET returns correct value');
 
