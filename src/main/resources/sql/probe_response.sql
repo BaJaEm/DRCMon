@@ -8,7 +8,7 @@ CREATE OR REPLACE TABLE probe_response
 	end_time        DATETIME NOT NULL,
 	success         CHAR(1) CHECK (success IN ('T', 'F')),
 	error           VARCHAR(255),
-	error_message    VARCHAR(255)
+	error_message    VARCHAR(2048)
 	
 );
 

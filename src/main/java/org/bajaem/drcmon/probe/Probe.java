@@ -82,10 +82,11 @@ public abstract class Probe implements Runnable
         {
             try (final StringWriter sw = new StringWriter())
             {
-                final PrintWriter pw = new PrintWriter(sw);
-                r.getError().printStackTrace(pw);
-                resp.setError(pw.toString());
-                pw.close();
+                try (final PrintWriter pw = new PrintWriter(sw))
+                {
+                    r.getError().printStackTrace(pw);
+                    resp.setError(sw.toString());
+                }
             }
             catch (final IOException e)
             {
