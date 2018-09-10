@@ -1,12 +1,15 @@
 
 package org.bajaem.drcmon;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.logging.log4j.LogManager;
@@ -41,4 +44,16 @@ public class TestTests extends DBGenerator
         LOG.info(url);
     }
 
+    @Autowired
+    JdbcTemplate template;
+
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
+    @Test
+    public void testDS()
+    {
+        assertNotNull(dataSource);
+        LOG.info(dataSource.getClass());
+        assertNotNull(template);
+        LOG.info(template.getClass());
+    }
 }
