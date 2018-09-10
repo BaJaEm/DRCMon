@@ -28,6 +28,7 @@ import org.bajaem.drcmon.model.SQLQueryProbeConfig;
  * <li>expected = <single String value that is expected>
  * <li>keyFile = <file with obfuscated username/password>
  * <p>
+ * We always use DIRTY READ if possible.
  */
 
 // TODO: runtime loading of Driver Resources - possible new table with Driver
@@ -63,8 +64,10 @@ public class SQLQueryProbe extends Probe
     @Override
     public Response probe()
     {
-        try (final Connection connection = DriverManager.getConnection(myConfig.getUrl(), key.getUserId(), key.getSecret()))
+        try (final Connection connection = DriverManager.getConnection(myConfig.getUrl(), key.getUserId(),
+                key.getSecret()))
         {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
             try (final Statement stmt = connection.createStatement())
             {
                 try (final ResultSet rs = stmt.executeQuery(myConfig.getQuery()))
