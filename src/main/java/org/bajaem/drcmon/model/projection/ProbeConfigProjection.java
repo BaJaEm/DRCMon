@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.ProbeType;
 import org.springframework.data.rest.core.config.Projection;
 
@@ -29,6 +30,8 @@ public interface ProbeConfigProjection
     public boolean isEnabled();
 
     public ProbeType getProbeType();
+
+    public ProbeKey getProbeKey();
 
     public Map<String, String> getCustomConfiguration();
 }

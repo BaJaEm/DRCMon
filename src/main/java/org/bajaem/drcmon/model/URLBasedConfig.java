@@ -17,8 +17,6 @@ public abstract class URLBasedConfig extends Configurable
 
     private static final String PATH_KEY = "PATH";
 
-    private static final String KEYFILE_KEY = "KEYFILE";
-
     public String getUrl()
     {
         return getConfig().getCustomConfiguration().get(URL_KEY);
@@ -48,15 +46,4 @@ public abstract class URLBasedConfig extends Configurable
     {
         getConfig().getCustomConfiguration().put(PATH_KEY, _path);
     }
-
-    public String getKeyFile()
-    {
-        return getConfig().getCustomConfiguration().get(KEYFILE_KEY);
-    }
-
-    public void setKeyFile(final String _keyFile)
-    {
-        getConfig().getCustomConfiguration().put(KEYFILE_KEY, _keyFile);
-    }
-
 }

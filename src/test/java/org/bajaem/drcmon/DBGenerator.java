@@ -3,7 +3,6 @@ package org.bajaem.drcmon;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -22,12 +21,14 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.PortMonProbeConfig;
 import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
-import org.bajaem.drcmon.util.Key;
+import org.bajaem.drcmon.respository.ProbeKeyRepository;
 import org.h2.tools.RunScript;
 import org.junit.After;
 import org.junit.Before;
@@ -51,19 +52,15 @@ public abstract class DBGenerator
 
     private static final Logger LOG = LogManager.getLogger();
 
-    protected File goodWebKeyFile;
-
-    protected File badWebKeyFile;
-
-    protected File goodSQLKeyFile;
-
-    protected File badSQLKeyFile;
-
     protected String baseURL;
 
-    protected Key goodWebKey;
+    protected ProbeKey goodWebKey;
 
-    protected Key goodSQLKey;
+    protected ProbeKey goodSQLKey;
+
+    protected ProbeKey badWebKey;
+
+    protected ProbeKey badSQLKey;
 
     protected String webUser;
 
@@ -71,6 +68,9 @@ public abstract class DBGenerator
 
     @Autowired
     DataSource dataSource;
+
+    @Autowired
+    ProbeKeyRepository keyRepo;
 
     @LocalServerPort
     protected int port;
@@ -85,29 +85,33 @@ public abstract class DBGenerator
         try (final Connection conn = dataSource.getConnection())
         {
             assertNotNull(conn);
-            for (final String s : new String[] { "/sql/key.sql", "/sql/probe_type.sql", "/sql/probe_config.sql",
-                    "/sql/probe_response.sql" })
+            for (final String s : new String[] { //
+                    "/sql/key.sql", //
+                    "/sql/probe_type.sql", //
+                    "/sql/probe_key.sql", //
+                    "/sql/probe_config.sql", //
+                    "/sql/probe_response.sql"//
+            })
             {
                 final URL u = DBGenerator.class.getResource(s);
+                LOG.info(u);
                 RunScript.execute(conn, new FileReader(u.getFile()));
             }
         }
 
-        goodWebKeyFile = File.createTempFile("goodTempKey", null);
-        Key.encryptKey(goodWebKeyFile.getAbsolutePath(), "b", "b");
-        goodWebKey = Key.decryptKey(goodWebKeyFile.getAbsolutePath());
+        goodWebKey = newProbeKey("goodWebKey", "b", "b");
+        keyRepo.save(goodWebKey);
 
-        badWebKeyFile = File.createTempFile("badTempKey", null);
-        Key.encryptKey(badWebKeyFile.getAbsolutePath(), "bad", "bad");
+        badWebKey = newProbeKey("badWebKey", "bad", "bad");
+        keyRepo.save(badWebKey);
 
-        goodSQLKeyFile = File.createTempFile("goodTempKey", null);
-        Key.encryptKey(goodSQLKeyFile.getAbsolutePath(), "System", "");
-        goodSQLKey = Key.decryptKey(goodSQLKeyFile.getAbsolutePath());
+        goodSQLKey = newProbeKey("goodSQLKey", "System", "");
+        keyRepo.save(goodSQLKey);
 
-        badSQLKeyFile = File.createTempFile("badTempKey", null);
-        Key.encryptKey(badSQLKeyFile.getAbsolutePath(), "bad", "bad");
+        badSQLKey = newProbeKey("badSQLKey", "bad", "bad");
+        keyRepo.save(badSQLKey);
 
-        webUser = goodWebKey.getId();
+        webUser = goodWebKey.getUserId();
         webPassword = goodWebKey.getSecret();
 
         baseURL = "http://localhost:" + port + "/";
@@ -135,11 +139,21 @@ public abstract class DBGenerator
             conn.createStatement().execute("DROP TABLE probe_response");
             conn.createStatement().execute("DROP TABLE probe_config");
             conn.createStatement().execute("DROP TABLE probe_type");
+            conn.createStatement().execute("DROP TABLE probe_key");
         }
         catch (final SQLException e)
         {
             LOG.warn(e);
         }
+    }
+
+    public ProbeKey newProbeKey(final String name, final String userId, final String secret)
+    {
+        final ProbeKey key = new ProbeKey();
+        key.setName(name);
+        key.setUserId(userId);
+        key.setSecret(secret);
+        return key;
     }
 
     protected PingProbeConfig newPingProbeConfig(final String host)
@@ -175,20 +189,20 @@ public abstract class DBGenerator
     {
         return newSQLQueryProbeConfig(//
                 "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                "keyFile", //
+                goodSQLKey, //
                 "SELECT name FROM probe_type WHERE name = 'SQLQueryProbe'", //
                 "SQLQueryProbe"//
         );
     }
 
-    protected SQLQueryProbeConfig newSQLQueryProbeConfig(final String _url, final String _keyFile, final String _query,
+    protected SQLQueryProbeConfig newSQLQueryProbeConfig(final String _url, final ProbeKey _key, final String _query,
             final String _expected)
     {
         final ProbeConfig pConfig = initializConfig();
         final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(pConfig, cache);
-        LOG.info(cache.getProbeTypeByConfig(conf.getClass()));
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setUrl(_url);
-        conf.setKeyFile(_keyFile);
+        pConfig.setProbeKey(_key);
         conf.setQuery(_query);
         conf.setExpected(_expected);
         return conf;
@@ -200,20 +214,21 @@ public abstract class DBGenerator
                 "http://localhost:" + port + "/api/portTypes/Ping", //
                 "description", //
                 "Ping using java isReachable method - may or maynot be ICMP", //
-                goodWebKeyFile.getAbsolutePath()//
+                goodWebKey//
         );
     }
 
     protected RESTGetProbeConfig newRESTGetProbeConfig(final String _url, final String _path, final String _expected,
-            final String _keyFile)
+            final ProbeKey key)
     {
         final ProbeConfig pConfig = initializConfig();
         final RESTGetProbeConfig conf = new RESTGetProbeConfig(pConfig, cache);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
+        pConfig.setProbeKey(key);
         conf.setUrl(_url);
         conf.setPath(_path);
         conf.setExpected(_expected);
-        conf.setKeyFile(_keyFile);
+
         return conf;
     }
 

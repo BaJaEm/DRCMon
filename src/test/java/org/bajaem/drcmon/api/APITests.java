@@ -89,7 +89,7 @@ public class APITests extends DBGenerator
         node.put("probeType", getURLforProbeType("RESTGet"));
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
-        final String user = goodWebKey.getId();
+        final String user = goodWebKey.getUserId();
         final String passwd = goodWebKey.getSecret();
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");
@@ -116,7 +116,7 @@ public class APITests extends DBGenerator
         node.put("probeType", getURLforProbeType("SQLQuery"));
         final String url = baseURL + "api/probeConfigs";
         LOG.info(url);
-        final String user = goodWebKey.getId();
+        final String user = goodWebKey.getUserId();
         final String passwd = goodWebKey.getSecret();
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put("Content-Type", "application/json");

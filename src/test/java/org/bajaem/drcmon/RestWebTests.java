@@ -13,6 +13,7 @@ import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 
 public class RestWebTests extends DBGenerator
 {
@@ -24,6 +25,7 @@ public class RestWebTests extends DBGenerator
         LOG.info("new client");
     }
 
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void testWebClientGET()
     {

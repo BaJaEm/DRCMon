@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,6 +45,8 @@ public class ProbeConfig
     private ProbeType probeType;
 
     private Map<String, String> customConfiguration = new HashMap<>();
+
+    private ProbeKey probeKey;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Generator")
@@ -87,6 +90,7 @@ public class ProbeConfig
         delayTime = _delayTime;
     }
 
+    @Column(name = "created_on", nullable = false, updatable = false)
     public Timestamp getCreatedOn()
     {
         return createdOn;
@@ -101,6 +105,7 @@ public class ProbeConfig
         createdOn = _createdOn;
     }
 
+    @Column(name = "created_by", nullable = false, updatable = false)
     public String getCreatedBy()
     {
         return createdBy;
@@ -163,6 +168,18 @@ public class ProbeConfig
     public void setProbeType(final ProbeType _probeType)
     {
         probeType = _probeType;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "probe_key")
+    public ProbeKey getProbeKey()
+    {
+        return probeKey;
+    }
+
+    public void setProbeKey(final ProbeKey _probeKey)
+    {
+        probeKey = _probeKey;
     }
 
     @Override

@@ -12,18 +12,21 @@ import java.sql.SQLException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
+import org.springframework.security.test.context.support.WithMockUser;
 
 public class TestTests extends DBGenerator
 {
 
     private static final Logger LOG = LogManager.getLogger();
 
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void checkDataSource() throws FileNotFoundException, SQLException
     {
         assertNotNull(dataSource);
     }
 
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void connectionTest() throws SQLException
     {

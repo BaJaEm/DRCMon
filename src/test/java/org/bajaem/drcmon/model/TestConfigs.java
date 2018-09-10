@@ -83,9 +83,8 @@ public class TestConfigs extends DBGenerator
         final String expected = conf2.getExpected();
         assertNotNull(expected);
         assertEquals("SQLQueryProbe", expected);
-        final String keyFile = conf2.getKeyFile();
-        assertNotNull(keyFile);
-        assertEquals("keyFile", keyFile);
+        final ProbeKey key = conf.getConfig().getProbeKey();
+        assertNotNull(key);;
 
         checkUpdateDelete(conf.getConfig().getId());
     }
@@ -100,14 +99,15 @@ public class TestConfigs extends DBGenerator
 
         final RESTGetProbeConfig conf2 = new RESTGetProbeConfig(configRepo.findById(conf.getConfig().getId()).get(),
                 cache);
+        LOG.info("CREATED ON: " + conf2.getConfig().getCreatedOn());
         final String url = conf2.getUrl();
         assertNotNull(url);
         assertEquals(conf.getUrl(), url);
         final String expected = conf2.getExpected();
         assertNotNull(expected);
         assertEquals("Ping using java isReachable method - may or maynot be ICMP", expected);
-        final String keyFile = conf2.getKeyFile();
-        assertNotNull(keyFile);
+        final ProbeKey key = conf.getConfig().getProbeKey();
+        assertNotNull(key);
         final String path = conf2.getPath();
         assertNotNull(path);
         assertEquals("description", path);

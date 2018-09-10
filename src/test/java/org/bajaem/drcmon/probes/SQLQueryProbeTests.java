@@ -25,7 +25,7 @@ public class SQLQueryProbeTests extends DBGenerator
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
                 "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                goodSQLKeyFile.getAbsolutePath(), //
+                goodSQLKey, //
                 "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
                 "SQLQuery");
         final Probe p = new SQLQueryProbe(conf);
@@ -59,31 +59,12 @@ public class SQLQueryProbeTests extends DBGenerator
 
     @Test
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    public void testBadKeyFile()
-    {
-        final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
-                "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                "BadFile", //
-                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
-                "SQLQuery"); //
-        try
-        {
-            new SQLQueryProbe(conf);
-            fail("Probe Intialization should fail");
-        }
-        catch (DRCStartupException e)
-        {
-            // Correct path
-        }
-    }
-
-    @Test
-    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     public void testBadUserPassword()
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
                 "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                badSQLKeyFile.getAbsolutePath(), "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
+                badSQLKey, //
+                "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
                 "SQLQuery");//
         final Probe p = new SQLQueryProbe(conf);
         final Response response = p.probe();
@@ -101,7 +82,7 @@ public class SQLQueryProbeTests extends DBGenerator
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
                 "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                goodSQLKeyFile.getAbsolutePath(), //
+                goodSQLKey, //
                 "FOO", //
                 "FOO");//
         final Probe p = new SQLQueryProbe(conf);
@@ -120,7 +101,7 @@ public class SQLQueryProbeTests extends DBGenerator
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
                 "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", //
-                goodSQLKeyFile.getAbsolutePath(), //
+                goodSQLKey, //
                 "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
                 "FOO");//
 
@@ -140,7 +121,7 @@ public class SQLQueryProbeTests extends DBGenerator
     {
         final SQLQueryProbeConfig conf = newSQLQueryProbeConfig(//
                 "foo", //
-                goodSQLKeyFile.getAbsolutePath(), //
+                goodSQLKey, //
                 "SELECT name FROM probe_type WHERE name = 'SQLQuery'", //
                 "SQLQuery");//
         final Probe p = new SQLQueryProbe(conf);

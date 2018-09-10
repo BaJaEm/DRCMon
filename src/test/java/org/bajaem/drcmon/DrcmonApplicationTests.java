@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
@@ -39,6 +40,7 @@ public class DrcmonApplicationTests extends DBGenerator
 
     }
 
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void annotataionTest()
     {
@@ -66,6 +68,7 @@ public class DrcmonApplicationTests extends DBGenerator
         LOG.error("annotataionWithSpring: " + (end.getTimeInMillis() - start.getTimeInMillis()));
     }
 
+    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
     public void annotataionWithClassGraphTest()
     {

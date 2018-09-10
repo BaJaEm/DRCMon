@@ -74,7 +74,6 @@ public class InitBean // implements CommandLineRunner
             final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(configDefaults(), cache);
             configDefaults();
             conf.setUrl("jdbc:h2:./foo;AUTO_SERVER=true");
-            conf.setKeyFile("jdbc.key");
             conf.setQuery("SELECT name FROM probe_type WHERE name = 'SQLQuery'");
             conf.setExpected("SQLQuery");
             configRepo.save(conf.getConfig());
@@ -83,7 +82,6 @@ public class InitBean // implements CommandLineRunner
             final RESTGetProbeConfig conf = new RESTGetProbeConfig(configDefaults(), cache);
             configDefaults();
             conf.setUrl("http://localhost:8080/api/probeTypes/Ping");
-            conf.setKeyFile("web.key");
             conf.setPath("description");
             conf.setExpected("Ping using java isReachable method - may or maynot be ICMP");
             configRepo.save(conf.getConfig());

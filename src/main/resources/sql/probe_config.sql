@@ -12,6 +12,7 @@ CREATE OR REPLACE TABLE probe_config
 	last_modified_on      datetime not null  DEFAULT CURRENT_TIMESTAMP,
 	last_modified_by      varchar(50) not null,
 	enabled               CHAR(1) DEFAULT 'T' NOT NULL CHECK (enabled IN ('T', 'F')),
+	probe_key             BIGINT,
 	custom_configuration  varchar(2048)
 	
 	
@@ -21,3 +22,6 @@ ALTER TABLE probe_config
 	ADD FOREIGN KEY ( probe_type )
 	REFERENCES probe_type ( id );
 	
+ALTER TABLE probe_config
+	ADD FOREIGN KEY ( probe_key )
+	REFERENCES probe_key ( id );

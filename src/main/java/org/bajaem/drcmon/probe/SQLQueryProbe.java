@@ -10,8 +10,8 @@ import java.sql.Statement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
+import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
-import org.bajaem.drcmon.util.Key;
 
 /**
  * SQL Query Probe
@@ -38,7 +38,7 @@ public class SQLQueryProbe extends Probe
 
     private static final Logger LOG = LogManager.getLogger(SQLQueryProbe.class);
 
-    private final Key key;
+    private final ProbeKey key;
 
     private final SQLQueryProbeConfig myConfig;
 
@@ -48,20 +48,22 @@ public class SQLQueryProbe extends Probe
         myConfig = _probeConfig;
         LOG.debug("new Query Probe");
 
-        if (null != myConfig.getKeyFile())
+        if (null != myConfig.getConfig().getProbeKey())
         {
-            key = Key.decryptKey(myConfig.getKeyFile());
+            key = myConfig.getConfig().getProbeKey();
         }
         else
         {
-            key = new Key(null, null);
+            key = new ProbeKey();
+            key.setName(null);
+            key.setSecret(null);
         }
     }
 
     @Override
     public Response probe()
     {
-        try (final Connection connection = DriverManager.getConnection(myConfig.getUrl(), key.getId(), key.getSecret()))
+        try (final Connection connection = DriverManager.getConnection(myConfig.getUrl(), key.getUserId(), key.getSecret()))
         {
             try (final Statement stmt = connection.createStatement())
             {

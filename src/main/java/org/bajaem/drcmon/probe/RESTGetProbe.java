@@ -5,12 +5,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.exceptions.DRCProbeException;
+import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.util.DRCBasicAuthRestWeb;
 import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;
 import org.bajaem.drcmon.util.JsonTools;
-import org.bajaem.drcmon.util.Key;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -24,7 +24,7 @@ public class RESTGetProbe extends Probe
 
     private final DRCWebClient client;
 
-    private final Key key;
+    private final ProbeKey key;
 
     public RESTGetProbe(final RESTGetProbeConfig _probeConfig)
     {
@@ -32,10 +32,10 @@ public class RESTGetProbe extends Probe
         myConfig = _probeConfig;
         LOG.trace("New Probe... " + _probeConfig);
 
-        if (null != myConfig.getKeyFile())
+        if (null != myConfig.getConfig().getProbeKey())
         {
-            key = Key.decryptKey(myConfig.getKeyFile());
-            client = new DRCBasicAuthRestWeb(myConfig.getUrl(), key.getId(), key.getSecret());
+            key = myConfig.getConfig().getProbeKey();
+            client = new DRCBasicAuthRestWeb(myConfig.getUrl(), key.getUserId(), key.getSecret());
         }
         else
         {
