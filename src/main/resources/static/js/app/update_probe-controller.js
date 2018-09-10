@@ -7,6 +7,13 @@
 			$scope.error = error;
 			alert(error);
 		}
+		
+		var getProbeResponse = function() {
+			$http.get("/api/probeKeys").then(function(data) {
+				$scope.probeKeys = data.data._embedded.probeKeys
+			});
+		}
+		
 		var getProbeKeys = function() {
 			$http.get("/api/probeKeys").then(function(data) {
 				$scope.probeKeys = data.data._embedded.probeKeys
@@ -21,6 +28,7 @@
 					function(data) {
 						$scope.np = data.data;
 						$scope.probeTypes = [ data.data.probeType ];
+
 					}, onError);
 		}
 
@@ -44,6 +52,7 @@
 			});
 
 		}
+		
 	}
 
 	drcmon_app.controller("update_probe_controller", update_probe_controller);

@@ -40,19 +40,20 @@
 			if (item.pt.name == 'PortMon') {
 				item.customConfiguration.PORT = item.customConfigurationTemp.PORT;
 			}
+			if (item.pt.name == 'RESTGet') {
+				item.customConfiguration.PATH = item.customConfigurationTemp.PATH;
+			}
 			if (item.pt.name == 'SQLQuery' || item.pt.name == 'RESTGet') {
 				item.customConfiguration.URL = item.customConfigurationTemp.URL;
-				item.customConfiguration.PATH = item.customConfigurationTemp.PATH;
 				item.customConfiguration.EXPECTED = item.customConfigurationTemp.EXPECTED;
 				item.customConfiguration.KEYFILE = item.customConfigurationTemp.KEYFILE;
-
 			}
 			if (item.pt.name == 'SQLQuery') {
 				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
 			}
 			item.probeType = item.pt._links.self.href;
 			
-			if (item.probeKey._links ){
+			if (item.probeKey && item.probeKey._links ){
 				var probeKey = item.probeKey._links.probeKey.href;
 				item.probeKey = probeKey;
 		    }
