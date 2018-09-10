@@ -53,6 +53,7 @@ public class RESTGetProbe extends Probe
         try
         {
             final JsonNode node = client.get();
+            LOG.trace(node);
             return new Response(myConfig.getExpected().equals(JsonTools.getValue(node, myConfig.getPath())));
         }
         catch (final DRCProbeException e)
