@@ -37,10 +37,14 @@ public class DrcmonApplication
         @Override
         public void run(final String... args) throws Exception
         {
-            LOG.info("Initialize engine");
-            // eng.start();
+
+            if ("start".equals(args[0]))
+            {
+                eng.start();
+            }
             if (broker.isStopped())
             {
+                LOG.info("Initialize broker");
                 broker.start();
                 LOG.info("started");
             }
