@@ -96,7 +96,7 @@ public class MonitorEngine
 
     private void refresh()
     {
-        LOG.info("Starting Refresh");
+        LOG.debug("Starting Refresh");
         // TODO: do we really need to get all of the configs from the DB each
         // time?
         final Map<String, Probe> dbMap = probeConfig.getProbes();
@@ -141,7 +141,7 @@ public class MonitorEngine
             {
                 if (probe.getProbeConfig().isEnabled())
                 {
-                    LOG.info("Key: " + key + " - updated");
+                    LOG.debug("Key: " + key + " - updated");
                     final ScheduledFuture<?> future = probeMap.get(key);
                     if (null != future)
                     {
@@ -154,7 +154,7 @@ public class MonitorEngine
                 }
                 else
                 {
-                    LOG.info("Key: " + key + " - removed");
+                    LOG.debug("Key: " + key + " - removed");
                     final ScheduledFuture<?> future = probeMap.get(key);
                     if (null != future)
                     {
@@ -164,7 +164,7 @@ public class MonitorEngine
                 }
             }
         }
-        LOG.info("Completed Refresh");
+        LOG.debug("Completed Refresh");
     }
 
     public void start()

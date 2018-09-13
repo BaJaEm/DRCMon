@@ -62,7 +62,7 @@ public class ProbeConfigurator
     public ProbeConfigurator(final ProbeConfigRepository _configRepo, final ProbeResponseRepository _responseRepo,
             final ProbeTypeRepository _typeRepo, final ProbeMarkerCache _probeCache, final MessageSender _sender)
     {
-        LOG.info("constructor probe configer");
+        LOG.trace("constructor probe configer");
         configRepo = _configRepo;
         responseRepo = _responseRepo;
         typeRepo = _typeRepo;
@@ -85,7 +85,7 @@ public class ProbeConfigurator
             final ProbeResponseRepository _responseRepo, final ProbeTypeRepository _typeRepo,
             final ProbeMarkerCache _probeCache, final MessageSender _sender)
     {
-        LOG.info("static probe configer");
+        LOG.debug("static probe configer");
         if (null == config)
         {
             config = new ProbeConfigurator(_configRepo, _responseRepo, _typeRepo, _probeCache, _sender);
@@ -109,7 +109,7 @@ public class ProbeConfigurator
                     // Reflection voodoo here --->
                     final Constructor<? extends Configurable> conCons = c.getConstructor(config.getClass(),
                             probeCache.getClass(), MessageSender.class);
-                    LOG.info(c.getClass());
+                    LOG.trace(c.getClass());
                     final Constructor<? extends Probe> probeCons = p.getConstructor(c);
                     final Configurable configurable = conCons.newInstance(config, probeCache, sender);
                     final Probe probe = probeCons.newInstance(configurable);

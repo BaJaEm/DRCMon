@@ -21,7 +21,7 @@ import org.springframework.jms.support.converter.MessageType;
 @EnableJms
 public class DRCMQConfig
 {
-    
+
     @Bean
     public JmsListenerContainerFactory<?> myFactory(//
             final ConnectionFactory connectionFactory, //
@@ -50,13 +50,13 @@ public class DRCMQConfig
     @Bean(initMethod = "start", destroyMethod = "stop")
     public BrokerService broker()
     {
-        BrokerService broker = new BrokerService();
+        final BrokerService broker = new BrokerService();
 
         try
         {
             broker.addConnector("tcp://localhost:61616");
             broker.setUseJmx(true);
-            PersistenceAdapter pa = new MemoryPersistenceAdapter();
+            final PersistenceAdapter pa = new MemoryPersistenceAdapter();
             broker.setPersistenceAdapter(pa);
             broker.setPersistent(false);
 

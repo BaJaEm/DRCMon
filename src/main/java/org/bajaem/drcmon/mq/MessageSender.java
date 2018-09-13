@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageSender
 {
-    @SuppressWarnings("unused")
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired
@@ -20,6 +19,7 @@ public class MessageSender
 
     public void sendMessage(final ProbeResponse resp)
     {
+        LOG.trace("Sending Message: " + resp.getProbeConfig().getProbeType().getName());
         jmsTemplate.setPubSubDomain(true);
         jmsTemplate.convertAndSend("drcmon.topic", resp);
     }
