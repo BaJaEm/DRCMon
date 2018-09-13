@@ -42,34 +42,6 @@ public class DrcmonApplicationTests extends DBGenerator
 
     @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
     @Test
-    public void annotataionTest()
-    {
-        final Calendar start = Calendar.getInstance();
-        final ClassPathScanningCandidateComponentProvider scanner;
-        scanner = new ClassPathScanningCandidateComponentProvider(false);
-        scanner.addIncludeFilter(new AnnotationTypeFilter(ProbeMarker.class));
-        for (final BeanDefinition bd : scanner.findCandidateComponents("*"))
-        {
-            try
-            {
-                final Class<?> clazz = Class.forName(bd.getBeanClassName());
-                final ProbeMarker m = clazz.getAnnotation(ProbeMarker.class);
-
-                LOG.error(m.config() + m.toString());
-            }
-            catch (final ClassNotFoundException e)
-            {
-                LOG.fatal("Could not find class: " + bd.getBeanClassName(), e);
-                throw new RuntimeException(e);
-            }
-        }
-
-        final Calendar end = Calendar.getInstance();
-        LOG.error("annotataionWithSpring: " + (end.getTimeInMillis() - start.getTimeInMillis()));
-    }
-
-    @WithMockUser(username = "admin", roles = { "USER", "ADMIN" })
-    @Test
     public void annotataionWithClassGraphTest()
     {
         final Calendar start = Calendar.getInstance();
