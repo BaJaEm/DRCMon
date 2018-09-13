@@ -28,7 +28,7 @@ public class RESTGetProbe extends Probe
 
     public RESTGetProbe(final RESTGetProbeConfig _probeConfig)
     {
-        super(_probeConfig.getConfig());
+        super(_probeConfig);
         myConfig = _probeConfig;
         LOG.trace("New Probe... " + _probeConfig);
 

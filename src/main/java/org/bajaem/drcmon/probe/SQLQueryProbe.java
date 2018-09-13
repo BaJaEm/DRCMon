@@ -45,7 +45,7 @@ public class SQLQueryProbe extends Probe
 
     public SQLQueryProbe(final SQLQueryProbeConfig _probeConfig)
     {
-        super(_probeConfig.getConfig());
+        super(_probeConfig);
         myConfig = _probeConfig;
         LOG.debug("new Query Probe");
 

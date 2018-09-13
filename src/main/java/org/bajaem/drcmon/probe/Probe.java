@@ -15,6 +15,7 @@ import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.engine.ProbeConfigurator;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeResponse;
+import org.bajaem.drcmon.mq.MessageSender;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 
 /**
@@ -28,6 +29,8 @@ public abstract class Probe implements Runnable
     private static final Logger LOG = LogManager.getLogger(Probe.class);
 
     protected final ProbeConfig probeConfig;
+
+    protected final Configurable config;
 
     protected static InetAddress localhost;
     static
@@ -43,9 +46,11 @@ public abstract class Probe implements Runnable
         }
     }
 
-    public Probe(final ProbeConfig _probeConfig)
+    public Probe(final Configurable _config)
     {
-        probeConfig = _probeConfig;
+        config = _config;
+        probeConfig = config.getConfig();
+
     }
 
     /**
@@ -66,10 +71,22 @@ public abstract class Probe implements Runnable
         final Instant start = Instant.now();
         final Response r = probe();
         final Instant end = Instant.now();
-        SystemUserWrapper.executeAsSystem(() -> storeResponse(r, localhost, start, end));
+        final ThreadLocal<ProbeResponse> resp = new ThreadLocal<>();
+        SystemUserWrapper.executeAsSystem(() -> resp.set(storeResponse(r, localhost, start, end)));
+
+        if (null == config.getSender())
+        {
+            LOG.fatal("\n\n\nFAIL\n\n\n");
+        }
+        else
+        {
+            config.getSender().sendMessage(resp.get());
+        }
+
     }
 
-    private void storeResponse(final Response r, final InetAddress addr, final Instant start, final Instant end)
+    private ProbeResponse storeResponse(final Response r, final InetAddress addr, final Instant start,
+            final Instant end)
     {
         final ProbeConfigurator configer = ProbeConfigurator.getProbeConfigurator();
         LOG.info("Duration: " + (end.toEpochMilli() - start.toEpochMilli()) + " " + toString() + " for " + r);
@@ -99,6 +116,7 @@ public abstract class Probe implements Runnable
 
         resp.setSuccess(r.isSuccess());
         repo.save(resp);
+        return resp;
     }
 
     public ProbeConfig getProbeConfig()

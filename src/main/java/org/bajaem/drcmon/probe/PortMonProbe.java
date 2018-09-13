@@ -19,7 +19,7 @@ public class PortMonProbe extends Probe
 
     public PortMonProbe(final PortMonProbeConfig _probeConfig)
     {
-        super(_probeConfig.getConfig());
+        super(_probeConfig);
         myConfig = _probeConfig;
     }
 

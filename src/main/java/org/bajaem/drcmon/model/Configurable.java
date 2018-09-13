@@ -1,6 +1,7 @@
 package org.bajaem.drcmon.model;
 
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.mq.MessageSender;
 
 public abstract class Configurable
 {
@@ -8,11 +9,14 @@ public abstract class Configurable
 
     private final ProbeMarkerCache cache;
 
-    public Configurable(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    private final MessageSender sender;
+
+    public Configurable(final ProbeConfig _config, final ProbeMarkerCache _cache, final MessageSender _sender)
     {
         config = _config;
         cache = _cache;
         config.setProbeType(cache.getProbeTypeByConfig(this.getClass()));
+        sender = _sender;
     }
 
     public ProbeConfig getConfig()
@@ -23,5 +27,10 @@ public abstract class Configurable
     public ProbeMarkerCache getProbeMarkerCache()
     {
         return cache;
+    }
+
+    public MessageSender getSender()
+    {
+        return sender;
     }
 }

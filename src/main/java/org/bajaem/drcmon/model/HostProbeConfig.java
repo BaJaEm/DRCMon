@@ -1,13 +1,14 @@
 package org.bajaem.drcmon.model;
 
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.mq.MessageSender;
 
 public abstract class HostProbeConfig extends Configurable
 {
 
-    public HostProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache)
+    public HostProbeConfig(final ProbeConfig _config, final ProbeMarkerCache _cache, final MessageSender _sender)
     {
-        super(_config, _cache);
+        super(_config, _cache, _sender);
     }
 
     private static final String HOST_KEY = "HOST";

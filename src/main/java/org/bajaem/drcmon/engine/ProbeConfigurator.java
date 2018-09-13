@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeConfig;
+import org.bajaem.drcmon.mq.MessageSender;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
@@ -40,6 +41,9 @@ public class ProbeConfigurator
     @Autowired
     private final ProbeMarkerCache probeCache;
 
+    @Autowired
+    private final MessageSender sender;
+
     public ProbeResponseRepository getProbeResponseRepository()
     {
         return responseRepo;
@@ -56,13 +60,14 @@ public class ProbeConfigurator
     }
 
     public ProbeConfigurator(final ProbeConfigRepository _configRepo, final ProbeResponseRepository _responseRepo,
-            final ProbeTypeRepository _typeRepo, final ProbeMarkerCache _probeCache)
+            final ProbeTypeRepository _typeRepo, final ProbeMarkerCache _probeCache, final MessageSender _sender)
     {
         LOG.info("constructor probe configer");
         configRepo = _configRepo;
         responseRepo = _responseRepo;
         typeRepo = _typeRepo;
         probeCache = _probeCache;
+        sender = _sender;
     }
 
     /**
@@ -78,12 +83,12 @@ public class ProbeConfigurator
     @Bean
     private static ProbeConfigurator probeConfigurator(final ProbeConfigRepository _configRepo,
             final ProbeResponseRepository _responseRepo, final ProbeTypeRepository _typeRepo,
-            final ProbeMarkerCache _probeCache)
+            final ProbeMarkerCache _probeCache, final MessageSender _sender)
     {
         LOG.info("static probe configer");
         if (null == config)
         {
-            config = new ProbeConfigurator(_configRepo, _responseRepo, _typeRepo, _probeCache);
+            config = new ProbeConfigurator(_configRepo, _responseRepo, _typeRepo, _probeCache, _sender);
         }
         return config;
     }
@@ -103,10 +108,10 @@ public class ProbeConfigurator
                 {
                     // Reflection voodoo here --->
                     final Constructor<? extends Configurable> conCons = c.getConstructor(config.getClass(),
-                            probeCache.getClass());
+                            probeCache.getClass(), MessageSender.class);
                     LOG.info(c.getClass());
                     final Constructor<? extends Probe> probeCons = p.getConstructor(c);
-                    final Configurable configurable = conCons.newInstance(config, probeCache);
+                    final Configurable configurable = conCons.newInstance(config, probeCache, sender);
                     final Probe probe = probeCons.newInstance(configurable);
                     // Reflection voodoo ends
                     probes.put(probe.getUniqueKey(), probe);

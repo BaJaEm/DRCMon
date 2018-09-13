@@ -76,7 +76,7 @@ public class TestConfigs extends DBGenerator
         configRepo.save(conf.getConfig());
 
         final SQLQueryProbeConfig conf2 = new SQLQueryProbeConfig(configRepo.findById(conf.getConfig().getId()).get(),
-                cache);
+                cache, sender);
         final String url = conf2.getUrl();
         assertNotNull(url);
         assertEquals("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", url);
@@ -84,7 +84,7 @@ public class TestConfigs extends DBGenerator
         assertNotNull(expected);
         assertEquals("SQLQueryProbe", expected);
         final ProbeKey key = conf.getConfig().getProbeKey();
-        assertNotNull(key);;
+        assertNotNull(key);
 
         checkUpdateDelete(conf.getConfig().getId());
     }
@@ -98,7 +98,7 @@ public class TestConfigs extends DBGenerator
         LOG.info(conf.getConfig().getId());
 
         final RESTGetProbeConfig conf2 = new RESTGetProbeConfig(configRepo.findById(conf.getConfig().getId()).get(),
-                cache);
+                cache, sender);
         LOG.info("CREATED ON: " + conf2.getConfig().getCreatedOn());
         final String url = conf2.getUrl();
         assertNotNull(url);

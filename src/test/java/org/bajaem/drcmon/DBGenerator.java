@@ -21,13 +21,13 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
-import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.model.PortMonProbeConfig;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
+import org.bajaem.drcmon.mq.MessageSender;
 import org.bajaem.drcmon.respository.ProbeKeyRepository;
 import org.h2.tools.RunScript;
 import org.junit.After;
@@ -77,6 +77,9 @@ public abstract class DBGenerator
 
     @Autowired
     protected ProbeMarkerCache cache;
+
+    @Autowired
+    protected MessageSender sender;
 
     @Before
     public void createDB() throws SQLException, IOException, InvalidKeyException, NoSuchAlgorithmException,
@@ -159,7 +162,7 @@ public abstract class DBGenerator
     protected PingProbeConfig newPingProbeConfig(final String host)
     {
         final ProbeConfig pConfig = initializConfig();
-        final PingProbeConfig conf = new PingProbeConfig(pConfig, cache);
+        final PingProbeConfig conf = new PingProbeConfig(pConfig, cache, sender);
         conf.setHost(host);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         return conf;
@@ -178,7 +181,7 @@ public abstract class DBGenerator
     protected PortMonProbeConfig newPortMonProbeConfig(final String host, final int _port)
     {
         final ProbeConfig pConfig = initializConfig();
-        final PortMonProbeConfig conf = new PortMonProbeConfig(pConfig, cache);
+        final PortMonProbeConfig conf = new PortMonProbeConfig(pConfig, cache, sender);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setHost(host);
         conf.setPort(_port);
@@ -199,7 +202,7 @@ public abstract class DBGenerator
             final String _expected)
     {
         final ProbeConfig pConfig = initializConfig();
-        final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(pConfig, cache);
+        final SQLQueryProbeConfig conf = new SQLQueryProbeConfig(pConfig, cache, sender);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         conf.setUrl(_url);
         pConfig.setProbeKey(_key);
@@ -222,7 +225,7 @@ public abstract class DBGenerator
             final ProbeKey key)
     {
         final ProbeConfig pConfig = initializConfig();
-        final RESTGetProbeConfig conf = new RESTGetProbeConfig(pConfig, cache);
+        final RESTGetProbeConfig conf = new RESTGetProbeConfig(pConfig, cache, sender);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         pConfig.setProbeKey(key);
         conf.setUrl(_url);

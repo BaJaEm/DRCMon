@@ -1,12 +1,19 @@
 
 package org.bajaem.drcmon;
 
+import org.apache.activemq.broker.BrokerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.engine.MonitorEngine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.stereotype.Component;
 
 @SpringBootApplication
+@EnableJms
 public class DrcmonApplication
 {
 
@@ -17,20 +24,27 @@ public class DrcmonApplication
         SpringApplication.run(DrcmonApplication.class, args);
     }
 
-    // @Component
-    // public class MyBean implements CommandLineRunner
-    // {
-    //
-    // @Autowired
-    // private MonitorEngine eng;
-    //
-    // @Override
-    // public void run(final String... args) throws UnknownHostException
-    // {
-    // LOG.info("Initialize engine");
-    // eng.start();
-    // }
-    //
-    // }
+    @Component
+    public class MyBean implements CommandLineRunner
+    {
 
+        @Autowired
+        private BrokerService broker;
+
+        @Autowired
+        private MonitorEngine eng;
+
+        @Override
+        public void run(final String... args) throws Exception
+        {
+            LOG.info("Initialize engine");
+            // eng.start();
+            if (broker.isStopped())
+            {
+                broker.start();
+                LOG.info("started");
+            }
+        }
+
+    }
 }

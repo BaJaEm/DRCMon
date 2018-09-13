@@ -20,7 +20,7 @@ public class PingProbe extends Probe
 
     public PingProbe(final PingProbeConfig _probeConfig)
     {
-        super(_probeConfig.getConfig());
+        super(_probeConfig);
         myConfig = _probeConfig;
         LOG.trace("New Probe... " + myConfig.getHost());
     }
