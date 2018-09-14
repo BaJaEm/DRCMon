@@ -19,7 +19,7 @@ public class MessageSender
 
     public void sendMessage(final ProbeResponse resp)
     {
-        LOG.trace("Sending Message: " + resp.getProbeConfig().getProbeType().getName());
+        LOG.trace("Sending Message: " + resp);
         jmsTemplate.setPubSubDomain(true);
         jmsTemplate.convertAndSend("drcmon.topic", resp);
     }
