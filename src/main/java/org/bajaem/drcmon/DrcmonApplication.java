@@ -4,6 +4,7 @@ package org.bajaem.drcmon;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bajaem.drcmon.configuration.DRCMonConfiguration;
 import org.bajaem.drcmon.engine.MonitorEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -34,15 +35,18 @@ public class DrcmonApplication
         @Autowired
         private MonitorEngine eng;
 
+        @Autowired
+        private DRCMonConfiguration config;
+
         @Override
         public void run(final String... args) throws Exception
         {
 
-            if ("start".equals(args[0]))
+            if ( config.autostartEngine())
             {
                 eng.start();
             }
-            if (broker.isStopped())
+            if (config.isTCPBrokerEnabled() && broker.isStopped())
             {
                 LOG.info("Initialize broker");
                 broker.start();
