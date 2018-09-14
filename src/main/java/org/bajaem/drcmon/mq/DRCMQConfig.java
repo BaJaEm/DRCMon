@@ -5,6 +5,7 @@ import javax.jms.ConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.apache.activemq.store.PersistenceAdapter;
 import org.apache.activemq.store.memory.MemoryPersistenceAdapter;
+import org.bajaem.drcmon.configuration.DRCMonConfiguration;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -21,6 +22,8 @@ import org.springframework.jms.support.converter.MessageType;
 @EnableJms
 public class DRCMQConfig
 {
+    @Autowired
+    private DRCMonConfiguration config;
 
     @Bean
     public JmsListenerContainerFactory<?> myFactory(//
@@ -50,11 +53,20 @@ public class DRCMQConfig
     @Bean(initMethod = "start", destroyMethod = "stop")
     public BrokerService broker()
     {
+
         final BrokerService broker = new BrokerService();
 
         try
         {
-            broker.addConnector("tcp://localhost:61616");
+            if (config.isTCPBrokerEnabled())
+            {
+                broker.addConnector(config.getBrokerURL());
+            }
+            else
+            {
+
+                broker.addConnector("vm:localhost");
+            }
             broker.setUseJmx(true);
             final PersistenceAdapter pa = new MemoryPersistenceAdapter();
             broker.setPersistenceAdapter(pa);
