@@ -1,3 +1,4 @@
+
 package org.bajaem.drcmon.mq;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,15 +13,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageSender
 {
+
     private static final Logger LOG = LogManager.getLogger();
+
+    public static final String BASE_TOPIC = "drcmon.topic";
 
     @Autowired
     JmsTemplate jmsTemplate;
 
-    public void sendMessage(final ProbeResponse resp)
+    public void sendMessage(final ProbeResponse resp, final String topic)
     {
         LOG.trace("Sending Message: " + resp);
+        final String channel = topic != null ? BASE_TOPIC + "/" + topic : BASE_TOPIC;
         jmsTemplate.setPubSubDomain(true);
-        jmsTemplate.convertAndSend("drcmon.topic", resp);
+        jmsTemplate.convertAndSend(channel, resp);
+    }
+
+    public void sendMessage(final ProbeResponse resp)
+    {
+        sendMessage(resp, null);
     }
 }

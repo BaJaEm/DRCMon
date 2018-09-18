@@ -1,4 +1,5 @@
 -- DROP TABLE probe_config
+-- ALTER TABLE probe_config ADD probe_category BIGINT
 
 CREATE TABLE probe_config 
 (
@@ -13,9 +14,9 @@ CREATE TABLE probe_config
 	last_modified_by      VARCHAR(50) not null,
 	enabled               CHAR(1) DEFAULT 'T' NOT NULL CHECK (enabled IN ('T', 'F')),
 	probe_key             BIGINT,
+	probe_category        BIGINT,
 	custom_configuration  VARCHAR(2048)
 );
-
 
 ALTER TABLE probe_config 
 	ADD FOREIGN KEY ( probe_type )
@@ -24,3 +25,7 @@ ALTER TABLE probe_config
 ALTER TABLE probe_config
 	ADD FOREIGN KEY ( probe_key )
 	REFERENCES probe_key ( id );
+
+ALTER TABLE probe_config
+	ADD FOREIGN KEY ( probe_category )
+	REFERENCES probe_category ( id );

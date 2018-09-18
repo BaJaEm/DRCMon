@@ -77,9 +77,9 @@ public abstract class Probe implements Runnable
         final ThreadLocal<ProbeResponse> resp = new ThreadLocal<>();
         SystemUserWrapper.executeAsSystem(() -> resp.set(storeResponse(r, localhost, start, end)));
 
-        if (null != config.getSender())
+        if (null != config.getSender() && config.getConfig().getProbeCategory() != null)
         {
-            config.getSender().sendMessage(resp.get());
+            config.getSender().sendMessage(resp.get(), config.getConfig().getProbeCategory().getChannel());
         }
     }
 

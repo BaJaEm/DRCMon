@@ -48,6 +48,8 @@ public class ProbeConfig
 
     private ProbeKey probeKey;
 
+    private ProbeCategory probeCategory;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Generator")
     public long getId()
@@ -180,6 +182,18 @@ public class ProbeConfig
     public void setProbeKey(final ProbeKey _probeKey)
     {
         probeKey = _probeKey;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "probe_category")
+    public ProbeCategory getProbeCategory()
+    {
+        return probeCategory;
+    }
+
+    public void setProbeCategory(final ProbeCategory _probeCategory)
+    {
+        probeCategory = _probeCategory;
     }
 
     @Override

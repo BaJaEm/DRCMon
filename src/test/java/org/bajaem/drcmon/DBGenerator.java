@@ -92,6 +92,7 @@ public abstract class DBGenerator
                     "/sql/key.sql", //
                     "/sql/probe_type.sql", //
                     "/sql/probe_key.sql", //
+                    "/sql/probe_category.sql", //
                     "/sql/probe_config.sql", //
                     "/sql/probe_response.sql"//
             })
@@ -143,6 +144,7 @@ public abstract class DBGenerator
             conn.createStatement().execute("DROP TABLE probe_config");
             conn.createStatement().execute("DROP TABLE probe_type");
             conn.createStatement().execute("DROP TABLE probe_key");
+            conn.createStatement().execute("DROP TABLE probe_category");
         }
         catch (final SQLException e)
         {
