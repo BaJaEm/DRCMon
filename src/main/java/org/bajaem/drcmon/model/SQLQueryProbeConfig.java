@@ -11,7 +11,7 @@ public class SQLQueryProbeConfig extends URLBasedConfig
         super(_config, _cache, _sender);
     }
 
-    private static final String QUERY_KEY = "QUERY";
+    public static final String QUERY_KEY = "QUERY";
 
     public String getQuery()
     {

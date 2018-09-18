@@ -12,11 +12,11 @@ public abstract class URLBasedConfig extends Configurable
         super(_config, _cache, _sender);
     }
 
-    private static final String URL_KEY = "URL";
+    public static final String URL_KEY = "URL";
 
-    private static final String EXPECTED_KEY = "EXPECTED";
+    public static final String EXPECTED_KEY = "EXPECTED";
 
-    private static final String PATH_KEY = "PATH";
+    public static final String PATH_KEY = "PATH";
 
     public String getUrl()
     {

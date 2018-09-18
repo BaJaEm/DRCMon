@@ -11,7 +11,7 @@ public abstract class HostProbeConfig extends Configurable
         super(_config, _cache, _sender);
     }
 
-    private static final String HOST_KEY = "HOST";
+    public static final String HOST_KEY = "HOST";
 
     public String getHost()
     {

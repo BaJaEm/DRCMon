@@ -11,7 +11,7 @@ public class PortMonProbeConfig extends HostProbeConfig
         super(_config, _cache, _sender);
     }
 
-    private static final String PORT_KEY = "PORT";
+    public static final String PORT_KEY = "PORT";
 
     public Integer getPort()
     {
