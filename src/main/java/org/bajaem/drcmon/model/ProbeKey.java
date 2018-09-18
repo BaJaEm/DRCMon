@@ -1,3 +1,4 @@
+
 package org.bajaem.drcmon.model;
 
 import javax.persistence.Convert;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @SequenceGenerator(name = "Generator", sequenceName = "key_seq", allocationSize = 1)
 public class ProbeKey
 {
+
     private long id;
 
     private String name;

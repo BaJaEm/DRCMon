@@ -1,12 +1,14 @@
+
 package org.bajaem.drcmon.respository;
 
 import org.bajaem.drcmon.model.ProbeKey;
+import org.bajaem.drcmon.model.projection.ProbeKeyProjection;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @PreAuthorize("hasRole('ROLE_USER')")
-@RepositoryRestResource
+@RepositoryRestResource(excerptProjection = ProbeKeyProjection.class)
 public interface ProbeKeyRepository extends CrudRepository<ProbeKey, Long>
 {
 
@@ -16,5 +18,5 @@ public interface ProbeKeyRepository extends CrudRepository<ProbeKey, Long>
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
-    void delete(ProbeKey aLong);  
+    void delete(ProbeKey aLong);
 }
