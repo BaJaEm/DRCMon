@@ -16,6 +16,8 @@
      <table border="1">
           <tr>
                <th>Type</th>
+               <th>Artifact</th>
+               <th>Category</th>
                <th>Configuration</th>
                <th>Enabled?</th>
                <th>Delay Time</th>
@@ -26,6 +28,8 @@
           </tr>
           <tr ng-repeat="config in data">
                <td>{{config.probeType.name}}</td>
+               <td>{{config.artifactId}}</td>
+               <td>{{config.probeCategory ? config.probeCategory.name : "" }}</td>
                <td><div
                          ng-repeat="(key, value) in config.customConfiguration">
                          {{key}} : {{value}}</div></td>

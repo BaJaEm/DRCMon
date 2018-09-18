@@ -2,23 +2,9 @@
 
 	var drcmon_app = angular.module("drcmon_app");
 
-	var overview_service = function($log, $http) {
-		return {
+	var overview_controller = function($scope, $http, $window, helper_service) {
 
-		};
-	}
-
-	drcmon_app.factory("overview_service", overview_service);
-
-	var overview_controller = function($scope, overview_service, $http, $window) {
-
-		$scope.status = "Initializing..."
-
-		var onError = function(error) {
-			$scope.error = error;
-			alert(error);
-			refreshStatus();
-		}
+		$scope.status = "Initializing...";
 
 		var refreshStatus = function() {
 			$http.get("/status").then(function(data) {
@@ -31,18 +17,24 @@
 				} else {
 					$scope.status = "Not Running";
 				}
-			}, onError);
+			}, function(error) {
+				alert(error);
+			});
 		}
 		$scope.start = function() {
 			$http.get("/start").then(function(data) {
 				refreshStatus()
-			}, onError)
+			}, function(error) {
+				alert(error);
+			})
 		}
 
 		$scope.stop = function() {
 			$http.get("/stop").then(function(data) {
 				refreshStatus()
-			}, onError)
+			}, function(error) {
+				alert(error);
+			})
 		}
 
 		$scope.update = function(config) {
@@ -55,7 +47,9 @@
 		var refreshData = function() {
 			$http.get("/api/probeConfigs").then(function(data) {
 				$scope.data = data.data._embedded.probeConfigs;
-			}, onError)
+			}, function(error) {
+				alert(error);
+			})
 		}
 		refreshStatus();
 		refreshData();

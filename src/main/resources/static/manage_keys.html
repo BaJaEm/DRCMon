@@ -7,14 +7,26 @@
                <th></th>
                <th></th>
           </tr>
-          <tr ng-repeat="key in probeKeys">
-               <td>{{key.name}}</td>
-               <td>{{key.userId}}</td>
-               <td>"Hidden"</td>
-               <td></td>
-               <td><input type="submit" value="edit"
-                    ng-click="updateKey(key)" /></td>
-          </tr>
+          <tbody ng-repeat="key in probeKeys">
+
+               <tr ng-show="! modify[key.id]">
+                    <td>{{key.name}}</td>
+                    <td>{{key.userId}}</td>
+                    <td>********</td>
+                    <td>********</td>
+                    <td><input type="submit" value="edit"
+                         ng-click="updateKey(key)" /></td>
+               </tr>
+               <tr ng-show="modify[key.id]">
+                    <td><input type="text" ng-model="key.name" /></td>
+                    <td><input type="text" ng-model="key.userId" /></td>
+                    <td><input type="password" ng-model="key.pw1" /></td>
+                    <td><input type="password" ng-model="key.pw2" /></td>
+                    <td><input type="submit" value="save"
+                         ng-click="saveKey(key)" /></td>
+
+               </tr>
+          </tbody>
           <tr>
                <td><input type="text" ng-model="newkey.name" /></td>
                <td><input type="text" ng-model="newkey.userId" /></td>

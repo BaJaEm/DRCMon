@@ -1,9 +1,14 @@
-<div class="add_probe">
+<div class="update_probe">
      <form>
           <table>
                <tr>
                     <td>Probe Type:</td>
                     <td>{{np.probeType.name}}</td>
+               </tr>
+               <tr>
+                    <td>Probe Category:</td>
+                    <td><select style="width: 100%" ng-model="np.probeCategory"
+                         ng-options="c.name for c in probeCategories track by c.name"></select></td>
                </tr>
                <tr>
                     <td>Artifact ID:</td>

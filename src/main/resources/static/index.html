@@ -13,12 +13,12 @@
           </div>
           <div class="row">
                <div id="menu" class="col">
-                    <div>
-                         <a href="#">Overview</a><p>
-                         <a href="/#!search/">Search</a><p>
-                         <a href="/#!/add/">Add Probes</a><p>
-                         <a href="/#!/key/">Manage Keys</a><p>
-                    </div>
+                    <ul>
+                         <li><a href="#">Overview</a></li>
+                         <li><a href="/#!/add/">Add Probes</a></li>
+                         <li><a href="/#!/key/">Manage Keys</a></li>
+                         <li><a href="/#!/category/">Manage Categories</a></li>
+                    </ul>
                </div>
                <div id="main" class="col">
                     <div ng-view></div>
@@ -42,6 +42,7 @@
 <script src="js/app/add_probe-controller.js"></script>
 <script src="js/app/update_probe-controller.js"></script>
 <script src="js/app/manage_keys-controller.js"></script>
+<script src="js/app/manage_categories-controller.js"></script>
 
 <link rel="stylesheet" href="css/lib/bootstrap.min.css" />
 <link rel="stylesheet" href="css/app/drcmon.css" />

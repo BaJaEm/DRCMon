@@ -2,29 +2,12 @@
 
 	var drcmon_app = angular.module("drcmon_app");
 
-	var add_probe_service = function($log, $http) {
+	var add_probe_controller = function($scope, $http, $window, helper_service) {
 
-		return {};
-	}
+		helper_service.getProbeTypes($scope);
+		helper_service.getProbeKeys($scope);
+		helper_service.getProbeCategories($scope);
 
-	drcmon_app.factory("add_probe_service", add_probe_service);
-
-	var add_probe_controller = function($scope, add_probe_service, $http,
-			$window) {
-		var getProbeTypes = function() {
-			$http.get("/api/probeTypes").then(function(data) {
-				$scope.probeTypes = data.data._embedded.probeTypes
-			});
-		}
-		getProbeTypes();
-		
-		var getProbeKeys = function() {
-			$http.get("/api/probeKeys").then(function(data) {
-				$scope.probeKeys = data.data._embedded.probeKeys
-			});
-		}
-		getProbeKeys();
-		
 		$scope.np = {
 			"enabled" : true,
 			"pollingInterval" : 30,
@@ -52,14 +35,19 @@
 				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
 			}
 			item.probeType = item.pt._links.self.href;
-			
-			if (item.probeKey && item.probeKey._links ){
+
+			if (item.probeKey && item.probeKey._links) {
 				var probeKey = item.probeKey._links.probeKey.href;
 				item.probeKey = probeKey;
-		    }
-			else
-			{
+			} else {
 				delete item.probeKey;
+			}
+
+			if (item.probeCategory && item.probeCategory._links) {
+				var probeCategory = item.probeCategory._links.probeCategory.href;
+				item.probeCategory = probeCategory;
+			} else {
+				delete item.probeCategory;
 			}
 			$http.post("/api/probeConfigs", item).then(
 					$window.location.href = '/#!/add', function(response) {
