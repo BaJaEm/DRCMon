@@ -14,7 +14,7 @@ public class PingProbe extends Probe
 
     static final Logger LOG = LogManager.getLogger(PingProbe.class);
 
-    private static final int TIMEOUT = 30;
+    private static final int TIMEOUT = 10000;
 
     private final PingProbeConfig myConfig;
 
