@@ -1,5 +1,4 @@
 -- DROP TABLE probe_config
--- ALTER TABLE probe_config ADD probe_category BIGINT
 
 CREATE TABLE probe_config 
 (
