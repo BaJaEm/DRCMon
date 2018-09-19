@@ -9,7 +9,7 @@
 * Returned data value 
 
 ##Message Queue for response
-* Option of AMPQ vs JMS
+* __Option of AMPQ vs JMS__ /Decided to go with JMS
 
 ##Monitor engine 
 * _Get probes from dB_
@@ -91,3 +91,4 @@ host/ip, Port, Protocol
 * _Better mechanism for probe initialization_
 * _ad-hoc config for probes ( JSON field )_
 * Integration with SSO ( KeyCloak, etc... )
+* services on linux/unix and Windows
