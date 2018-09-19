@@ -5,12 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.DBGenerator;
-import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.probe.RESTGetProbe;
 import org.bajaem.drcmon.probe.Response;
@@ -29,7 +27,7 @@ public class RESTGetProbeTests extends DBGenerator
         final RESTGetProbeConfig conf = newRESTGetProbeConfig(//
                 getURLforProbeType("Ping"), //
                 "description", //
-                "Ping using java isReachable method - may or maynot be ICMP", //
+                "Ping using java isReachable method - may or may not be ICMP", //
                 goodWebKey);//
         final RESTGetProbe p = new RESTGetProbe(conf);
         final Response response = p.probe();

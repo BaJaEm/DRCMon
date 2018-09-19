@@ -27,7 +27,10 @@ import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeKey;
 import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
+import org.bajaem.drcmon.model.WebBotProbeConfig;
 import org.bajaem.drcmon.mq.MessageSender;
+import org.bajaem.drcmon.probe.WebBotAction;
+import org.bajaem.drcmon.probes.WebBotTestAction;
 import org.bajaem.drcmon.respository.ProbeKeyRepository;
 import org.h2.tools.RunScript;
 import org.junit.After;
@@ -241,4 +244,26 @@ public abstract class DBGenerator
     {
         return baseURL + "/api/probeTypes/" + cache.getProbeTypeByName(name).getId();
     }
+
+    protected WebBotProbeConfig newWebBotProbeConfig(final String _url, final ProbeKey key,
+            final Class<? extends WebBotAction> script)
+    {
+        final ProbeConfig pConfig = initializConfig();
+        pConfig.setProbeKey(key);
+        final WebBotProbeConfig conf = new WebBotProbeConfig(pConfig, cache, sender);
+        conf.setUrl(_url);
+        conf.setActionScript(script);
+        conf.setHeadless(false);
+        pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
+        return conf;
+    }
+
+    protected WebBotProbeConfig newWebBotProbeConfig()
+    {
+        return newWebBotProbeConfig(//
+                "http://localhost:" + port + "/monitor", //
+                goodWebKey, //
+                WebBotTestAction.class);
+    }
+
 }

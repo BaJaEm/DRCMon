@@ -19,7 +19,7 @@ public class Response
 
     private final String errorMessage;
 
-    private final Exception error;
+    private final Throwable error;
 
     public Response(final Map<String, String> _dataMap, final boolean _success)
     {
@@ -31,7 +31,7 @@ public class Response
         this(new HashMap<>(), _success, null, null);
     }
 
-    public Response(final boolean _success, final String _errorMessage, final Exception _error)
+    public Response(final boolean _success, final String _errorMessage, final Throwable _error)
     {
         this(new HashMap<>(), _success, _errorMessage, _error);
     }
@@ -49,7 +49,7 @@ public class Response
      *            {@link Exception} that was thrown by probe.
      */
     public Response(final Map<String, String> _dataMap, final boolean _success, final String _errorMessage,
-            final Exception _error)
+            final Throwable _error)
     {
         dataMap = _dataMap;
         success = _success;
@@ -72,7 +72,7 @@ public class Response
         return errorMessage;
     }
 
-    public Exception getError()
+    public Throwable getError()
     {
         return error;
     }
