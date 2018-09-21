@@ -34,6 +34,11 @@
 			if (item.pt.name == 'SQLQuery') {
 				item.customConfiguration.QUERY = item.customConfigurationTemp.QUERY;
 			}
+			
+			if ( item.pt.name == 'WebBot' ) {
+					item.customConfiguration.URL = item.customConfigurationTemp.URL;
+					item.customConfiguration.ACTIONSCRIPT = item.customConfigurationTemp.ACTIONSCRIPT;
+			}
 			item.probeType = item.pt._links.self.href;
 
 			if (item.probeKey && item.probeKey._links) {

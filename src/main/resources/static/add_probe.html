@@ -40,13 +40,13 @@
                          ng-model="np.customConfigurationTemp.PORT" /></td>
                </tr>
                <tr
-                    ng-show="np.pt && np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet'">
+                    ng-show="np.pt && np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet' || np.pt.name == 'WebBot'">
                     <td>Key</td>
                     <td><select style="width: 100%" ng-model="np.probeKey"
                          ng-options="t.name for t in probeKeys track by t.name"></select></td>
                </tr>
                <tr
-                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                    ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet' || np.pt.name == 'WebBot')">
                     <td>URL</td>
                     <td><input type="text"
                          ng-model="np.customConfigurationTemp.URL" /></td>
@@ -67,6 +67,11 @@
                     <td><input type="text"
                          ng-model="np.customConfigurationTemp.QUERY" /></td>
                </tr>
+               <tr ng-show="np.pt && (np.pt.name == 'WebBot' )">
+                    <td>Action Script Class</td>
+                    <td><input type="text"
+                         ng-model="np.customConfigurationTemp.ACTIONSCRIPT" /></td>
+               </tr>
                <tr>
                     <td><input type="submit" value="{{action}}"
                          ng-click="doAction(np)"></td>
@@ -75,5 +80,5 @@
      </form>
      <pre ng-show="error">ERROR: {{error | json}}</pre>
      <hr>
-     <pre>{{foo | json}}</pre>
+     <pre>{{foo| json}}</pre>
 </div>
