@@ -11,7 +11,7 @@ public class WebBotProbeConfig extends URLBasedConfig
 
     public static final String WEBDRIVER_KEY = "WEBDRIVER";
 
-    public static final String DEFAULT_WEBDRIVER_LOC = "bin/chromedriver.exe";
+    public static final String DEFAULT_WEBDRIVER_LOC = "bin/";
 
     public static final String HEADLESS_KEY = "HEADLESS";
 
@@ -29,7 +29,24 @@ public class WebBotProbeConfig extends URLBasedConfig
     public String getWebDriverPath()
     {
         final String loc = getConfig().getCustomConfiguration().get(WEBDRIVER_KEY);
-        return loc != null ? loc : DEFAULT_WEBDRIVER_LOC;
+        if (loc == null)
+        {
+            final String os = System.getProperty("os.name").toLowerCase();
+            if (os.contains("windows"))
+            {
+                return DEFAULT_WEBDRIVER_LOC + "chromedriver.exe";
+            }
+            else if (os.contains("linux"))
+            {
+                return DEFAULT_WEBDRIVER_LOC + "chromedriver";
+
+            }
+            else
+            {
+                throw new DRCStartupException(os + " is not a supported operating system");
+            }
+        }
+        return loc;
     }
 
     public void setWebDriver(final String _webDriverPath)
@@ -64,7 +81,8 @@ public class WebBotProbeConfig extends URLBasedConfig
     {
         try
         {
-            return (Class<? extends WebBotAction>) Class.forName(getConfig().getCustomConfiguration().get(ACTIONSCRIPT_KEY));
+            return (Class<? extends WebBotAction>) Class
+                    .forName(getConfig().getCustomConfiguration().get(ACTIONSCRIPT_KEY));
         }
         catch (final ClassNotFoundException e)
         {
