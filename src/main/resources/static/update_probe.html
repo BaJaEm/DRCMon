@@ -38,13 +38,13 @@
                          ng-model="np.customConfiguration.PORT" /></td>
                </tr>
                <tr
-                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet' || np.probeType.name == 'WebBot'">
                     <td>Key</td>
                     <td><select style="width: 100%" ng-model="np.probeKey"
                          ng-options="t.name for t in probeKeys track by t.name"></select></td>
                </tr>
                <tr
-                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
+                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet' || np.probeType.name == 'WebBot'">
                     <td>URL</td>
                     <td><input type="text"
                          ng-model="np.customConfiguration.URL" /></td>
@@ -66,6 +66,11 @@
                     <td>QUERY</td>
                     <td><input type="text"
                          ng-model="np.customConfiguration.QUERY" /></td>
+               </tr>
+               <tr ng-show="np.probeType.name == 'WebBot'">
+                    <td>Action Script Class</td>
+                    <td><input type="text"
+                         ng-model="np.customConfiguration.ACTIONSCRIPT" /></td>
                </tr>
                <tr>
                     <td><input type="submit" value="{{action}}"
