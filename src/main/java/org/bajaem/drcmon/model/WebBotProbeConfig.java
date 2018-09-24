@@ -1,6 +1,8 @@
 
 package org.bajaem.drcmon.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.mq.MessageSender;
@@ -8,6 +10,8 @@ import org.bajaem.drcmon.probe.WebBotAction;
 
 public class WebBotProbeConfig extends URLBasedConfig
 {
+
+    private static final Logger LOG = LogManager.getLogger();
 
     public static final String WEBDRIVER_KEY = "WEBDRIVER";
 
@@ -58,7 +62,7 @@ public class WebBotProbeConfig extends URLBasedConfig
     {
         final String headless = getConfig().getCustomConfiguration().get(HEADLESS_KEY);
 
-        return (headless != null && headless.toLowerCase().equals("true")) ? true : false;
+        return (headless != null && headless.toLowerCase().equals("false")) ? false : true;
     }
 
     public void setHeadless(final boolean _headless)
@@ -81,6 +85,7 @@ public class WebBotProbeConfig extends URLBasedConfig
     {
         try
         {
+            LOG.debug(getConfig().getCustomConfiguration().get(ACTIONSCRIPT_KEY));
             return (Class<? extends WebBotAction>) Class
                     .forName(getConfig().getCustomConfiguration().get(ACTIONSCRIPT_KEY));
         }

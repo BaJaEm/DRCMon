@@ -46,6 +46,7 @@ public class WebBotProbe extends Probe
             {
                 System.setProperty("webdriver.chrome.driver", myConfig.getWebDriverPath());
                 final ChromeOptions opts = new ChromeOptions();
+                LOG.debug("isHeadless: " + myConfig.isHeadless());
                 if (myConfig.isHeadless())
                 {
                     opts.addArguments("--headless");
