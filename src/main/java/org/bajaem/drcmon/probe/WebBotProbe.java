@@ -121,8 +121,7 @@ public class WebBotProbe extends Probe
     @Override
     public String getUniqueKey()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return myConfig.getActionScript().toString() + "-" + myConfig.getUrl();
     }
 
 }
