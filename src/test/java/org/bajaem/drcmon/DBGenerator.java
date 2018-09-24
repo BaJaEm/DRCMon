@@ -253,7 +253,7 @@ public abstract class DBGenerator
         final WebBotProbeConfig conf = new WebBotProbeConfig(pConfig, cache, sender);
         conf.setUrl(_url);
         conf.setActionScript(script);
-        conf.setHeadless(false);
+        conf.setHeadless(true);
         pConfig.setProbeType(cache.getProbeTypeByConfig(conf.getClass()));
         return conf;
     }
