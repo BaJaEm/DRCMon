@@ -254,12 +254,17 @@ public class MonitorEngine
                         // do nothing
                     }
                 }
-                shutdown();
-                LOG.info("Engine shut down complete");
+
             }
             catch (final DRCStartupException e)
             {
+                LOG.error(e);
                 running = false;
+            }
+            finally
+            {
+                shutdown();
+                LOG.info("Engine shut down complete");
             }
         }
         else
