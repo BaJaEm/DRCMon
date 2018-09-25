@@ -93,6 +93,7 @@ public abstract class DBGenerator
             assertNotNull(conn);
             for (final String s : new String[] { //
                     "/sql/key.sql", //
+                    "/sql/probe_user.sql", //
                     "/sql/probe_type.sql", //
                     "/sql/probe_key.sql", //
                     "/sql/probe_category.sql", //
@@ -148,6 +149,7 @@ public abstract class DBGenerator
             conn.createStatement().execute("DROP TABLE probe_type");
             conn.createStatement().execute("DROP TABLE probe_key");
             conn.createStatement().execute("DROP TABLE probe_category");
+            conn.createStatement().execute("DROP TABLE probe_user");
         }
         catch (final SQLException e)
         {
