@@ -5,15 +5,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.net.UnknownHostException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.model.PingProbeConfig;
 import org.bajaem.drcmon.probe.PingProbe;
 import org.bajaem.drcmon.probe.Response;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 

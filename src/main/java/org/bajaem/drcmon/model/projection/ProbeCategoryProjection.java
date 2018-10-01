@@ -10,6 +10,6 @@ public interface ProbeCategoryProjection
     public long getId();
 
     public String getName();
-    
+
     public String getChannel();
 }

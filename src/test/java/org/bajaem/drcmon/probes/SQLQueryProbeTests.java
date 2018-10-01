@@ -5,10 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.bajaem.drcmon.DBGenerator;
-import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.probe.Response;

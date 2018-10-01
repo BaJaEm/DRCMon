@@ -88,6 +88,7 @@ public class JsonToolsTests
             fail(e.getMessage());
         }
     }
+
     @Test
     public void testRows2()
     {

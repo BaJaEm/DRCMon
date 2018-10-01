@@ -16,7 +16,6 @@ import org.bajaem.drcmon.engine.ProbeConfigurator;
 import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeResponse;
-import org.bajaem.drcmon.mq.MessageSender;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 import org.springframework.stereotype.Component;
 

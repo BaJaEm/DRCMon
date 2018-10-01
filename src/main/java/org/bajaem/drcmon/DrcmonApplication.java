@@ -42,7 +42,7 @@ public class DrcmonApplication
         public void run(final String... args) throws Exception
         {
 
-            if ( config.autostartEngine())
+            if (config.autostartEngine())
             {
                 eng.start();
             }
