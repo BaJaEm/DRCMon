@@ -12,7 +12,8 @@ public class DRCSecurityConfig extends WebSecurityConfigurerAdapter
     {
         http.authorizeRequests().antMatchers("/api/**").permitAll();
         http.authorizeRequests().antMatchers("/monitor").permitAll();
+        http.authorizeRequests().antMatchers("/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/index.html").permitAll();
         http.authorizeRequests().antMatchers("/**").authenticated();
-        http.csrf().disable();
     }
 }

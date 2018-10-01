@@ -1,35 +1,31 @@
 
 package org.bajaem.drcmon.security;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableOAuth2Sso
 @Profile("sso")
-public class SSOSecurityConfig extends DRCSecurityConfig implements PrincipalExtractor, AuthoritiesExtractor
+public class SSOSecurityConfig extends DRCSecurityConfig implements AuthoritiesExtractor
 {
-
     private final SimpleGrantedAuthority admin = new SimpleGrantedAuthority("ROLE_ADMIN");
 
-    private final List<? extends GrantedAuthority> roles = Arrays.asList(new SimpleGrantedAuthority[] { admin });
+    private final SimpleGrantedAuthority user = new SimpleGrantedAuthority("ROLE_USER");
 
     private static final Logger LOG = LogManager.getLogger();
 
@@ -38,49 +34,24 @@ public class SSOSecurityConfig extends DRCSecurityConfig implements PrincipalExt
     {
         LOG.info("SSO Security Enabled");
         super.configure(http);
-    }
-
-    @Autowired
-    public void foo()
-    {
-        LOG.info("Starting foo");
-        // Collection<SimpleGrantedAuthority> oldAuthorities =
-        // (Collection<SimpleGrantedAuthority>)SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        // SimpleGrantedAuthority authority = new
-        // SimpleGrantedAuthority("ROLE_ANOTHER");
-        // List<SimpleGrantedAuthority> updatedAuthorities = new
-        // ArrayList<SimpleGrantedAuthority>();
-        // updatedAuthorities.add(authority);
-        // updatedAuthorities.addAll(oldAuthorities);
-        //
-        // SecurityContextHolder.getContext().setAuthentication(
-        // new UsernamePasswordAuthenticationToken(
-        // SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
-        // SecurityContextHolder.getContext().getAuthentication().getCredentials(),
-        // updatedAuthorities)
-        // );
-
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+        http.logout().logoutSuccessUrl("/").permitAll();
     }
 
     @Override
-    public Object extractPrincipal(final Map<String, Object> _map)
+    public List<GrantedAuthority> extractAuthorities(final Map<String, Object> _map)
     {
-//        final String id = (String) _map.get("id");
-//        _map.keySet().forEach(k -> LOG.info(k + " => " + _map.get(k)));
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        final Collection authorities = authentication.getAuthorities();
-//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        final List<GrantedAuthority> ga = new ArrayList<>();
+        final List<String> o = (List<String>) _map.get("gevdsGroupIDmemberOf");
+        for (final String g : o)
+        {
+            final SimpleGrantedAuthority sga = new SimpleGrantedAuthority(g);
+            ga.add(sga);
+        }
 
-        return authentication;
-    }
-
-    @Override
-    public List<GrantedAuthority> extractAuthorities(Map<String, Object> _map)
-    {
-        _map.keySet().forEach(k -> LOG.info(k + " => " + _map.get(k)));
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LOG.info("AUTH: " + authentication);
-        return null;
+        ga.add(admin);
+        ga.add(user);
+        return ga;
     }
 
 }
