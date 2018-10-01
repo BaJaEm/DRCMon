@@ -31,7 +31,7 @@ public class DRCMQConfig
             final DefaultJmsListenerContainerFactoryConfigurer configurer, //
             final MessageConverter messageConverter)
     {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        final DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 
         factory.setClientId("DRCMQ-Client");
         factory.setConcurrency("3-10");
@@ -44,7 +44,7 @@ public class DRCMQConfig
     @Bean // Serialize message content to json using TextMessage
     public MessageConverter jacksonJmsMessageConverter()
     {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        final MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
         converter.setTypeIdPropertyName("_type");
         return converter;

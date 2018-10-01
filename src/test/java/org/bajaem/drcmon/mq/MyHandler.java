@@ -17,7 +17,7 @@ public class MyHandler implements SessionAwareMessageListener<Message>
 
     @JmsListener(destination = "drcmon.topic", subscription = "drcmon.sub", containerFactory = "myFactory")
     @Override
-    public void onMessage(Message _message, Session session) throws JMSException
+    public void onMessage(final Message _message, final Session session) throws JMSException
     {
         LOG.info(_message);
 

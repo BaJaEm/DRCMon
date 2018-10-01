@@ -96,8 +96,8 @@ public class SendTest
             final ActiveMQSession s = (ActiveMQSession) session.get();
             LOG.info(s.isClosed());
 
-            Collection<MessageListenerContainer> col = jmsListenerEndpointRegistry.getListenerContainers();
-            for (MessageListenerContainer cont : col)
+            final Collection<MessageListenerContainer> col = jmsListenerEndpointRegistry.getListenerContainers();
+            for (final MessageListenerContainer cont : col)
             {
                 final DefaultMessageListenerContainer dmlc = (DefaultMessageListenerContainer) cont;
                 dmlc.destroy();
@@ -114,8 +114,8 @@ public class SendTest
             con.setClientID("DRCClient");
             final Session s1 = con.createSession(false, Session.AUTO_ACKNOWLEDGE);
             assertNotNull(s1);
-            String topicName = "drcmon.topic";
-            String subscriberName = "drcmon.sub";
+            final String topicName = "drcmon.topic";
+            final String subscriberName = "drcmon.sub";
             final Topic topic = s1.createTopic(topicName);
             assertNotNull(topic);
             final TopicSubscriber subscriber = s1.createDurableSubscriber(topic, subscriberName);
@@ -126,7 +126,7 @@ public class SendTest
             LOG.info("Unsub");
 
         }
-        catch (Throwable t)
+        catch (final Throwable t)
         {
             LOG.fatal(t);
             fail("Execption");
