@@ -4,32 +4,34 @@
 <!-- Required meta tags -->
 <meta charset="utf-8">
 <meta name="viewport"
-    content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <title>DRCMon</title>
 </head>
 <body ng-app="drcmon_app">
-    <div class="main">
+     <div class="main">
 
-        <div class="Header">
-            <h2>Distribute ResourCe Monitor</h2>
-        </div>
-        <div class="row">
-            <div id="menu" class="col-md-2">
-                <ul>
-                    <li><a href="#">Overview</a></li>
-                    <li><a href="/#!/add/">Add Probes</a></li>
-                    <li><a href="/#!/key/">Manage Keys</a></li>
-                    <li><a href="/#!/category/">Manage
-                            Categories</a></li>
-                </ul>
-            </div>
-            <div id="main" class="col">
-                <div ng-view></div>
-            </div>
-        </div>
-        <div id="bottom" class="Footer text-muted">(c) 2018</div>
-    </div>
+          <div class="Header">
+               <h2>Distribute ResourCe Monitor</h2>
+          </div>
+          <div class="row">
+               <div id="menu" class="col-md-2 container" >
+                    <ul>
+                         <li><a href="#">Overview</a></li>
+                         <li><a href="/#!/add/">Add Probes</a></li>
+                         <li><a href="/#!/key/">Manage Keys</a></li>
+                         <li><a href="/#!/category/">Manage Categories</a></li>
+                         <li><a href="/#!/users/">Manage Users</a></li>
+                         <li>- {{authenticated}} -</li>
+                         <li ng-show="authenticated"><a href="{{logout()}}">Logout</a></li>
+                    </ul>
+               </div>
+               <div id="main" class="col">
+                    <div ng-view></div>
+               </div>
+          </div>
+          <div id="bottom" class="Footer text-muted">(c) 2018</div>
+     </div>
 </body>
 
 
