@@ -7,8 +7,8 @@ CREATE TABLE probe_response
 	start_time		TIMESTAMP NOT NULL,
 	end_time        TIMESTAMP NOT NULL,
 	success         CHAR(1) CHECK (success IN ('T', 'F')),
-	error           VARCHAR(255),
-	error_message   VARCHAR(2048)
+	error           VARCHAR(2048),
+	error_message   VARCHAR(10240)
 	
 );
 
