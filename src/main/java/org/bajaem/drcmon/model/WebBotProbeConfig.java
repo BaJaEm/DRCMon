@@ -21,7 +21,7 @@ public class WebBotProbeConfig extends URLBasedConfig
 
     public static final String TIMEOUT_KEY = "TIMEOUT";
 
-    public static final int DEFAULT_TIMEOUT = 90;
+    public static final int DEFAULT_TIMEOUT = 30;
 
     public static final String ACTIONSCRIPT_KEY = "ACTIONSCRIPT";
 
