@@ -1,52 +1,77 @@
 <div class="overview">
-	<table>
-		<tr>
-			<td>Status:</td>
-			<td>{{status}}</td>
-		</tr>
-		<tr>
-			<td><input type="button" value="Start" ng-click="start()"
-				ng-disabled="start_disabled" /></td>
-			<td><input type="button" value="Stop" ng-click="stop()"
-				ng-disabled="stop_disabled" /></td>
-		</tr>
+    <table>
+        <tr>
+            <td>Status:</td>
+            <td>{{status}}</td>
+        </tr>
+        <tr>
+            <td><input type="button" value="Start"
+                ng-click="start()" ng-disabled="start_disabled" /></td>
+            <td><input type="button" value="Stop" ng-click="stop()"
+                ng-disabled="stop_disabled" /></td>
+        </tr>
 
-	</table>
-	<table class="table table-bordered">
-		<tr>
-			<th>Type
-				<p>
-					<input type="text" ng-model="p_filter" />
-			</th>
-			<th>Artifact
-				<p>
-					<input type="text" ng-model="artifactId_filter" />
-			</th>
-			<th>Category
-				<p>
-					<input type="text" ng-model="c_filter" />
-			</th>
-			<th>Configuration</th>
-			<th>Enabled?</th>
-			<th>Delay Time</th>
-			<th>Polling Interval</th>
-			<th>Last Modified</th>
-			<th></th>
-		</tr>
+    </table>
 
-		<tr
-			ng-repeat="config in data | filter : {artifactId : artifactId_filter, probeCategory : { name : c_filter}, probeType : { name : p_filter}} : myFilter">
-			<td>{{config.probeType.name}}</td>
-			<td>{{config.artifactId}}</td>
-			<td>{{config.probeCategory ? config.probeCategory.name : "" }}</td>
-			<td><div ng-repeat="(key, value) in config.customConfiguration">
-					{{key}} : {{value}}</div></td>
-			<td>{{config.enabled}}</td>
-			<td>{{config.delayTime}} sec.</td>
-			<td>{{config.pollingInterval}} sec.</td>
-			<td>{{config.lastModifiedOn | date: 'yy-MM-dd HH:mm:ss'}}</td>
-			<td><input type="submit" value="edit" ng-click="update(config)" /></td>
+    Sort Type: {{ sortType }}
+    <table class="table table-bordered">
+        <tr>
+            <th><a href="#" ng-click="probeSort('probeType.name')">
+                    <span
+                    ng-show="sortType == 'probeType.name' && sortReverse ">v</span>
+                    <span
+                    ng-show="sortType == 'probeType.name' && !sortReverse ">^</span>Type
+            </a>
+                <p>
+                    <input type="text" ng-model="p_filter" /></th>
+            <th><a href="#" ng-click="probeSort('artifactId')">
+                    <span
+                    ng-show="sortType == 'artifactId' && sortReverse">v</span>
+                    <span
+                    ng-show="sortType == 'artifactId' && !sortReverse">^</span>Artifact
+            </a>
+                <p>
+                    <input type="text" ng-model="artifactId_filter" /></th>
+            <th><a href="#"
+                ng-click="probeSort('probeCategory.name')"> <span
+                    ng-show="sortType == 'probeCategory.name' && sortReverse">v</span>
+                    <span
+                    ng-show="sortType == 'probeCategory.name' && !sortReverse">^</span>Category
+            </a>
 
-		</tr>
-	</table>
+                <p>
+                    <input type="text" ng-model="c_filter.name" /></th>
+            <th>Configuration</th>
+            <th>Enabled?</th>
+            <th>Delay Time</th>
+            <th>Polling Interval</th>
+            <th><a href="#" ng-click="probeSort('lastModifiedOn')">
+                    <span
+                    ng-show="sortType == 'lastModifiedOn' && sortReverse">v</span>
+                    <span
+                    ng-show="sortType == 'lastModifiedOn' && !sortReverse">^</span>
+                    Last Modified
+            </a></th>
+            <th></th>
+        </tr>
+
+        <tr
+            ng-repeat="config in data | filter : {artifactId : artifactId_filter, probeCategory : c_filter, probeType : { name : p_filter}} : myFilter | orderBy:sortType:sortReverse">
+            <td>{{config.probeType.name}}</td>
+            <td>{{config.artifactId}}</td>
+            <td>{{config.probeCategory ? config.probeCategory.name
+                : "" }}</td>
+            <td><div
+                    ng-repeat="(key, value) in config.customConfiguration">
+                    {{key}} : {{value}}</div></td>
+            <td>{{config.enabled}}</td>
+            <td>{{config.delayTime}} sec.</td>
+            <td>{{config.pollingInterval}} sec.</td>
+            <td>{{config.lastModifiedOn | date: 'yy-MM-dd
+                HH:mm:ss'}}</td>
+            <td><input type="submit" value="edit"
+                ng-click="update(config)" /></td>
+
+        </tr>
+    </table>
 </div>

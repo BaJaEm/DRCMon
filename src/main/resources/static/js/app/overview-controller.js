@@ -5,23 +5,38 @@
 	var overview_controller = function($scope, $http, $window, helper_service) {
 
 		$scope.status = "Initializing...";
+		$scope.c_filter = {};
 
 		helper_service.getProbeTypes($scope);
 		helper_service.getProbeCategories($scope);
 
-		$scope.c_filter_list = [ {
-			'name' : '--any--'
-		} ].concat($scope.probeCategories);
+		$scope.probeSort = function(type) {
+			if ($scope.sortType == type) {
+				$scope.sortReverse = !$scope.sortReverse;
+			}
+			else
+				{
+				$scope.sortType = type;
+				$scope.sortReverse = false;
+				}
+		}
+
+		$scope.sortType = 'probeType.name'; // set the default sort type
+		$scope.sortReverse = false; // set the default sort order
 
 		$scope.myFilter = function(a, b) {
 
-			if (!b || b == null || b == 'null' || angular.equals(b, {})) {
+			if (!b || b == null || b == 'null' || b == ''
+					|| angular.equals(b, {}) || angular.equals(b, {
+						'name' : ''
+					})) {
 
 				return true;
 			}
 			if (a) {
-				return a.match(".*" + b + ".*");
+				return a.toUpperCase().match(".*" + b.toUpperCase() + ".*");
 			}
+
 			return false;
 		}
 		var refreshStatus = function() {
