@@ -6,6 +6,24 @@
 
 		$scope.status = "Initializing...";
 
+		helper_service.getProbeTypes($scope);
+		helper_service.getProbeCategories($scope);
+
+		$scope.c_filter_list = [ {
+			'name' : '--any--'
+		} ].concat($scope.probeCategories);
+
+		$scope.myFilter = function(a, b) {
+
+			if (!b || b == null || b == 'null' || angular.equals(b, {})) {
+
+				return true;
+			}
+			if (a) {
+				return a.match(".*" + b + ".*");
+			}
+			return false;
+		}
 		var refreshStatus = function() {
 			$http.get("/status").then(function(data) {
 				$scope.running = data.data;
