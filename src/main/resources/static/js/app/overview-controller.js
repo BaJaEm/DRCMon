@@ -13,12 +13,10 @@
 		$scope.probeSort = function(type) {
 			if ($scope.sortType == type) {
 				$scope.sortReverse = !$scope.sortReverse;
-			}
-			else
-				{
+			} else {
 				$scope.sortType = type;
 				$scope.sortReverse = false;
-				}
+			}
 		}
 
 		$scope.sortType = 'probeType.name'; // set the default sort type
