@@ -35,6 +35,8 @@ public interface ProbeConfigProjection
     public ProbeType getProbeType();
 
     public ProbeKey getProbeKey();
+    
+    public String getLabel();
 
     public ProbeCategory getProbeCategory();
 

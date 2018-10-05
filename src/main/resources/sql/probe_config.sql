@@ -14,6 +14,7 @@ CREATE TABLE probe_config
 	enabled               CHAR(1) DEFAULT 'T' NOT NULL CHECK (enabled IN ('T', 'F')),
 	probe_key             BIGINT,
 	probe_category        BIGINT,
+	label                 VARCHAR(50),
 	custom_configuration  VARCHAR(2048)
 );
 

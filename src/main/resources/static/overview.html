@@ -23,6 +23,8 @@
             </a>
                 <p>
                     <input type="text" ng-model="p_filter" /></th>
+
+            <th>Display Label</th>
             <th><a href="#" ng-click="probeSort('artifactId')">
                     <span
                     ng-show="sortType == 'artifactId' && sortReverse">v</span>
@@ -57,6 +59,7 @@
         <tr
             ng-repeat="config in data | filter : {artifactId : artifactId_filter, probeCategory : c_filter, probeType : { name : p_filter}} : myFilter | orderBy:sortType:sortReverse">
             <td>{{config.probeType.name}}</td>
+            <td>{{config.label}}</td>
             <td>{{config.artifactId}}</td>
             <td>{{config.probeCategory ? config.probeCategory.name
                 : "" }}</td>

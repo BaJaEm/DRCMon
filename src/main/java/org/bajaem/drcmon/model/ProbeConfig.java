@@ -44,6 +44,8 @@ public class ProbeConfig
 
     private ProbeType probeType;
 
+    private String label;
+
     private Map<String, String> customConfiguration = new HashMap<>();
 
     private ProbeKey probeKey;
@@ -194,6 +196,16 @@ public class ProbeConfig
     public void setProbeCategory(final ProbeCategory _probeCategory)
     {
         probeCategory = _probeCategory;
+    }
+
+    public String getLabel()
+    {
+        return label;
+    }
+
+    public void setLabel(final String _label)
+    {
+        label = _label;
     }
 
     @Override
