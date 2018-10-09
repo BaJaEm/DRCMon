@@ -1,12 +1,12 @@
 
-package org.bajaem.drcmon.model;
+package org.bajaem.drcmon.probe;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
+import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.mq.MessageSender;
-import org.bajaem.drcmon.probe.WebBotAction;
 
 public class WebBotProbeConfig extends URLBasedConfig
 {

@@ -9,9 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.model.ProbeKey;
-import org.bajaem.drcmon.model.WebBotProbeConfig;
 import org.bajaem.drcmon.probe.Response;
 import org.bajaem.drcmon.probe.WebBotProbe;
+import org.bajaem.drcmon.probe.WebBotProbeConfig;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 

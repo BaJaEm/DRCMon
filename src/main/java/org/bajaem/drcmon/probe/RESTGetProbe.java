@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.exceptions.DRCProbeException;
 import org.bajaem.drcmon.model.ProbeKey;
-import org.bajaem.drcmon.model.RESTGetProbeConfig;
 import org.bajaem.drcmon.util.DRCBasicAuthRestWeb;
 import org.bajaem.drcmon.util.DRCRestTemplate;
 import org.bajaem.drcmon.util.DRCWebClient;

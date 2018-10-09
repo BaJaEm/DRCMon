@@ -7,7 +7,6 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
-import org.bajaem.drcmon.model.PortMonProbeConfig;
 
 @ProbeMarker(config = PortMonProbeConfig.class, typeName = "PortMon")
 public class PortMonProbe extends Probe

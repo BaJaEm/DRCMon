@@ -1,7 +1,8 @@
 
-package org.bajaem.drcmon.model;
+package org.bajaem.drcmon.probe;
 
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.mq.MessageSender;
 
 public abstract class URLBasedConfig extends Configurable

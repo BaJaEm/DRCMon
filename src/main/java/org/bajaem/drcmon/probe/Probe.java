@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.engine.ProbeConfigurator;
-import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeResponse;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;

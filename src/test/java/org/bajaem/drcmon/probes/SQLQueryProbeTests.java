@@ -9,10 +9,10 @@ import static org.junit.Assert.fail;
 
 import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
-import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.probe.Response;
 import org.bajaem.drcmon.probe.SQLQueryProbe;
+import org.bajaem.drcmon.probe.SQLQueryProbeConfig;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 

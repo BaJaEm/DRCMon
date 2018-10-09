@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.bajaem.drcmon.DBGenerator;
-import org.bajaem.drcmon.model.PortMonProbeConfig;
 import org.bajaem.drcmon.probe.PortMonProbe;
+import org.bajaem.drcmon.probe.PortMonProbeConfig;
 import org.bajaem.drcmon.probe.Response;
 import org.junit.Test;
 import org.springframework.security.test.context.support.WithMockUser;

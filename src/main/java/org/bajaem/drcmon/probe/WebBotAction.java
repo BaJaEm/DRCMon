@@ -1,7 +1,6 @@
 
 package org.bajaem.drcmon.probe;
 
-import org.bajaem.drcmon.model.WebBotProbeConfig;
 import org.openqa.selenium.WebDriver;
 
 public abstract class WebBotAction

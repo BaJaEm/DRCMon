@@ -7,8 +7,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeType;
+import org.bajaem.drcmon.probe.Configurable;
 import org.bajaem.drcmon.probe.Probe;
 import org.bajaem.drcmon.respository.ProbeTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

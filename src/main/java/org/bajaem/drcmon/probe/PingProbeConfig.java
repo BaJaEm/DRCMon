@@ -1,10 +1,11 @@
 
-package org.bajaem.drcmon.model;
+package org.bajaem.drcmon.probe;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.bajaem.drcmon.configuration.ProbeMarkerCache;
+import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.mq.MessageSender;
 
 public class PingProbeConfig extends HostProbeConfig

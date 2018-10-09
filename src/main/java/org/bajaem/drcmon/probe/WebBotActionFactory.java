@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
-import org.bajaem.drcmon.model.WebBotProbeConfig;
 import org.openqa.selenium.WebDriver;
 
 public class WebBotActionFactory

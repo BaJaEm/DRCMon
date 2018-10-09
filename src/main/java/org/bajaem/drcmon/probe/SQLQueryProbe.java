@@ -11,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.ProbeMarker;
 import org.bajaem.drcmon.model.ProbeKey;
-import org.bajaem.drcmon.model.SQLQueryProbeConfig;
 
 /**
  * SQL Query Probe
