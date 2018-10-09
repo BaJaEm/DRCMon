@@ -3,6 +3,7 @@ package org.bajaem.drcmon.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class ProbeResponse
     }
 
     @ManyToOne
-    @JoinColumn(name = "probe_config")
+    @JoinColumn(name = "probe_config", nullable = false)
     public ProbeConfig getProbeConfig()
     {
         return probeConfig;
@@ -57,6 +58,7 @@ public class ProbeResponse
         probeConfig = _probeConfig;
     }
 
+    @Column(nullable = false)
     public Timestamp getStartTime()
     {
         return startTime;
@@ -67,6 +69,7 @@ public class ProbeResponse
         startTime = _startTime;
     }
 
+    @Column(nullable = false)
     public Timestamp getEndTime()
     {
         return endTime;
@@ -88,6 +91,7 @@ public class ProbeResponse
         success = _success;
     }
 
+    @Column(length = 2048)
     public String getErrorMessage()
     {
         return errorMessage;
@@ -98,6 +102,7 @@ public class ProbeResponse
         errorMessage = _errorMessage;
     }
 
+    @Column(length = 10240)
     public String getError()
     {
         return error;

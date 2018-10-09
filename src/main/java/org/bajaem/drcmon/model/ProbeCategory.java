@@ -1,6 +1,7 @@
 
 package org.bajaem.drcmon.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class ProbeCategory
         id = _id;
     }
 
+    @Column(nullable = false, length = 50, unique = true)
     public String getName()
     {
         return name;
@@ -42,6 +44,7 @@ public class ProbeCategory
         name = _name;
     }
 
+    @Column(nullable = false, length = 25, unique = true)
     public String getChannel()
     {
         return channel;

@@ -64,6 +64,7 @@ public class ProbeConfig
         id = _id;
     }
 
+    @Column(length = 255)
     public String getArtifactId()
     {
         return artifactId;
@@ -74,6 +75,7 @@ public class ProbeConfig
         artifactId = _artifactId;
     }
 
+    @Column(nullable = false)
     public int getPollingInterval()
     {
         return pollingInterval;
@@ -109,7 +111,7 @@ public class ProbeConfig
         createdOn = _createdOn;
     }
 
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by", nullable = false, updatable = false, length = 50)
     public String getCreatedBy()
     {
         return createdBy;
@@ -120,6 +122,7 @@ public class ProbeConfig
         createdBy = _createdBy;
     }
 
+    @Column(nullable = false)
     public Timestamp getLastModifiedOn()
     {
         return lastModifiedOn;
@@ -130,6 +133,7 @@ public class ProbeConfig
         lastModifiedOn = _lastModifiedOn;
     }
 
+    @Column(nullable = false, length = 50)
     public String getLastModifiedBy()
     {
         return lastModifiedBy;
@@ -163,7 +167,7 @@ public class ProbeConfig
     }
 
     @ManyToOne
-    @JoinColumn(name = "probe_type")
+    @JoinColumn(name = "probe_type", nullable = false)
     public ProbeType getProbeType()
     {
         return probeType;
@@ -198,6 +202,7 @@ public class ProbeConfig
         probeCategory = _probeCategory;
     }
 
+    @Column(length = 50)
     public String getLabel()
     {
         return label;

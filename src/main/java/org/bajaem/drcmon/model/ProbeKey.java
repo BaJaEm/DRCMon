@@ -1,6 +1,7 @@
 
 package org.bajaem.drcmon.model;
 
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +38,7 @@ public class ProbeKey
         id = _id;
     }
 
+    @Column(nullable = false, length = 50, unique = true)
     public String getName()
     {
         return name;
@@ -48,6 +50,7 @@ public class ProbeKey
         name = _name;
     }
 
+    @Column(nullable = false, length = 50)
     public String getUserId()
     {
         return userId;
@@ -60,6 +63,7 @@ public class ProbeKey
 
     @Convert(converter = EncryptionConverter.class)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false, length = 2048)
     public String getSecret()
     {
         return secret;

@@ -1,6 +1,7 @@
 
 package org.bajaem.drcmon.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,6 +34,7 @@ public class ProbeType
         id = _id;
     }
 
+    @Column(length = 10, nullable = false, unique = true)
     public String getName()
     {
         return name;
@@ -43,6 +45,7 @@ public class ProbeType
         name = _name;
     }
 
+    @Column(length = 255, nullable = false)
     public String getDescription()
     {
         return description;
