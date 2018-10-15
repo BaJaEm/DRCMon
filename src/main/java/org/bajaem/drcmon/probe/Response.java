@@ -53,7 +53,7 @@ public class Response
     {
         dataMap = _dataMap;
         success = _success;
-        errorMessage = _errorMessage;
+        errorMessage = _errorMessage != null ? _errorMessage.substring(0, 2047) : null;
         error = _error;
     }
 
