@@ -16,7 +16,6 @@ import org.bajaem.drcmon.engine.ProbeConfigurator;
 import org.bajaem.drcmon.model.Configurable;
 import org.bajaem.drcmon.model.ProbeConfig;
 import org.bajaem.drcmon.model.ProbeResponse;
-import org.bajaem.drcmon.mq.MessageSender;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
 import org.springframework.stereotype.Component;
 
@@ -75,8 +74,9 @@ public abstract class Probe implements Runnable
         final Response r = probe();
         final Instant end = Instant.now();
         final ThreadLocal<ProbeResponse> resp = new ThreadLocal<>();
+        LOG.debug("probe complete - store response");
         SystemUserWrapper.executeAsSystem(() -> resp.set(storeResponse(r, localhost, start, end)));
-
+        LOG.debug("probe complete - store response complete");
         if (null != config.getSender() && config.getConfig().getProbeCategory() != null)
         {
             config.getSender().sendMessage(resp.get(), config.getConfig().getProbeCategory().getChannel());
@@ -115,7 +115,9 @@ public abstract class Probe implements Runnable
             resp.setProbeConfig(probeConfig);
 
             resp.setSuccess(r.isSuccess());
+            LOG.debug("Saving response");
             repo.save(resp);
+            LOG.debug("Completed saving response");
             return resp;
         }
         catch (final Throwable e)

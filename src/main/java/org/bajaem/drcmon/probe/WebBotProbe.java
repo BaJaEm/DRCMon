@@ -73,6 +73,8 @@ public class WebBotProbe extends Probe
                 {
                     LOG.trace(driver.getPageSource());
                 }
+
+                LOG.debug(myConfig.getUrl() + " failed" + e.getMessage());
                 return new Response(false, e.getMessage(), e);
             }
             finally
@@ -113,10 +115,12 @@ public class WebBotProbe extends Probe
                 LOG.debug("Complete shutdown");
             }
 
+            LOG.debug(myConfig.getUrl() + " success");
             return new Response(true);
         }
         catch (final Exception e)
         {
+            LOG.debug(myConfig.getUrl() + " failed2" + e.getMessage());
             return new Response(false, e.getMessage(), e);
         }
 
