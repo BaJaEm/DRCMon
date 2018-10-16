@@ -86,35 +86,43 @@ public abstract class Probe implements Runnable
     private ProbeResponse storeResponse(final Response r, final InetAddress addr, final Instant start,
             final Instant end)
     {
-        final ProbeConfigurator configer = ProbeConfigurator.getProbeConfigurator();
-        LOG.info("Duration: " + (end.toEpochMilli() - start.toEpochMilli()) + " " + toString() + " for " + r);
-        final ProbeResponseRepository repo = configer.getProbeResponseRepository();
-        final ProbeResponse resp = new ProbeResponse();
-
-        resp.setStartTime(new Timestamp(start.toEpochMilli()));
-        resp.setEndTime(new Timestamp(end.toEpochMilli()));
-        if (r.getError() != null)
+        try
         {
-            try (final StringWriter sw = new StringWriter())
+            final ProbeConfigurator configer = ProbeConfigurator.getProbeConfigurator();
+            LOG.info("Duration: " + (end.toEpochMilli() - start.toEpochMilli()) + " " + toString() + " for " + r);
+            final ProbeResponseRepository repo = configer.getProbeResponseRepository();
+            final ProbeResponse resp = new ProbeResponse();
+
+            resp.setStartTime(new Timestamp(start.toEpochMilli()));
+            resp.setEndTime(new Timestamp(end.toEpochMilli()));
+            if (r.getError() != null)
             {
-                try (final PrintWriter pw = new PrintWriter(sw))
+                try (final StringWriter sw = new StringWriter())
                 {
-                    r.getError().printStackTrace(pw);
-                    resp.setError(sw.toString());
+                    try (final PrintWriter pw = new PrintWriter(sw))
+                    {
+                        r.getError().printStackTrace(pw);
+                        resp.setError(sw.toString());
+                    }
+                }
+                catch (final IOException e)
+                {
+                    LOG.error(e.getMessage(), e);
                 }
             }
-            catch (final IOException e)
-            {
-                LOG.error(e);
-            }
+
+            resp.setErrorMessage(r.getErrorMessage());
+            resp.setProbeConfig(probeConfig);
+
+            resp.setSuccess(r.isSuccess());
+            repo.save(resp);
+            return resp;
         }
-
-        resp.setErrorMessage(r.getErrorMessage());
-        resp.setProbeConfig(probeConfig);
-
-        resp.setSuccess(r.isSuccess());
-        repo.save(resp);
-        return resp;
+        catch (final Throwable e)
+        {
+            LOG.error(e.getMessage(), e);
+            throw e;
+        }
     }
 
     public ProbeConfig getProbeConfig()

@@ -68,7 +68,7 @@ public class WebBotProbe extends Probe
             }
             catch (final Throwable e)
             {
-                LOG.error(e);
+                LOG.error(e.getMessage(), e);
                 if (LOG.isTraceEnabled())
                 {
                     LOG.trace(driver.getPageSource());
@@ -88,7 +88,9 @@ public class WebBotProbe extends Probe
                     try
                     {
                         Thread.sleep(1000);
+                        LOG.debug("Deleting: " + tempDir);
                         FileUtils.deleteDirectory(tempDir);
+                        LOG.debug("Deleted: " + tempDir);
                         failed = false;
                     }
                     catch (final Exception e)
@@ -100,7 +102,7 @@ public class WebBotProbe extends Probe
 
                         LOG.warn(e.getMessage(), e);
                     }
-
+                    LOG.debug("failed: " + failed + " retries: " + retries);
                 }
                 while (failed && (retries > 0));
                 if (failed)
@@ -108,6 +110,7 @@ public class WebBotProbe extends Probe
                     LOG.error("failed to delete: " + tempDir);
                 }
                 ThreadContext.pop();
+                LOG.debug("Complete shutdown");
             }
 
             return new Response(true);
