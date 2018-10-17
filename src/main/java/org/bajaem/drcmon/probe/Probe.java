@@ -102,7 +102,19 @@ public abstract class Probe implements Runnable
                     try (final PrintWriter pw = new PrintWriter(sw))
                     {
                         r.getError().printStackTrace(pw);
-                        resp.setError(sw.toString());
+                        // TODO: this needs to be moved to a better place, or
+                        // the error_message columns needs to be a clob
+                        final String _stackTrace = sw.toString();
+                        final String stackTrace;
+                        if (_stackTrace != null && _stackTrace.length() > 20480)
+                        {
+                            stackTrace = _stackTrace.substring(0, 2048);
+                        }
+                        else
+                        {
+                            stackTrace = _stackTrace;
+                        }
+                        resp.setError(stackTrace);
                     }
                 }
                 catch (final IOException e)
