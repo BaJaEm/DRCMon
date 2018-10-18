@@ -1,6 +1,9 @@
 
 package org.bajaem.drcmon.configuration;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,6 +13,8 @@ public class DRCMonConfiguration
 {
 
     private final int poolSize;
+
+    private final String[] dedicatedPools;
 
     private final int refreshTime;
 
@@ -25,13 +30,15 @@ public class DRCMonConfiguration
             @Value("${bajaem.drcmon.refreshTime:60000}") final int _refreshTime, //
             @Value("${bajaem.drcmon.tcp-broker-enabled:false}") final Boolean _enableBroker, //
             @Value("${bajaem.drcmon.autostart-engine:false}") final Boolean _autostartEngine, //
-            @Value("${bajaem.drcmon.broker-url:<none>}") final String _url)
+            @Value("${bajaem.drcmon.broker-url:<none>}") final String _url, //
+            @Value("${bajaem.drcmon.dedicated-pools:[]}") final String[] _dedicatedPools)
     {
         poolSize = _poolsize;
         refreshTime = _refreshTime;
         enableBroker = _enableBroker;
         autostartEngine = _autostartEngine;
         url = _url;
+        dedicatedPools = _dedicatedPools;
     }
 
     public int getPoolSize()
@@ -57,5 +64,10 @@ public class DRCMonConfiguration
     public boolean autostartEngine()
     {
         return autostartEngine;
+    }
+
+    public List<String> getDedicatedPools()
+    {
+        return Arrays.asList(dedicatedPools);
     }
 }

@@ -61,11 +61,4 @@ public class RESTGetProbe extends Probe
         }
 
     }
-
-    @Override
-    public String getUniqueKey()
-    {
-        return myConfig.getUrl();
-    }
-
 }

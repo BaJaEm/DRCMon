@@ -88,11 +88,4 @@ public class SQLQueryProbe extends Probe
         }
         return new Response(false);
     }
-
-    @Override
-    public String getUniqueKey()
-    {
-        return myConfig.getUrl() + "/" + myConfig.getQuery();
-    }
-
 }

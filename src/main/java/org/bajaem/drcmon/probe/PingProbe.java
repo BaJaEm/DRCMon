@@ -43,11 +43,4 @@ public class PingProbe extends Probe
     {
         return myConfig.getHost() + " -- " + super.toString();
     }
-
-    @Override
-    public String getUniqueKey()
-    {
-        return myConfig.getHost();
-    }
-
 }

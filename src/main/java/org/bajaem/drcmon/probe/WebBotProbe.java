@@ -124,11 +124,4 @@ public class WebBotProbe extends Probe
         }
 
     }
-
-    @Override
-    public String getUniqueKey()
-    {
-        return myConfig.getActionScript().toString() + "-" + myConfig.getUrl();
-    }
-
 }

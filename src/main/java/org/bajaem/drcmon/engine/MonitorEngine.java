@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bajaem.drcmon.configuration.DRCMonConfiguration;
+import org.bajaem.drcmon.configuration.ProbeMarkerCache;
 import org.bajaem.drcmon.configuration.SystemUserWrapper;
 import org.bajaem.drcmon.exceptions.DRCStartupException;
 import org.bajaem.drcmon.probe.Probe;
@@ -41,15 +42,21 @@ public class MonitorEngine
 
     private final ProbeConfigurator probeConfig;
 
+    private final ProbeMarkerCache pmCache;
+
     private Thread engineThread;
 
     private Instant lastRefreshed;
 
     @Autowired
-    public MonitorEngine(final DRCMonConfiguration _config, final ProbeConfigurator _probeConfig)
+    public MonitorEngine(//
+            final DRCMonConfiguration _config, //
+            final ProbeConfigurator _probeConfig, //
+            final ProbeMarkerCache _pmCache)
     {
         config = _config;
         probeConfig = _probeConfig;
+        pmCache = _pmCache;
     }
 
     public int getPoolSize()
@@ -84,11 +91,25 @@ public class MonitorEngine
 
     private ScheduledExecutorService getExecutor(final Probe probe)
     {
-        final String key = probe.getProbeConfig().getProbeType().getName();
+        final String type = pmCache.getNameByProbeType(probe.getClass());
+        final String key;
+        final int size;
+        if (config.getDedicatedPools() != null && config.getDedicatedPools().contains(type))
+        {
+
+            key = probe.getUniqueKey();
+            LOG.info("using dedicated pool: " + key);
+            size = 1;
+        }
+        else
+        {
+            key = probe.getProbeConfig().getProbeType().getName();
+            size = config.getPoolSize();
+        }
         final ScheduledExecutorService service = pool.get(key);
         if (service == null || service.isTerminated())
         {
-            pool.put(key, Executors.newScheduledThreadPool(config.getPoolSize()));
+            pool.put(key, Executors.newScheduledThreadPool(size));
         }
         return pool.get(key);
 

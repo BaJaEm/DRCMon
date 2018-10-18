@@ -37,11 +37,4 @@ public class PortMonProbe extends Probe
             return new Response(false, e.getMessage(), e);
         }
     }
-
-    @Override
-    public String getUniqueKey()
-    {
-        return myConfig.getHost() + ":" + myConfig.getPort();
-    }
-
 }

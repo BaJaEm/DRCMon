@@ -64,7 +64,10 @@ public abstract class Probe implements Runnable
      * probe method to define a key that identifies this probe instance. This
      * value is used as the hash key for the Probe;
      */
-    public abstract String getUniqueKey();
+    public final String getUniqueKey()
+    {
+        return "P:" + probeConfig.getId();
+    }
 
     @Override
     public void run()

@@ -47,6 +47,8 @@ public class ProbeMarkerCache
 
     private final Map<Class<? extends Configurable>, ProbeType> config2Type = new HashMap<>();
 
+    private final Map<Class<? extends Probe>, String> probe2Type = new HashMap<>();
+
     ProbeMarkerCache()
     {
         LOG.debug("Starting Annotation Scan");
@@ -68,6 +70,7 @@ public class ProbeMarkerCache
                     final Class<? extends Configurable> c = pm.config();
                     final String pt = pm.typeName();
                     type2Probe.put(pt, p);
+                    probe2Type.put(p, pt);
                     type2Config.put(pt, c);
                     config2TypeName.put(c, pt);
                 }
@@ -102,6 +105,16 @@ public class ProbeMarkerCache
     public Map<String, Class<? extends Probe>> getType2Probe()
     {
         return Collections.unmodifiableMap(type2Probe);
+    }
+
+    /**
+     * Get Map of {@link Probe} class to corresponding {@link ProbeType} name.
+     *
+     * @return unmodifiableMap of backed by the live map
+     */
+    public Map<Class<? extends Probe>, String> getProbe2Type()
+    {
+        return Collections.unmodifiableMap(probe2Type);
     }
 
     /**
@@ -164,6 +177,18 @@ public class ProbeMarkerCache
     public ProbeType getProbeTypeByName(final String name)
     {
         return getName2ProbeType().get(name);
+    }
+
+    /**
+     * Get the name of the probe type by it's Probe Class.
+     *
+     * @param {@link
+     *            ProbeType} object
+     * @return name of the probe.
+     */
+    public String getNameByProbeType(final Class<? extends Probe> pt)
+    {
+        return getProbe2Type().get(pt);
     }
 
 }
