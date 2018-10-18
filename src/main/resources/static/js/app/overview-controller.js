@@ -2,7 +2,8 @@
 
 	var drcmon_app = angular.module("drcmon_app");
 
-	var overview_controller = function($scope, $http, $window, helper_service) {
+	var overview_controller = function($scope, $http, $window, helper_service,
+			$q, DTOptionsBuilder, ) {
 
 		$scope.status = "Initializing...";
 		$scope.c_filter = {};
@@ -84,6 +85,20 @@
 		}
 		refreshStatus();
 		refreshData();
+
+		var vm = this;
+		vm.dtOptions = DTOptionsBuilder.newOptions().withBootstrap();
+
+		// var vm = this;
+		// vm.dtOptions = DTOptionsBuilder.newOptions().withOptions('autoWidth',
+		// fnThatReturnsAPromise);
+		//
+		// function fnThatReturnsAPromise() {
+		// var defer = $q.defer();
+		// defer.resolve(false);
+		// return defer.promise;
+		// }
+
 	}
 
 	drcmon_app.controller("overview_controller", overview_controller);

@@ -1,7 +1,7 @@
 (function() {
 
 	var drcmon_app = angular.module("drcmon_app", [ 'ngResource', 'ngCookies',
-			'ngRoute' ]);
+			'ngRoute', 'datatables', 'datatables.bootstrap' ]);
 
 	drcmon_app.config(function($routeProvider) {
 		$routeProvider.when("/add/", {
@@ -36,19 +36,20 @@
 				scope.probeTypes = data.data._embedded.probeTypes
 			});
 		};
-		
+
 		s.getProbeKeys = function(scope) {
 			$http.get("/api/probeKeys").then(function(data) {
 				scope.probeKeys = data.data._embedded.probeKeys
+
 			});
 		};
-		
+
 		s.getProbeCategories = function(scope) {
 			$http.get("/api/probeCategories").then(function(data) {
 				scope.probeCategories = data.data._embedded.probeCategories
 			});
 		}
-		
+
 		return s;
 	};
 

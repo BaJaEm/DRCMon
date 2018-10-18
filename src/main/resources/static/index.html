@@ -1,108 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<!-- Bootstrap core CSS -->
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>DRCMon Administration</title>
+
+<!-- Bootstrap Core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Custom fonts for this template -->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-    rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet'
-    type='text/css'>
+<!-- MetisMenu CSS -->
+<link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
-<!-- Plugin CSS -->
-<link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="dist/css/sb-admin-2.css" rel="stylesheet">
 
-<!-- Custom styles for this template -->
-<link href="css/creative.min.css" rel="stylesheet">
-<title>DRCMon</title>
+<link href="css/drcmon.css" rel="stylesheet">
+
+<link rel="stylesheet" href="vendor/angular-datatables/css/angular-datatables.css">
+<link rel="stylesheet" href="vendor/angular-datatables/plugins/bootstrap/datatables.bootstrap.min.css">
+<!-- Morris Charts CSS -->
+<link href="vendor/morrisjs/morris.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
-<body ng-app="drcmon_app" id="page-top">
-    <div class="main">
+
+<body ng-app="drcmon_app">
+
+    <div id="wrapper">
+
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-            <div class="container">
-                <a class="navbar-brand js-scroll-trigger" href="#page-top">Distributed ResourCe Monitor</a>
-                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 100">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+                        class="icon-bar"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#">Overview</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#!/add/">Add Probes</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#!/key/">Manage Keys</a></li>
-                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="/#!/category/">Manage Categories</a></li>
+                <a class="navbar-brand" href="index.html"> DRC</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <!-- /.dropdown -->
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="."> <i class="fa fa-user fa-fw"></i> <i
+                        class="fa fa-caret-down"></i>
+                </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                    </ul></li>
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search..."> <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div> <!-- /input-group -->
+                        </li>
+
+                        <li><a href="#"><i class="fa fa-dashboard fa-fw"></i>Overview</a></li>
+                        <li><a href="/#!/add/"><i class="fa fa-circle fa-fw"></i> Add Probes</a></li>
+                        <li><a href="/#!/key/"><i class="fa fa-key fa-fw"></i> Manage Keys</a></li>
+                        <li><a href="/#!/category/"><i class="fa fa-sitemap fa-fw"></i> Manage Categories</a></li>
                     </ul>
                 </div>
+                <!-- /.sidebar-collapse -->
             </div>
+            <!-- /.navbar-static-side -->
         </nav>
-
-        <header class="masthead text-center text-white d-flex">
-            <div class="container my-auto">
+        <div id="page-wrapper">
+            <div class="container-fluid">
                 <div class="row">
-                    <div ng-view></div>
+                    <div class="col-sm-12">
+                        <div ng-view></div>
+                    </div>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- old -->
-        <!-- 
-        <div class="Header">
-            <h2>Distributed ResourCe Monitor</h2>
-        </div>
-        <div class="row">
-            <div id="menu" class="col-md-2">
-                <ul>
-                    <li><a href="#">Overview</a></li>
-                    <li><a href="/#!/add/">Add Probes</a></li>
-                    <li><a href="">Manage Keys</a></li>
-                    <li><a href=""></a></li>
-                </ul>
-            </div>
-            <div id="main" class="col">
-                <div ng-view></div>
-            </div>
-        </div>
-        -->
-        <div id="bottom" class="Footer text-muted">(c) 2018</div>
     </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <!--     <script src="vendor/raphael/raphael.min.js"></script> -->
+    <!--     <script src="vendor/morrisjs/morris.min.js"></script> -->
+    <!--     <script src="data/morris-data.js"></script> -->
+
+    <!-- Custom Theme JavaScript -->
+    <script src="dist/js/sb-admin-2.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+
+    <!-- angularjs  -->
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-route.min.js"></script>
+    <script src="js/lib/angular-resource.min.js"></script>
+    <script src="js/lib/angular-cookies.min.js"></script>
+    <script src="vendor/angular-datatables/angular-datatables.min.js"></script>
+    <script src="vendor/angular-datatables/plugins/bootstrap/angular-datatables.bootstrap.min.js"></script>
+
+    <!-- angularjs application -->
+    <script src="js/app/drcmon-app.js"></script>
+    <script src="js/app/overview-controller.js"></script>
+    <script src="js/app/add_probe-controller.js"></script>
+    <script src="js/app/update_probe-controller.js"></script>
+    <script src="js/app/manage_keys-controller.js"></script>
+    <script src="js/app/manage_categories-controller.js"></script>
+
 </body>
 
-
-
-<script src="js/lib/angular.min.js"></script>
-
-<script src="js/lib/angular-route.min.js"></script>
-<script src="js/lib/angular-resource.min.js"></script>
-<script src="js/lib/angular-cookies.min.js"></script>
-<script src="js/lib/jquery-3.3.1.slim.min.js"></script>
-
-<script src="js/app/drcmon-app.js"></script>
-<script src="js/app/overview-controller.js"></script>
-<script src="js/app/add_probe-controller.js"></script>
-<script src="js/app/update_probe-controller.js"></script>
-<script src="js/app/manage_keys-controller.js"></script>
-<script src="js/app/manage_categories-controller.js"></script>
-
-<!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Plugin JavaScript -->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-<script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-
-<!-- Custom scripts for this template -->
-<script src="js/creative.min.js"></script>
-
-
-
-<link rel="stylesheet" href="css/app/drcmon.css" />
 </html>
