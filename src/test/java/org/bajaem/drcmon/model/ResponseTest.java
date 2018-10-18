@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.bajaem.drcmon.DBGenerator;
 import org.bajaem.drcmon.probe.PingProbe;
+import org.bajaem.drcmon.probe.PingProbeConfig;
 import org.bajaem.drcmon.probe.Response;
 import org.bajaem.drcmon.respository.ProbeConfigRepository;
 import org.bajaem.drcmon.respository.ProbeResponseRepository;
