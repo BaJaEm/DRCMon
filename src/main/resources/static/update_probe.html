@@ -1,88 +1,111 @@
-<div class="update_probe">
-     <form>
-          <table>
-               <tr>
-                    <td>Probe Type:</td>
-                    <td>{{np.probeType.name}}</td>
-               </tr>
-               <tr>
-                    <td>Probe Category:</td>
-                    <td><select style="width: 100%" ng-model="np.probeCategory"
-                         ng-options="c.name for c in probeCategories track by c.name"></select></td>
-               </tr>
-               <tr>
-                    <td>Display Label:</td>
-                    <td><input type="text" ng-model="np.label" /></td>
-               </tr>
-               <tr>
-                    <td>Artifact ID:</td>
-                    <td><input type="text" ng-model="np.artifactId" /></td>
-               </tr>
-               <tr>
-                    <td>Polling Interval</td>
-                    <td><input type="text" ng-model="np.pollingInterval" /></td>
-               </tr>
-               <tr>
-                    <td>Delay Time</td>
-                    <td><input type="text" ng-model="np.delayTime" /></td>
-               </tr>
-               <tr>
-                    <td>Enabled</td>
-                    <td><input type="checkbox" ng-model="np.enabled" /></td>
-               </tr>
-               <tr
-                    ng-show="np.probeType.name == 'Ping' || np.probeType.name == 'PortMon'">
-                    <td>Host</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.HOST" /></td>
-               </tr>
-               <tr ng-show="np.probeType.name == 'PortMon'">
-                    <td>Port</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.PORT" /></td>
-               </tr>
-               <tr
-                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet' || np.probeType.name == 'WebBot'">
-                    <td>Key</td>
-                    <td><select style="width: 100%" ng-model="np.probeKey"
-                         ng-options="t.name for t in probeKeys track by t.name"></select></td>
-               </tr>
-               <tr
-                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet' || np.probeType.name == 'WebBot'">
-                    <td>URL</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.URL" /></td>
-               </tr>
-               <tr
-                    ng-show="np.probeType.name == 'SQLQuery' || np.probeType.name == 'RESTGet'">
-                    <td>EXPECTED</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.EXPECTED" /></td>
-               </tr>
-               <tr
-                    ng-show="np.probeType.name == 'RESTGet'">
-                    <td>PATH</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.PATH" /></td>
-               </tr>
+<div class="update_probe container">
+    <div class="add_probe panel panel-default">
+        <div class="panel-heading bg">New Probe</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="row">
+                    <form role="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Probe Type:</label>
+                            <div class="col-sm-10">{{np.probeType.name}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Probe Category:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" ng-model="np.probeCategory"
+                                    ng-options="c.name for c in probeCategories track by c.name"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Display Label:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.label" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Artifact ID:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.artifactId" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Polling Interval:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.pollingInterval" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Delay Time:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.delayTime" />
+                            </div>
+                        </div>
 
-               <tr ng-show="np.probeType.name == 'SQLQuery' ">
-                    <td>QUERY</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.QUERY" /></td>
-               </tr>
-               <tr ng-show="np.probeType.name == 'WebBot'">
-                    <td>Action Script Class</td>
-                    <td><input type="text"
-                         ng-model="np.customConfiguration.ACTIONSCRIPT" /></td>
-               </tr>
-               <tr>
-                    <td><input type="submit" value="{{action}}"
-                         ng-click="doAction(np)"></td>
-               </tr>
-          </table>
-     </form>
-     <pre ng-show="error">ERROR: {{error | json}}</pre>
-     <hr>
-     <pre>{{foo | json}}</pre>
+                        <div class="form-group" ng-show="np.pt && ( np.pt.name == 'Ping' || np.pt.name == 'PortMon')">
+                            <label class="control-label col-sm-2">Host:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.HOST" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="np.pt && np.pt.name == 'PortMon'">
+                            <label class="control-label col-sm-2">Port:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.PORT" />
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            ng-show="np.pt && np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet' || np.pt.name == 'WebBot'">
+                            <label class="control-label col-sm-2">Key:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" ng-model="np.probeKey" ng-options="t.name for t in probeKeys track by t.name"></select>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet' || np.pt.name == 'WebBot')">
+                            <label class="control-label col-sm-2">URL:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.URL" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="np.pt && (np.pt.name == 'SQLQuery' || np.pt.name == 'RESTGet')">
+                            <label class="control-label col-sm-2">EXPECTED:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.EXPECTED" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="np.pt && np.pt.name == 'RESTGet'">
+                            <label class="control-label col-sm-2">PATH:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.PATH" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="np.pt && (np.pt.name == 'SQLQuery' )">
+                            <label class="control-label col-sm-2">QUERY:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.QUERY" />
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="np.pt && (np.pt.name == 'WebBot' )">
+                            <label class="control-label col-sm-2">Action Script Class:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" ng-model="np.customConfigurationTemp.ACTIONSCRIPT" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-2">Enabled:</label>
+                            <div class="checkbox col-sm-10">
+                                <input type="checkbox" ng-model="np.enabled" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  col-sm-2"></label>
+                            <div class="col-sm-10">
+                                <input class="control-label" type="submit" value="{{action}}" ng-click="doAction(np)">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

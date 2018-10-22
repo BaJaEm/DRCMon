@@ -16,6 +16,7 @@
 					function(data) {
 						$scope.np = data.data;
 						$scope.probeTypes = [ data.data.probeType ];
+						$scope.np.pt = data.data.probeType;
 
 					}, function(error) {
 						alert(error);
