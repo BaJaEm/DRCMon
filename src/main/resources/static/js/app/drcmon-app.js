@@ -16,6 +16,9 @@
 		}).when("/category/", {
 			'templateUrl' : "manage_categories.html",
 			'controller' : "manage_categories_controller"
+		}).when("/users/", {
+			'templateUrl' : "manage_users.html",
+			'controller' : "manage_users_controller"
 		}).otherwise({
 			'templateUrl' : "overview.html",
 			'controller' : "overview_controller"
@@ -40,6 +43,13 @@
 		s.getProbeKeys = function(scope) {
 			$http.get("/api/probeKeys").then(function(data) {
 				scope.probeKeys = data.data._embedded.probeKeys
+
+			});
+		};
+		
+		s.getProbeUsers = function(scope) {
+			$http.get("/api/probeUsers").then(function(data) {
+				scope.probeUsers = data.data._embedded.probeUsers
 
 			});
 		};

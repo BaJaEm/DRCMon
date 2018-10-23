@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="manage_users panel panel-default">
+        <div class="panel-heading bg">Manage Users</div>
+        <div class="panel-body">
+
+            <div class="manage_users">
+                <table class="table-bordered">
+                    <tr>
+                        <th>Display Name</th>
+                        <th>User ID</th>
+                        <th>is Admin</th>
+                        <th>password</th>
+
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tbody ng-repeat="user in probeUsers">
+
+                        <tr ng-show="! modify[user.id]">
+                            <td>{{user.name}}</td>
+                            <td>{{user.userId}}</td>
+                            <td>
+                                <div class="checkbox col-sm-10">
+                                    <input type="checkbox" ng-model="user.admin" />
+                                </div>
+                            </td>
+                            <td>********</td>
+                            <td>********</td>
+                            <td><input type="submit" value="edit" ng-click="updateUser(user)" /></td>
+                        </tr>
+                        <tr ng-show="modify[user.id]">
+                            <td><input type="text" ng-model="user.name" /></td>
+                            <td><input type="text" ng-model="user.userId" /></td>
+                            <td>
+                                <div class="checkbox col-sm-10">
+                                    <input type="checkbox" ng-model="user.admin" />
+                                </div>
+                            </td>
+                            <td><input type="password" ng-model="user.pw1" /></td>
+                            <td><input type="password" ng-model="user.pw2" /></td>
+                            <td><input type="submit" value="save" ng-click="saveUser(user)" /></td>
+
+                        </tr>
+                    </tbody>
+                    <tr>
+                        <td><input type="text" ng-model="newuser.name" /></td>
+                        <td><input type="text" ng-model="newuser.userId" /></td>
+                        <td>
+                            <div class="checkbox col-sm-10">
+                                <input type="checkbox" ng-model="newuser.admin" />
+                            </div>
+                        </td>
+                        <td><input type="password" ng-model="newuser.pw1" /></td>
+                        <td><input type="password" ng-model="newuser.pw2" /></td>
+                        <td><input type="submit" value="add" ng-click="addUser(newuser)" /></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
