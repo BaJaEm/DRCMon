@@ -24,6 +24,11 @@ public class SystemUserWrapper
         new SystemUserWrapper().executeAsSystemHelper(wrapped);
     }
 
+    public static <T> T executeAsSystem(final TypedWrapped<T> wrapped)
+    {
+        return new SystemUserWrapper().executeAsSystemHelper(wrapped);
+    }
+
     private void executeAsSystemHelper(final Wrapped wrapped)
     {
         try
@@ -32,6 +37,21 @@ public class SystemUserWrapper
             SecurityContextHolder.setContext(ctx);
             ctx.setAuthentication(SystemUser.get());
             wrapped.execute();
+        }
+        finally
+        {
+            SecurityContextHolder.clearContext();
+        }
+    }
+
+    private <T> T executeAsSystemHelper(final TypedWrapped<T> wrapped)
+    {
+        try
+        {
+            final SecurityContext ctx = SecurityContextHolder.createEmptyContext();
+            SecurityContextHolder.setContext(ctx);
+            ctx.setAuthentication(SystemUser.get());
+            return wrapped.execute();
         }
         finally
         {
