@@ -1,4 +1,4 @@
-# DRCMon - Distributed ResourCe Monitor
+# DRCMon - Distributed Resource Cooridinator Monitor
 
 ## High Level Overview
 
